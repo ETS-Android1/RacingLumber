@@ -1,0 +1,36 @@
+Goals:
+1) Provide data that is insightful and more easily read that existing data logging solutions
+2) Record data at acceptable accuracy under processing and memory constraints
+3) Record data for up to 15 minutes
+
+Constraints:
+1)Test device(Samsung S7) has
+-1.7GB of RAM available
+-19GB of storage
+Therefore, RAM is the limiting factor.  Aim for up to 1GB used for storage.
+
+Storage options:
+xyz of the accelerometer and rotation type sensors data needs to be adjusted such that gravity points
+directly down in the adjusted coordinate system.  Otherwise, a phone shifting could alter output data
+and data may look skewed on a 2D plane.
+
+Option 1: 
+Calculate adjusted data prior to storing it in real time using the gravity vector.
+[(xyz of Accelerometer + xyz of rotation) in float]*(4bytes/float)*100 samples/second
+= (6)(4)(100) = 2400 bytes/second (2.4kB/s)
+In 1GB of RAM,
+1,000,000kB/(2.4kB/s) = 416666 seconds of recording = 6944 minutes = 115 hours.
+This handily meets requirements, with 15 minutes of recording requiring 2.1MB
+
+Option 2:
+Calculate adjusted data after recording with a recorded gravity vector.
+[(xyz of Accelerometer + xyz of rotation + xyz of gravity) in float]*(4bytes/float)*100 samples/second
+= (9)(4)(100) = 3600 bytes/second (3.6kB/s)
+In 1GB of RAM,
+1,000,000kB/(3.6kB/s) = 277777 seconds of recording = 4629 minutes = 77 hours.
+This also meets requirements, with 15 minutes of recording requiring 3.2MB
+
+Option 2 is better, because option 1 requires more calculations during recording (to adjust the coordinate
+system), while option 2 still meets storage requirements.
+
+

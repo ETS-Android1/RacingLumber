@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,18 +17,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
-    boolean dataIsRecording = false;
     int accelArrayLen = 100;
     int accelIndex = 0;
+    /////////////Control Flags/////////////
+    boolean dataIsRecording = false;
+    boolean saveDataToFile = false;
+    /////////////Recorded Data/////////////
     float[] xDataArray = new float[accelArrayLen];
     float[] yDataArray = new float[accelArrayLen];
     float[] zDataArray = new float[accelArrayLen];
     float[] xRotationArray = new float[accelArrayLen];
     float[] yRotationArray = new float[accelArrayLen];
     float[] zRotationArray = new float[accelArrayLen];
-
-    //float[] gravityQuaternion = new float[4]; //this reference needs to persist between sensor events
-    float[] gravityQuaternion = {1.0F,0.0F,0.0F,0.0F};
+    float[] xGravityArray = new float[accelArrayLen];
+    float[] yGravityArray = new float[accelArrayLen];
+    float[] zGravityArray = new float[accelArrayLen];
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -70,10 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else
         {
-            backward_img.setBackgroundColor(Color.WHITE);
-            dataIsRecording = false;
-            //todo we will need to save to file here too
-            onPause();
+            endRecording();
         }
     }
 ///////////ACCELEROMETER FUNCTIONS/////////////
@@ -87,10 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume()
     {
         super.onResume();
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL); //todo I need less delay on corners, more on straights
-        senSensorManager.registerListener(this, senRotation, SensorManager.SENSOR_DELAY_NORMAL); //todo I need less delay on corners, more on straights
-        senSensorManager.registerListener(this, senGravity, SensorManager.SENSOR_DELAY_NORMAL); //todo I need less delay on corners, more on straights
         //sensor delay game is 20,000ms delay = 100Hz
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        senSensorManager.registerListener(this, senRotation, SensorManager.SENSOR_DELAY_GAME);
+        senSensorManager.registerListener(this, senGravity, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -100,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onSensorChanged(SensorEvent sensorEvent)
     {
-        float xValue,yValue,zValue;
         Sensor mySensor = sensorEvent.sensor;
 
         if (dataIsRecording)
@@ -109,33 +107,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 if ((mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION))
                 {
-                    xValue = sensorEvent.values[0];
-                    yValue = sensorEvent.values[1];
-                    zValue = sensorEvent.values[2];
                     //todo do I need the timestamp here
-                    xDataArray[accelIndex] = xValue;
-                    yDataArray[accelIndex] = yValue;
-                    zDataArray[accelIndex] = zValue;
+                    xDataArray[accelIndex] = sensorEvent.values[0];
+                    yDataArray[accelIndex] = sensorEvent.values[1];
+                    zDataArray[accelIndex] = sensorEvent.values[2];
                     accelIndex = accelIndex + 1;
                 }
                 else if ((mySensor.getType() == Sensor.TYPE_ROTATION_VECTOR))
                 {
-                    xValue = sensorEvent.values[0];//x is pitch
-                    yValue = sensorEvent.values[1];//y is roll
-                    zValue = sensorEvent.values[2];//z is yaw (what we care about, turning angle)
-
-                    //TODO get quaternion of gravity, multiply, then take angle of ij axis as rotation
-                    float[] rotationQuaternion = new float[4];
-                    SensorManager.getQuaternionFromVector(rotationQuaternion, sensorEvent.values);
-
-                    xRotationArray[accelIndex] = xValue;
-                    yRotationArray[accelIndex] = yValue;
-                    zRotationArray[accelIndex] = zValue;
+                    xRotationArray[accelIndex] = sensorEvent.values[0];//x is pitch
+                    yRotationArray[accelIndex] = sensorEvent.values[1];//y is roll
+                    zRotationArray[accelIndex] = sensorEvent.values[2];//z is yaw (what we care about, turning angle)
                     accelIndex = accelIndex + 1;
                 }
                 else if ((mySensor.getType() == Sensor.TYPE_GRAVITY))
                 {
-                    SensorManager.getQuaternionFromVector(gravityQuaternion, sensorEvent.values); //update gravity reference
+                    xGravityArray[accelIndex] = sensorEvent.values[0];
+                    yGravityArray[accelIndex] = sensorEvent.values[1];
+                    zGravityArray[accelIndex] = sensorEvent.values[2];
+                    accelIndex = accelIndex + 1;
                 }
                 else
                 {
@@ -144,16 +134,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             else
             {
-//                externalStorageAPI.accelDataWriteToFile(xDataArray, this, "xDataArray");
-//                externalStorageAPI.accelDataWriteToFile(yDataArray, this, "yDataArray");
-//                externalStorageAPI.accelDataWriteToFile(zDataArray, this, "zDataArray");
-
-                Button backward_img = (Button) findViewById(R.id.recordButton); //todo combine this with onClick to make endRecord()
-                backward_img.setBackgroundColor(Color.WHITE);
-                dataIsRecording = false;
-                onPause();
+                endRecording();
             }
         }
+    }
+    ///////////////////Control Functions//////////////////////
+    private void endRecording()
+    {
+        if (saveDataToFile)
+        {
+            externalStorageAPI.accelDataWriteToFile(xDataArray, this, "xDataArray");
+            externalStorageAPI.accelDataWriteToFile(yDataArray, this, "yDataArray");
+            externalStorageAPI.accelDataWriteToFile(zDataArray, this, "zDataArray");
+        }
+
+        Button backward_img = (Button) findViewById(R.id.recordButton); //todo combine this with onClick to make endRecord()
+        backward_img.setBackgroundColor(Color.WHITE);
+        dataIsRecording = false;
+        onPause();
     }
 
     /**
