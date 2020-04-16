@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,13 +13,19 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
 
+//////////////////////////////////
+////////////////TODO NEXT TIME: add time storage for gravity and rotation, and see if 100Hz is still maintained
+/////////////////////////////////
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener {
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
-    int accelArrayLen = 100;
+    int accelArrayLen = 1000;
     int accelIndex = 0;
+    int rotationIndex = 0;
+    int gravityIndex = 0;
     /////////////Control Flags/////////////
     boolean dataIsRecording = false;
     boolean saveDataToFile = false;
@@ -26,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     float[] xDataArray = new float[accelArrayLen];
     float[] yDataArray = new float[accelArrayLen];
     float[] zDataArray = new float[accelArrayLen];
+    long[] accelEventTime = new long[accelArrayLen];
     float[] xRotationArray = new float[accelArrayLen];
     float[] yRotationArray = new float[accelArrayLen];
     float[] zRotationArray = new float[accelArrayLen];
@@ -66,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (dataIsRecording)
         {
             accelIndex = 0;
+            rotationIndex = 0;
+            gravityIndex = 0;
             backward_img.setBackgroundColor(Color.RED);
             dataIsRecording = true;
             onResume();
@@ -103,38 +113,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (dataIsRecording)
         {
-            if (accelIndex < accelArrayLen)
+            if ((accelIndex >= accelArrayLen)||(rotationIndex >= accelArrayLen)||(gravityIndex >= accelArrayLen))
             {
-                if ((mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION))
+                endRecording();
+            }
+            else
+            {
+                if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION)
                 {
                     //todo do I need the timestamp here
                     xDataArray[accelIndex] = sensorEvent.values[0];
                     yDataArray[accelIndex] = sensorEvent.values[1];
                     zDataArray[accelIndex] = sensorEvent.values[2];
+                    accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
                     accelIndex = accelIndex + 1;
                 }
-                else if ((mySensor.getType() == Sensor.TYPE_ROTATION_VECTOR))
+                else if (mySensor.getType() == Sensor.TYPE_ROTATION_VECTOR)
                 {
-                    xRotationArray[accelIndex] = sensorEvent.values[0];//x is pitch
-                    yRotationArray[accelIndex] = sensorEvent.values[1];//y is roll
-                    zRotationArray[accelIndex] = sensorEvent.values[2];//z is yaw (what we care about, turning angle)
-                    accelIndex = accelIndex + 1;
+                    xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
+                    yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
+                    zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw (what we care about, turning angle)
+                    rotationIndex = rotationIndex + 1;
                 }
-                else if ((mySensor.getType() == Sensor.TYPE_GRAVITY))
+                else if (mySensor.getType() == Sensor.TYPE_GRAVITY)
                 {
-                    xGravityArray[accelIndex] = sensorEvent.values[0];
-                    yGravityArray[accelIndex] = sensorEvent.values[1];
-                    zGravityArray[accelIndex] = sensorEvent.values[2];
-                    accelIndex = accelIndex + 1;
+                    xGravityArray[gravityIndex] = sensorEvent.values[0];
+                    yGravityArray[gravityIndex] = sensorEvent.values[1];
+                    zGravityArray[gravityIndex] = sensorEvent.values[2];
+                    gravityIndex = gravityIndex + 1;
                 }
                 else
                 {
                     //do nothing
                 }
-            }
-            else
-            {
-                endRecording();
             }
         }
     }
@@ -143,9 +154,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         if (saveDataToFile)
         {
-            externalStorageAPI.accelDataWriteToFile(xDataArray, this, "xDataArray");
-            externalStorageAPI.accelDataWriteToFile(yDataArray, this, "yDataArray");
-            externalStorageAPI.accelDataWriteToFile(zDataArray, this, "zDataArray");
+            externalStorageFunctionality.writeFloatArrayToFile(xDataArray, this, "xDataArray");
+            externalStorageFunctionality.writeFloatArrayToFile(yDataArray, this, "yDataArray");
+            externalStorageFunctionality.writeFloatArrayToFile(zDataArray, this, "zDataArray");
+            externalStorageFunctionality.writeLongArrayToFile(accelEventTime, this, "accelTimeArray");
         }
 
         Button backward_img = (Button) findViewById(R.id.recordButton); //todo combine this with onClick to make endRecord()
