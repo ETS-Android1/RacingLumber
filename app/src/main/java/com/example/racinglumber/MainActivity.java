@@ -14,7 +14,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
 
 //////////////////////////////////
-////////////////TODO NEXT TIME: add time storage for gravity and rotation, and see if 100Hz is still maintained
+////////////////TODO NEXT TIME:
 /////////////////////////////////
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener {
@@ -34,9 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     float[] yDataArray = new float[accelArrayLen];
     float[] zDataArray = new float[accelArrayLen];
     long[] accelEventTime = new long[accelArrayLen];
+
     float[] xRotationArray = new float[accelArrayLen];
     float[] yRotationArray = new float[accelArrayLen];
     float[] zRotationArray = new float[accelArrayLen];
+    long[] rotationEventTime = new long[accelArrayLen];
+
     float[] xGravityArray = new float[accelArrayLen];
     float[] yGravityArray = new float[accelArrayLen];
     float[] zGravityArray = new float[accelArrayLen];
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //sensor delay game is 20,000ms delay = 100Hz
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         senSensorManager.registerListener(this, senRotation, SensorManager.SENSOR_DELAY_GAME);
-        senSensorManager.registerListener(this, senGravity, SensorManager.SENSOR_DELAY_GAME);
+        senSensorManager.registerListener(this, senGravity, SensorManager.SENSOR_DELAY_GAME); //todo we don't need a gravity vector this accurate
     }
 
     @Override
@@ -133,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
                     yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
                     zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw (what we care about, turning angle)
+                    rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
                     rotationIndex = rotationIndex + 1;
                 }
                 else if (mySensor.getType() == Sensor.TYPE_GRAVITY)
@@ -158,9 +162,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             externalStorageFunctionality.writeFloatArrayToFile(yDataArray, this, "yDataArray");
             externalStorageFunctionality.writeFloatArrayToFile(zDataArray, this, "zDataArray");
             externalStorageFunctionality.writeLongArrayToFile(accelEventTime, this, "accelTimeArray");
+            externalStorageFunctionality.writeLongArrayToFile(rotationEventTime, this, "rotationTimeArray");
         }
 
-        Button backward_img = (Button) findViewById(R.id.recordButton); //todo combine this with onClick to make endRecord()
+        Button backward_img = (Button) findViewById(R.id.recordButton);
         backward_img.setBackgroundColor(Color.WHITE);
         dataIsRecording = false;
         onPause();

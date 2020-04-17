@@ -3,6 +3,11 @@ Goals:
 2) Record data at acceptable accuracy under processing and memory constraints
 3) Record data for up to 15 minutes
 
+The below calculations were for determining how to handle memory storage.  Although they
+are now outdated (I might store a combination of timestamps/other data in the future),
+the below calculations show that the second option presented below is the preferable
+of the two and is more than capable of meeting storage requirements.
+
 Constraints:
 1)Test device(Samsung S7) has
 -1.7GB of RAM available
