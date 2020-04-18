@@ -2,6 +2,7 @@ package com.example.racinglumber;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!dataIsRecording)
             {
                 //todo switch to new activity
+                startActivity(new Intent(MainActivity.this, graphActivity.class));
             }
             //todo error conditions.  What if pressed before recording?
         }

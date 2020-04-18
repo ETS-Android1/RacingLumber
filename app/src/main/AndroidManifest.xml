@@ -18,6 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="graphActivity"
+            android:label="graphActivity">
+        </activity>
+
     </application>
 
 </manifest>
