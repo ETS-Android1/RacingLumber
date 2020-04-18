@@ -22,40 +22,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
-    int accelArrayLen = 1000;
-    int accelIndex = 0;
-    int rotationIndex = 0;
-    int gravityIndex = 0;
+    int dataArrayLen = 1000;
+    int accelIndex = 0; //index of x/y/zDataArray
+    int rotationIndex = 0; //index of x/y/zRotationArray
+    int gravityIndex = 0; //index of x/y/zGravityArray
     /////////////Control Flags/////////////
     boolean dataIsRecording = false;
     boolean saveDataToFile = false;
     /////////////Recorded Data/////////////
-    float[] xDataArray = new float[accelArrayLen];
-    float[] yDataArray = new float[accelArrayLen];
-    float[] zDataArray = new float[accelArrayLen];
-    long[] accelEventTime = new long[accelArrayLen];
+    float[] xDataArray = new float[dataArrayLen];
+    float[] yDataArray = new float[dataArrayLen];
+    float[] zDataArray = new float[dataArrayLen];
+    long[] accelEventTime = new long[dataArrayLen];
 
-    float[] xRotationArray = new float[accelArrayLen];
-    float[] yRotationArray = new float[accelArrayLen];
-    float[] zRotationArray = new float[accelArrayLen];
-    long[] rotationEventTime = new long[accelArrayLen];
+    float[] xRotationArray = new float[dataArrayLen];
+    float[] yRotationArray = new float[dataArrayLen];
+    float[] zRotationArray = new float[dataArrayLen];
+    long[] rotationEventTime = new long[dataArrayLen];
 
-    float[] xGravityArray = new float[accelArrayLen];
-    float[] yGravityArray = new float[accelArrayLen];
-    float[] zGravityArray = new float[accelArrayLen];
+    float[] xGravityArray = new float[dataArrayLen];
+    float[] yGravityArray = new float[dataArrayLen];
+    float[] zGravityArray = new float[dataArrayLen];
 
     // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
+//    static {
+//        System.loadLibrary("native-lib");
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button buttonname = (Button) findViewById(R.id.recordButton);
-        buttonname.setOnClickListener(this);
+        Button recordButton = (Button) findViewById(R.id.recordButton);
+        recordButton.setOnClickListener(this);
+
+        Button graphButton = (Button) findViewById(R.id.graphButton);
+        graphButton.setOnClickListener(this);
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
@@ -64,28 +67,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
         // Example of a call to a native method
-        TextView tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+//        TextView tv = findViewById(R.id.sample_text);
+//        tv.setText(stringFromJNI());
     }
 ///////////BUTTON FUNCTIONS//////////////
     @Override
     public void onClick(View v)
     {
-        Button backward_img = (Button) findViewById(R.id.recordButton);
-        dataIsRecording = !dataIsRecording;
-
-        if (dataIsRecording)
+        if (v.getId() == R.id.recordButton)
         {
-            accelIndex = 0;
-            rotationIndex = 0;
-            gravityIndex = 0;
-            backward_img.setBackgroundColor(Color.RED);
-            dataIsRecording = true;
-            onResume();
+            /*Start/end recording data*/
+            dataIsRecording = !dataIsRecording;
+
+            if (dataIsRecording)
+            {
+                startRecording();
+            }
+            else
+            {
+                endRecording();
+            }
         }
         else
         {
-            endRecording();
+            /*graph button was pressed.  End recording and switch to new view*/
+            if (!dataIsRecording)
+            {
+                //todo switch to new activity
+            }
+            //todo error conditions.  What if pressed before recording?
         }
     }
 ///////////ACCELEROMETER FUNCTIONS/////////////
@@ -93,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onPause();
         senSensorManager.unregisterListener(this);
-
     }
 
     protected void onResume()
@@ -116,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (dataIsRecording)
         {
-            if ((accelIndex >= accelArrayLen)||(rotationIndex >= accelArrayLen)||(gravityIndex >= accelArrayLen))
+            if ((accelIndex >= dataArrayLen)||(rotationIndex >= dataArrayLen)||(gravityIndex >= dataArrayLen))
             {
                 endRecording();
             }
@@ -124,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION)
                 {
-                    //todo do I need the timestamp here
                     xDataArray[accelIndex] = sensorEvent.values[0];
                     yDataArray[accelIndex] = sensorEvent.values[1];
                     zDataArray[accelIndex] = sensorEvent.values[2];
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
                     yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
-                    zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw (what we care about, turning angle)
+                    zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw
                     rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
                     rotationIndex = rotationIndex + 1;
                 }
@@ -154,6 +162,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     ///////////////////Control Functions//////////////////////
+    private void startRecording()
+    {
+        accelIndex = 0;
+        rotationIndex = 0;
+        gravityIndex = 0;
+
+        Button backward_img = (Button) findViewById(R.id.recordButton);
+        dataIsRecording = !dataIsRecording;
+        backward_img.setBackgroundColor(Color.RED);
+
+        dataIsRecording = true;
+        onResume();
+    }
+
     private void endRecording()
     {
         if (saveDataToFile)
@@ -167,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button backward_img = (Button) findViewById(R.id.recordButton);
         backward_img.setBackgroundColor(Color.WHITE);
+
         dataIsRecording = false;
         onPause();
     }
@@ -175,5 +198,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native String stringFromJNI();
+//    public native String stringFromJNI();
 }
