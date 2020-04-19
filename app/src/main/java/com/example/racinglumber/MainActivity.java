@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int gravityIndex = 0; //index of x/y/zGravityArray
     /*Control Flags*/
     boolean dataIsRecording = false;
-    boolean saveDataToFile = false;
+    /*Developer Flags*/
+    boolean saveDataToFile = true;
     /*Recorded Data*/
     float[] xDataArray = new float[dataArrayLen];
     float[] yDataArray = new float[dataArrayLen];
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!dataIsRecording)
             {
                 //todo switch to new activity
-                startActivity(new Intent(MainActivity.this, graphActivity.class));
+//                startActivity(new Intent(MainActivity.this, graphActivity.class));
             }
             //todo error conditions.  What if pressed before recording?
         }
@@ -178,11 +179,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         if (saveDataToFile)
         {
-            externalStorageFunctionality.writeFloatArrayToFile(xDataArray, this, "xDataArray");
-            externalStorageFunctionality.writeFloatArrayToFile(yDataArray, this, "yDataArray");
-            externalStorageFunctionality.writeFloatArrayToFile(zDataArray, this, "zDataArray");
-            externalStorageFunctionality.writeLongArrayToFile(accelEventTime, this, "accelTimeArray");
-            externalStorageFunctionality.writeLongArrayToFile(rotationEventTime, this, "rotationTimeArray");
+//            externalStorageFunctionality.writeFloatArrayToFile();
+//            externalStorageFunctionality.writeFloatArrayToFile(yDataArray, this, "yDataArray");
+ //           externalStorageFunctionality.writeFloatArrayToFile(zDataArray, this, "zDataArray");
+  //          externalStorageFunctionality.writeLongArrayToFile(accelEventTime, this, "accelTimeArray");
+   //         externalStorageFunctionality.writeLongArrayToFile(rotationEventTime, this, "rotationTimeArray");
         }
 
         Button backward_img = (Button) findViewById(R.id.recordButton);

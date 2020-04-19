@@ -9,29 +9,29 @@ import android.os.Bundle;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class graphActivity extends Activity {
-    private GLSurfaceView gLView;
+//public class graphActivity extends Activity {
+//    private GLSurfaceView gLView;
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState)
+//    {
+//        super.onCreate(savedInstanceState);
+//        gLView = new MyGLSurfaceView(this);
+//        setContentView(gLView);
+//    }
+//}
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        gLView = new MyGLSurfaceView(this);
-        setContentView(gLView);
-    }
-}
-
-class MyGLSurfaceView extends GLSurfaceView {
-
-    private final MyGLRenderer renderer;
-
-    public MyGLSurfaceView(Context context){
-        super(context);
-        setEGLContextClientVersion(2);//OpenGL ES 2.0
-
-        renderer = new MyGLRenderer();
-        setRenderer(renderer);
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-    }
-}
+//class MyGLSurfaceView extends GLSurfaceView {
+//
+//    private final MyGLRenderer renderer;
+//
+//    public MyGLSurfaceView(Context context){
+//        super(context);
+//        setEGLContextClientVersion(2);//OpenGL ES 2.0
+//
+//        renderer = new MyGLRenderer();
+//        setRenderer(renderer);
+//        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+//    }
+//}
 
