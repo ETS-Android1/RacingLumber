@@ -19,14 +19,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
-    int dataArrayLen = 1000;
+    int dataArrayLen = 100;
     int accelIndex = 0; //index of x/y/zDataArray
     int rotationIndex = 0; //index of x/y/zRotationArray
     int gravityIndex = 0; //index of x/y/zGravityArray
     /*Control Flags*/
     boolean dataIsRecording = false;
-    /*Developer Flags*/
-    boolean saveDataToFile = true;
     /*Recorded Data*/
     float[] xDataArray = new float[dataArrayLen];
     float[] yDataArray = new float[dataArrayLen];
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!dataIsRecording)
             {
                 //todo switch to new activity
-//                startActivity(new Intent(MainActivity.this, graphActivity.class));
+                startActivity(new Intent(MainActivity.this, graphActivity.class));
             }
             //todo error conditions.  What if pressed before recording?
         }
@@ -127,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if ((accelIndex >= dataArrayLen)||(rotationIndex >= dataArrayLen)||(gravityIndex >= dataArrayLen))
             {
                 endRecording();
+                //todo why does calling fileStorage.writeFloatArrayToFile() here cause a system error?
             }
             else
             {
@@ -177,20 +176,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void endRecording()
     {
-        if (saveDataToFile)
-        {
-//            externalStorageFunctionality.writeFloatArrayToFile();
-//            externalStorageFunctionality.writeFloatArrayToFile(yDataArray, this, "yDataArray");
- //           externalStorageFunctionality.writeFloatArrayToFile(zDataArray, this, "zDataArray");
-  //          externalStorageFunctionality.writeLongArrayToFile(accelEventTime, this, "accelTimeArray");
-   //         externalStorageFunctionality.writeLongArrayToFile(rotationEventTime, this, "rotationTimeArray");
-        }
-
         Button backward_img = (Button) findViewById(R.id.recordButton);
         backward_img.setBackgroundColor(Color.WHITE);
 
         dataIsRecording = false;
         onPause();
+        //todo save to file here?
     }
 
     /**
