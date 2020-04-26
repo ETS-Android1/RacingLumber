@@ -6,15 +6,19 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import static android.opengl.GLES20.GL_LINES;
+import static android.opengl.GLES20.glEnable;
+import static android.opengl.GLES20.glLineWidth;
+
 public class triangleExample {
     private FloatBuffer vertexBuffer;
 
     // number of coordinates per vertex in this array
-    static final int COORDS_PER_VERTEX = 3;
+    static final int COORDS_PER_VERTEX = 2;
     static float triangleCoords[] = {   // in counterclockwise order:
-             0.0f,  0.622008459f, 0.0f, // top
-            -0.5f, -0.311004243f, 0.0f, // bottom left
-             0.5f, -0.311004243f, 0.0f  // bottom right
+             0.0f,  0.622008459f, // top
+            -0.5f, -0.311004243f, // bottom left
+             0.5f, -0.311004243f, // bottom right
     };
 
     private final String vertexShaderCode =
@@ -95,10 +99,21 @@ public class triangleExample {
         // Set color for drawing the triangle
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
 
+        /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        GLES20.glEnable(GL_LINES);
+        GLES20.glVertexAttrib2f(0, 0.5f, 0.5f);
+        GLES20.glVertexAttrib2f(1, -0.5f, -0.5f);
+        //glVertex2i(x, y);
+        //glVertex2i(x2, y2);
+        GLES20.glDisable(GL_LINES);
+        //glEnd();
+        GLES20.glLineWidth(1.0f);
+        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,
+
         // Draw the triangle
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+        //GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
 
         // Disable vertex array
-        GLES20.glDisableVertexAttribArray(positionHandle);
+        //GLES20.glDisableVertexAttribArray(positionHandle);
     }
 }

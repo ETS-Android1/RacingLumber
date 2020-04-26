@@ -1,37 +1,32 @@
 package com.example.racinglumber;
 
 import android.app.Activity;
-import android.content.Context;
-import android.opengl.EGLConfig;
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-import javax.microedition.khronos.opengles.GL10;
+//import com.jjoe64.graphview.GraphView;
+//import com.jjoe64.graphview.series.DataPoint;
+//import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class graphActivity extends Activity {
-    private GLSurfaceView gLView;
+//    GraphView graph = (GraphView)findViewById(R.id.graph);
+//    LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+//            new DataPoint(0, 1),
+//            new DataPoint(1, 5),
+//            new DataPoint(2, 3),
+//            new DataPoint(3, 2),
+//            new DataPoint(4, 6)
+//    });
+
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        gLView = new MyGLSurfaceView(this);
-        setContentView(gLView);
+
+//        graph.addSeries(series);
+
+        setContentView(R.layout.activity_graph);
+
+
     }
 }
-
-class MyGLSurfaceView extends GLSurfaceView {
-
-    private final MyGLRenderer renderer;
-
-    public MyGLSurfaceView(Context context){
-        super(context);
-        setEGLContextClientVersion(2);//OpenGL ES 2.0
-
-        renderer = new MyGLRenderer();
-        setRenderer(renderer);
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-    }
-}
-
