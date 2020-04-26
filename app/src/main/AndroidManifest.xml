@@ -21,7 +21,7 @@
         </activity>
 
         <activity
-            android:name=".openGLActivity"
+            android:name=".graphActivity"
             android:label="graphActivity">
         </activity>
 

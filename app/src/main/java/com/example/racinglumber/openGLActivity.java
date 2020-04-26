@@ -8,7 +8,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 import javax.microedition.khronos.opengles.GL10;
-
+//todo this activity is not in the manifest
 public class openGLActivity extends Activity {
     private GLSurfaceView gLView;
 
