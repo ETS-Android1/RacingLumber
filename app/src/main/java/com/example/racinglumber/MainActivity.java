@@ -14,23 +14,18 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
 
-//////////////////////////////////
-////////////////TODO NEXT TIME:
-/////////////////////////////////
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener {
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
-    int dataArrayLen = 1000;
+    int dataArrayLen = 100;
     int accelIndex = 0; //index of x/y/zDataArray
     int rotationIndex = 0; //index of x/y/zRotationArray
     int gravityIndex = 0; //index of x/y/zGravityArray
-    /////////////Control Flags/////////////
+    /*Control Flags*/
     boolean dataIsRecording = false;
-    boolean saveDataToFile = false;
-    /////////////Recorded Data/////////////
+    /*Recorded Data*/
     float[] xDataArray = new float[dataArrayLen];
     float[] yDataArray = new float[dataArrayLen];
     float[] zDataArray = new float[dataArrayLen];
@@ -46,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     float[] zGravityArray = new float[dataArrayLen];
 
     // Used to load the 'native-lib' library on application startup.
-//    static {
-//        System.loadLibrary("native-lib");
-//    }
+    static {
+        System.loadLibrary("native-lib");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
         // Example of a call to a native method
-//        TextView tv = findViewById(R.id.sample_text);
-//        tv.setText(stringFromJNI());
+        TextView tv = findViewById(R.id.sample_text);
+        tv.setText(stringFromJNI());
     }
 ///////////BUTTON FUNCTIONS//////////////
     @Override
@@ -130,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if ((accelIndex >= dataArrayLen)||(rotationIndex >= dataArrayLen)||(gravityIndex >= dataArrayLen))
             {
                 endRecording();
+                //todo why does calling fileStorage.writeFloatArrayToFile() here cause a system error?
             }
             else
             {
@@ -180,25 +176,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void endRecording()
     {
-        if (saveDataToFile)
-        {
-            externalStorageFunctionality.writeFloatArrayToFile(xDataArray, this, "xDataArray");
-            externalStorageFunctionality.writeFloatArrayToFile(yDataArray, this, "yDataArray");
-            externalStorageFunctionality.writeFloatArrayToFile(zDataArray, this, "zDataArray");
-            externalStorageFunctionality.writeLongArrayToFile(accelEventTime, this, "accelTimeArray");
-            externalStorageFunctionality.writeLongArrayToFile(rotationEventTime, this, "rotationTimeArray");
-        }
-
         Button backward_img = (Button) findViewById(R.id.recordButton);
         backward_img.setBackgroundColor(Color.WHITE);
 
         dataIsRecording = false;
         onPause();
+        //todo save to file here?
     }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-//    public native String stringFromJNI();
+    public native String stringFromJNI();
 }
