@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*Control Flags*/
     boolean dataIsRecording = false;
     /*Recorded Data*/
-    float[] xDataArray = new float[dataArrayLen];
+    //float[] xDataArray = new float[dataStorage.dataArrayLen];
     float[] yDataArray = new float[dataArrayLen];
     float[] zDataArray = new float[dataArrayLen];
     long[] accelEventTime = new long[dataArrayLen];
@@ -131,7 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION)
                 {
-                    xDataArray[accelIndex] = sensorEvent.values[0];
+                    dataStorage.xDataArray[accelIndex] = sensorEvent.values[0];
+//                    xDataArray[accelIndex] = sensorEvent.values[0];
                     yDataArray[accelIndex] = sensorEvent.values[1];
                     zDataArray[accelIndex] = sensorEvent.values[2];
                     accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
