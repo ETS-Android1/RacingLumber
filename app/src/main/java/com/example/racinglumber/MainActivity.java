@@ -19,26 +19,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
-    int dataArrayLen = 100;
     int accelIndex = 0; //index of x/y/zDataArray
     int rotationIndex = 0; //index of x/y/zRotationArray
     int gravityIndex = 0; //index of x/y/zGravityArray
     /*Control Flags*/
     boolean dataIsRecording = false;
-    /*Recorded Data*/
-    //float[] xDataArray = new float[dataStorage.dataArrayLen];
-    float[] yDataArray = new float[dataArrayLen];
-    float[] zDataArray = new float[dataArrayLen];
-    long[] accelEventTime = new long[dataArrayLen];
-
-    float[] xRotationArray = new float[dataArrayLen];
-    float[] yRotationArray = new float[dataArrayLen];
-    float[] zRotationArray = new float[dataArrayLen];
-    long[] rotationEventTime = new long[dataArrayLen];
-
-    float[] xGravityArray = new float[dataArrayLen];
-    float[] yGravityArray = new float[dataArrayLen];
-    float[] zGravityArray = new float[dataArrayLen];
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -57,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         graphButton.setOnClickListener(this);
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         senRotation = senSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
@@ -122,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (dataIsRecording)
         {
-            if ((accelIndex >= dataArrayLen)||(rotationIndex >= dataArrayLen)||(gravityIndex >= dataArrayLen))
+            if ((accelIndex >= dataStorage.dataArrayLen)||(rotationIndex >= dataStorage.dataArrayLen)||(gravityIndex >= dataStorage.dataArrayLen))
             {
                 endRecording();
                 //todo why does calling fileStorage.writeFloatArrayToFile() here cause a system error?
@@ -132,25 +116,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION)
                 {
                     dataStorage.xDataArray[accelIndex] = sensorEvent.values[0];
-//                    xDataArray[accelIndex] = sensorEvent.values[0];
-                    yDataArray[accelIndex] = sensorEvent.values[1];
-                    zDataArray[accelIndex] = sensorEvent.values[2];
-                    accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
+                    dataStorage.yDataArray[accelIndex] = sensorEvent.values[1];
+                    dataStorage.zDataArray[accelIndex] = sensorEvent.values[2];
+                    dataStorage.accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
                     accelIndex = accelIndex + 1;
                 }
                 else if (mySensor.getType() == Sensor.TYPE_ROTATION_VECTOR)
                 {
-                    xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
-                    yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
-                    zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw
-                    rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
+                    dataStorage.xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
+                    dataStorage.yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
+                    dataStorage.zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw
+                    dataStorage.rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
                     rotationIndex = rotationIndex + 1;
                 }
                 else if (mySensor.getType() == Sensor.TYPE_GRAVITY)
                 {
-                    xGravityArray[gravityIndex] = sensorEvent.values[0];
-                    yGravityArray[gravityIndex] = sensorEvent.values[1];
-                    zGravityArray[gravityIndex] = sensorEvent.values[2];
+                    dataStorage.xGravityArray[gravityIndex] = sensorEvent.values[0];
+                    dataStorage.yGravityArray[gravityIndex] = sensorEvent.values[1];
+                    dataStorage.zGravityArray[gravityIndex] = sensorEvent.values[2];
                     gravityIndex = gravityIndex + 1;
                 }
                 else

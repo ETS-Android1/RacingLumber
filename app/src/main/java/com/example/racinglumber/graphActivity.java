@@ -8,15 +8,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class graphActivity extends Activity {
-//    LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-//            new DataPoint(0, dataStorage.xDataArray[0]),
-//            new DataPoint(1, dataStorage.xDataArray[1]),
-//            new DataPoint(2, dataStorage.xDataArray[2]),
-//            new DataPoint(3, dataStorage.xDataArray[3]),
-//            new DataPoint(4, dataStorage.xDataArray[4])
-//    });
     LineGraphSeries<DataPoint> series = new LineGraphSeries();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -27,12 +19,22 @@ public class graphActivity extends Activity {
         GraphView graph = (GraphView)findViewById(R.id.graph);
 
         //add series of data
-        for (int counter = 0; counter < 15; counter++)
+        for (int counter = 0; counter < 500; counter++)
         {
-            series.appendData(new DataPoint(counter, dataStorage.xDataArray[counter]), false, 15);
+            series.appendData(new DataPoint(counter, dataStorage.xDataArray[counter]), false, 500);
         }
-        //DataPoint newData2 = new DataPoint(1, 2);;
-        //series.appendData(newData2, false, 10);
+
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(-30);
+        graph.getViewport().setMaxY(30);
+
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(100);
+
+        // enable scaling and scrolling
+        graph.getViewport().setScalable(true);
+        graph.getViewport().setScalableY(true);
 
         graph.addSeries(series);
     }
