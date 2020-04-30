@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -131,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else if (mySensor.getType() == Sensor.TYPE_GRAVITY)
                 {
+                    //Log.e("SPENCERxxxx", Float.toString(sensorEvent.values[0]));//debug log statements used for dev
+                    //Log.e("SPENCERyyyy", Float.toString(sensorEvent.values[1]));
+                    //Log.e("SPENCERzzzz", Float.toString(sensorEvent.values[2]));
+
                     dataStorage.xGravityArray[gravityIndex] = sensorEvent.values[0];
                     dataStorage.yGravityArray[gravityIndex] = sensorEvent.values[1];
                     dataStorage.zGravityArray[gravityIndex] = sensorEvent.values[2];
