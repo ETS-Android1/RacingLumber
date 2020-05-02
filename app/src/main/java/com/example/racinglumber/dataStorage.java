@@ -1,6 +1,11 @@
 package com.example.racinglumber;
 
 public class dataStorage {
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
+
     public static int dataArrayLen = 500;
 
     public static float[] xDataArray = new float[dataArrayLen];
@@ -44,8 +49,14 @@ public class dataStorage {
     * : Conjugate D by R: D' = RDR'
     * */
 
-    public static void correctDataOrientation ()
+    public void correctDataOrientation ()
     {
-
+        String testVar = stringFromJNI();
     }
+
+    /**
+     * A native method that is implemented by the 'native-lib' native library,
+     * which is packaged with this application.
+     */
+    public native String stringFromJNI();
 }

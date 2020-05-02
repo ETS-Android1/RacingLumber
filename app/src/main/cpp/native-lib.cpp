@@ -2,7 +2,7 @@
 #include <string>
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_racinglumber_MainActivity_stringFromJNI(
+Java_com_example_racinglumber_dataStorage_stringFromJNI(
         JNIEnv* env,
         jobject /* this */) {
     std::string hello = "Press that button";
