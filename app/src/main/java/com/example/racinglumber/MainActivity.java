@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
+    private dataStorage recordedVars;
     int accelIndex = 0; //index of x/y/zDataArray
     int rotationIndex = 0; //index of x/y/zRotationArray
     int gravityIndex = 0; //index of x/y/zGravityArray
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button graphButton = (Button) findViewById(R.id.graphButton);
         graphButton.setOnClickListener(this);
+
+        recordedVars = new dataStorage();
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -105,25 +108,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION)
                 {
-                    dataStorage.xDataArray[accelIndex] = sensorEvent.values[0];
-                    dataStorage.yDataArray[accelIndex] = sensorEvent.values[1];
-                    dataStorage.zDataArray[accelIndex] = sensorEvent.values[2];
-                    dataStorage.accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
+                    recordedVars.xDataArray[accelIndex] = sensorEvent.values[0];
+                    recordedVars.yDataArray[accelIndex] = sensorEvent.values[1];
+                    recordedVars.zDataArray[accelIndex] = sensorEvent.values[2];
+                    recordedVars.accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
                     accelIndex = accelIndex + 1;
                 }
                 else if (mySensor.getType() == Sensor.TYPE_ROTATION_VECTOR)
                 {
-                    dataStorage.xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
-                    dataStorage.yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
-                    dataStorage.zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw
-                    dataStorage.rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
+                    recordedVars.xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
+                    recordedVars.yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
+                    recordedVars.zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw
+                    recordedVars.rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
                     rotationIndex = rotationIndex + 1;
                 }
                 else if (mySensor.getType() == Sensor.TYPE_GRAVITY)
                 {
-                    dataStorage.xGravityArray[gravityIndex] = sensorEvent.values[0];
-                    dataStorage.yGravityArray[gravityIndex] = sensorEvent.values[1];
-                    dataStorage.zGravityArray[gravityIndex] = sensorEvent.values[2];
+                    recordedVars.xGravityArray[gravityIndex] = sensorEvent.values[0];
+                    recordedVars.yGravityArray[gravityIndex] = sensorEvent.values[1];
+                    recordedVars.zGravityArray[gravityIndex] = sensorEvent.values[2];
                     gravityIndex = gravityIndex + 1;
                 }
                 else
@@ -152,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         Button backward_img = (Button) findViewById(R.id.recordButton);
         backward_img.setBackgroundColor(Color.WHITE);
-
         dataIsRecording = false;
         onPause();
         //todo save to file here?
