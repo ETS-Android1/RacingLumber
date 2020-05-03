@@ -51,12 +51,14 @@ public class dataStorage {
 
     public void correctDataOrientation ()
     {
-        String testVar = stringFromJNI();
+        stringFromJNI();
+        long testVar = sumIntegers(1,2);
     }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native String stringFromJNI();
+    public native void stringFromJNI();
+    private native long sumIntegers(int first, int second);
 }
