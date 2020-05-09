@@ -138,11 +138,15 @@ public class dataStorage {
 
     //todo call this for every value asked for in graph activity.  That way we don't operate on unused datasets
     //todo needs bounds checking
-    public void correctDataOrientation () {
+    public void correctDataOrientation (double inputX, double inputY, double inputZ) {
         int index = 0; //todo debug var, will be inputted parameter
         double absValGPRIMEcrossG;
         double absValG;
         double angleW;
+
+        double outputX;
+        double outputY;
+        double outputZ;
 
         /*Calculate abs|G'xG| and abs|G|*/
         absValGPRIMEcrossG = Math.pow(xGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent x component
@@ -154,9 +158,52 @@ public class dataStorage {
 
         /*Calculate angle W*/
         angleW = Math.asin((absValGPRIMEcrossG/absValG));
+////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//todo do quaternion math here.  Make it simpler since we have zeroes? should make it easier
+        //Pout = q * Pin * conj(q)
+       // Conjugate D by R: D' = RDR'
+            //R = |G'xG|
+            //D is data input
+        //q = cos(W/2) + i ( Rx * sin(W/2)) + j (Ry * sin(W/2)) + k ( Rz * sin(W/2))
+        //    W=angle of rotation.
+        //    x,y,z = vector representing axis of rotation.
+
+        //so for me, q is the rotation quaternion and needs absolute value to be 1.  Need to normalize |G'xG| = [-Gy,Gx,0]
+        double normRx = (-1)*(yGravityArray[index] / absValGPRIMEcrossG);//normalized Rx
+        double normRy = (xGravityArray[index] / absValGPRIMEcrossG);//normalized Ry
+        //Normalized Rz = 0
+
+        double q0 = Math.cos(angleW/2); //cos(W/2)
+        double q1 = normRx * Math.sin(angleW/2); //( Rx * sin(W/2))i
+        double q2 = normRy * Math.sin(angleW/2); //j (Ry * sin(W/2))
+        double q3 = 0; //k ( Rz * sin(W/2)
+//x component of x output value of rotation
+        double dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
+        dPrimeXcompX *= inputX;
+//y component of x output value of rotation
+        double dPrimeXcompY = (q1*q2);
+        dPrimeXcompY *= (2*inputY);
+//z component of x output value of rotation
+        double dPrimeXcompZ = 2*inputZ*q0*q2;
+
+        outputX = dPrimeXcompX + dPrimeXcompY + dPrimeXcompZ;
+///////////
+        double dPrimeYcompX = 2*inputX*q1*q2;
+        double dPrimeYcompY = Math.pow(q0,2)+Math.pow(q2,2)-Math.pow(q1,2);
+        double dPrimeYcompZ = (-1)*2*inputZ*q0*q1;
+
+        outputY = dPrimeYcompX + dPrimeYcompY + dPrimeYcompZ;
+////////////
+        double dPrimeZcompX = (-2)*inputX*q0*q2;
+        double dPrimeZcompY = 2*inputY*q0*q1;
+        double dPrimeZcompZ = inputY*(Math.pow(q0,2)-(Math.pow(q1,2)+Math.pow(q2,2)));
+
+        outputZ = dPrimeZcompX + dPrimeZcompY + dPrimeZcompZ;
+        //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
     }
+
 
         //stringFromJNI();
         //long testVar = sumIntegers(1,2);
