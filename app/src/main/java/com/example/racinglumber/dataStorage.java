@@ -12,22 +12,22 @@ public class dataStorage {
     private static int dataArrayLen = 500;
 
     public static float[] xDataArray = new float[dataArrayLen];//todo this is public for now, update with graphActivity
-    private static float[] yDataArray = new float[dataArrayLen];
-    private static float[] zDataArray = new float[dataArrayLen];
-    private static int accelIndex = 0; //index of x/y/zDataArray
+    private static float[] yDataArray;// = new float[dataArrayLen];//todo check that these don't break record
+    private static float[] zDataArray;// = new float[dataArrayLen];
+    private static int accelIndex;// = 0; //index of x/y/zDataArray
     private static long[] accelEventTime = new long[dataArrayLen];
 
-    private static float[] xRotationArray = new float[dataArrayLen];
-    private static float[] yRotationArray = new float[dataArrayLen];
-    private static float[] zRotationArray = new float[dataArrayLen];
+    private static float[] xRotationArray;// = new float[dataArrayLen];
+    private static float[] yRotationArray;// = new float[dataArrayLen];
+    private static float[] zRotationArray;// = new float[dataArrayLen];
     private static int rotationIndex = 0; //index of x/y/zRotationArray
-    private static long[] rotationEventTime = new long[dataArrayLen];
+    private static long[] rotationEventTime;// = new long[dataArrayLen];
 
-    private static float[] xGravityArray = new float[dataArrayLen];
-    private static float[] yGravityArray = new float[dataArrayLen];
-    private static float[] zGravityArray = new float[dataArrayLen];
+    private static float[] xGravityArray;// = new float[dataArrayLen];
+    private static float[] yGravityArray;// = new float[dataArrayLen];
+    private static float[] zGravityArray;// = new float[dataArrayLen];
     private static int gravityIndex = 0; //index of x/y/zGravityArray
-    private static long[] gravityEventTime = new long[dataArrayLen];
+    private static long[] gravityEventTime;// = new long[dataArrayLen];
 
     public void clearStorage()
     {
@@ -136,12 +136,30 @@ public class dataStorage {
     * : Conjugate D by R: D' = RDR'
     * */
 
-    public void correctDataOrientation ()
-    {
-        //stringFromJNI();
-        //long testVar = sumIntegers(1,2);
+    //todo call this for every value asked for in graph activity.  That way we don't operate on unused datasets
+    //todo needs bounds checking
+    public void correctDataOrientation () {
+        int index = 0; //todo debug var, will be inputted parameter
+        double absValGPRIMEcrossG;
+        double absValG;
+        double angleW;
+
+        /*Calculate abs|G'xG| and abs|G|*/
+        absValGPRIMEcrossG = Math.pow(xGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent x component
+        absValGPRIMEcrossG += Math.pow(yGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent y component
+        absValG = absValGPRIMEcrossG + Math.pow(xGravityArray[index], 2); //abs|G| has z component while abs|G'xG| doesn't
+
+        absValG = Math.sqrt(absValG);
+        absValGPRIMEcrossG = Math.sqrt(absValGPRIMEcrossG);
+
+        /*Calculate angle W*/
+        angleW = Math.asin((absValGPRIMEcrossG/absValG));
+
+
     }
 
+        //stringFromJNI();
+        //long testVar = sumIntegers(1,2);
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
