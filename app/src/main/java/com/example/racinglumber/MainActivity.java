@@ -19,9 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senRotation;
     private Sensor senGravity;
     private dataStorage recordedVars;
-    int accelIndex = 0; //index of x/y/zDataArray
-    int rotationIndex = 0; //index of x/y/zRotationArray
-    int gravityIndex = 0; //index of x/y/zGravityArray
+
     /*Control Flags*/
     boolean dataIsRecording = false;
 
@@ -66,10 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             /*graph button was pressed.  End recording and switch to new view*/
             if (!dataIsRecording)
             {
-                //todo switch to new activity
                 startActivity(new Intent(MainActivity.this, graphActivity.class));
             }
-            //todo error conditions.  What if pressed before recording?
         }
     }
 ///////////ACCELEROMETER FUNCTIONS/////////////
@@ -85,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //sensor delay game is 20,000ms delay = 100Hz
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         senSensorManager.registerListener(this, senRotation, SensorManager.SENSOR_DELAY_GAME);
-        senSensorManager.registerListener(this, senGravity, SensorManager.SENSOR_DELAY_GAME); //todo we don't need a gravity vector this accurate
+        senSensorManager.registerListener(this, senGravity, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -95,53 +91,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onSensorChanged(SensorEvent sensorEvent)
     {
+        boolean bufferFull;
         Sensor mySensor = sensorEvent.sensor;
 
         if (dataIsRecording)
         {
-            if ((accelIndex >= dataStorage.dataArrayLen)||(rotationIndex >= dataStorage.dataArrayLen)||(gravityIndex >= dataStorage.dataArrayLen))
+            bufferFull = recordedVars.writeToStorage(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2], mySensor.getType());
+            if (bufferFull)
             {
                 endRecording();
-                //todo why does calling fileStorage.writeFloatArrayToFile() here cause a system error?
-            }
-            else
-            {
-                if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION)
-                {
-                    recordedVars.xDataArray[accelIndex] = sensorEvent.values[0];
-                    recordedVars.yDataArray[accelIndex] = sensorEvent.values[1];
-                    recordedVars.zDataArray[accelIndex] = sensorEvent.values[2];
-                    recordedVars.accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
-                    accelIndex = accelIndex + 1;
-                }
-                else if (mySensor.getType() == Sensor.TYPE_ROTATION_VECTOR)
-                {
-                    recordedVars.xRotationArray[rotationIndex] = sensorEvent.values[0];//x is pitch
-                    recordedVars.yRotationArray[rotationIndex] = sensorEvent.values[1];//y is roll
-                    recordedVars.zRotationArray[rotationIndex] = sensorEvent.values[2];//z is yaw
-                    recordedVars.rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
-                    rotationIndex = rotationIndex + 1;
-                }
-                else if (mySensor.getType() == Sensor.TYPE_GRAVITY)
-                {
-                    recordedVars.xGravityArray[gravityIndex] = sensorEvent.values[0];
-                    recordedVars.yGravityArray[gravityIndex] = sensorEvent.values[1];
-                    recordedVars.zGravityArray[gravityIndex] = sensorEvent.values[2];
-                    gravityIndex = gravityIndex + 1;
-                }
-                else
-                {
-                    //do nothing
-                }
             }
         }
     }
     ///////////////////Control Functions//////////////////////
     private void startRecording()
     {
-        accelIndex = 0;
-        rotationIndex = 0;
-        gravityIndex = 0;
+        recordedVars.clearStorage();
 
         Button backward_img = (Button) findViewById(R.id.recordButton);
         dataIsRecording = !dataIsRecording;
@@ -157,6 +122,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         backward_img.setBackgroundColor(Color.WHITE);
         dataIsRecording = false;
         onPause();
-        //todo save to file here?
     }
 }
