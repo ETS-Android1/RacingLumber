@@ -23,6 +23,11 @@ public class graphActivity extends Activity {
         //add series of data
         for (int counter = 0; counter < 500; counter++)
         {
+            if (recordedVars.xDataArray.length < counter)
+            {
+                break;
+            }
+            //series.appendData(new DataPoint(counter, recordedVars.returnCorrectedDataPoint(dataStorage.Axis.X,counter)), false, 500);
             series.appendData(new DataPoint(counter, recordedVars.xDataArray[counter]), false, 500);
         }
 

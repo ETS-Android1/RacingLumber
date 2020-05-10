@@ -5,17 +5,22 @@ import android.os.SystemClock;
 
 public class dataStorage {
     // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
+//    static {
+//        System.loadLibrary("native-lib");
+//    }
+
+    enum Axis
+    {
+        X, Y, Z;
     }
 
     private static int dataArrayLen = 500;
 
-    public static float[] xDataArray = new float[dataArrayLen];//todo this is public for now, update with graphActivity
+    public static float[] xDataArray;// = new float[dataArrayLen];//todo this is public for now, update with graphActivity
     private static float[] yDataArray;// = new float[dataArrayLen];//todo check that these don't break record
     private static float[] zDataArray;// = new float[dataArrayLen];
     private static int accelIndex;// = 0; //index of x/y/zDataArray
-    private static long[] accelEventTime = new long[dataArrayLen];
+    private static long[] accelEventTime;// = new long[dataArrayLen];
 
     private static float[] xRotationArray;// = new float[dataArrayLen];
     private static float[] yRotationArray;// = new float[dataArrayLen];
@@ -37,6 +42,8 @@ public class dataStorage {
         yDataArray = new float[dataArrayLen];
         zDataArray = null;
         zDataArray = new float[dataArrayLen];
+        accelEventTime = null;
+        accelEventTime = new long[dataArrayLen];
         accelIndex = 0;
 
         xRotationArray = null;
@@ -45,6 +52,8 @@ public class dataStorage {
         yRotationArray = new float[dataArrayLen];
         zRotationArray = null;
         zRotationArray = new float[dataArrayLen];
+        rotationEventTime = null;
+        rotationEventTime = new long[dataArrayLen];
         rotationIndex = 0;
 
         xGravityArray = null;
@@ -53,6 +62,8 @@ public class dataStorage {
         yGravityArray = new float[dataArrayLen];
         zGravityArray = null;
         zGravityArray = new float[dataArrayLen];
+        gravityEventTime = null;
+        gravityEventTime = new long[dataArrayLen];
         gravityIndex = 0;
     }
 
@@ -101,7 +112,7 @@ public class dataStorage {
                 xGravityArray[gravityIndex] = xInput;
                 yGravityArray[gravityIndex] = yInput;
                 zGravityArray[gravityIndex] = zInput;
-                gravityEventTime[rotationIndex] = SystemClock.elapsedRealtime();
+                gravityEventTime[gravityIndex] = SystemClock.elapsedRealtime();
                 gravityIndex = gravityIndex + 1;
             }
         }
@@ -111,6 +122,15 @@ public class dataStorage {
         }
 
         return bufferFull;
+    }
+
+    public float returnCorrectedDataPoint(Axis selectedAxis, int index)
+    {
+////////////////////TODO next time: I need to correct all of the data for rotation, right after endRecording();  So, change these input parameters
+        //todo should be an enum denoting accel/rotation then correct the value.  Timings do not need correction
+        correctDataOrientation (xRotationArray[index], zRotationArray[index], zRotationArray[index], index);
+
+        return xRotationArray[index];
     }
 
     /* Math for correcting the orientation of collected data.
@@ -138,8 +158,7 @@ public class dataStorage {
 
     //todo call this for every value asked for in graph activity.  That way we don't operate on unused datasets
     //todo needs bounds checking
-    public void correctDataOrientation (double inputX, double inputY, double inputZ) {
-        int index = 0; //todo debug var, will be inputted parameter
+    public void correctDataOrientation (double inputX, double inputY, double inputZ, int index) {
         double absValGPRIMEcrossG;
         double absValG;
         double angleW;
@@ -159,7 +178,7 @@ public class dataStorage {
         /*Calculate angle W*/
         angleW = Math.asin((absValGPRIMEcrossG/absValG));
 ////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//todo do quaternion math here.  Make it simpler since we have zeroes? should make it easier
+//todo do quaternion math here
         //Pout = q * Pin * conj(q)
        // Conjugate D by R: D' = RDR'
             //R = |G'xG|
@@ -200,7 +219,9 @@ public class dataStorage {
 
         outputZ = dPrimeZcompX + dPrimeZcompY + dPrimeZcompZ;
         //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
+        inputX = outputX;
+        inputY = outputY;
+        inputZ = outputZ;
 
     }
 
@@ -211,6 +232,6 @@ public class dataStorage {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native void stringFromJNI();
-    private native long sumIntegers(int first, int second);
+//    public native void stringFromJNI();
+//    private native long sumIntegers(int first, int second);
 }
