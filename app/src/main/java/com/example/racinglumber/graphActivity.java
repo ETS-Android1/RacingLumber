@@ -21,14 +21,14 @@ public class graphActivity extends Activity {
         recordedVars = new dataStorage();
 
         //add series of data
-        for (int counter = 0; counter < 500; counter++)
+        for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
         {
-            if (recordedVars.xDataArray.length < counter)
+            if ((recordedVars.xDataArray.length - 1) < counter)
             {
                 break;
             }
             //series.appendData(new DataPoint(counter, recordedVars.returnCorrectedDataPoint(dataStorage.Axis.X,counter)), false, 500);
-            series.appendData(new DataPoint(counter, recordedVars.xDataArray[counter]), false, 500);
+            series.appendData(new DataPoint(counter, recordedVars.xDataArray[counter]), false, recordedVars.dataArrayLen);
         }
 
         graph.getViewport().setYAxisBoundsManual(true);

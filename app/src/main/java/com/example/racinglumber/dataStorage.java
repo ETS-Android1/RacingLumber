@@ -14,7 +14,7 @@ public class dataStorage {
         X, Y, Z;
     }
 
-    private static int dataArrayLen = 500;
+    public static int dataArrayLen = 500;
 
     public static float[] xDataArray;// = new float[dataArrayLen];//todo this is public for now, update with graphActivity
     private static float[] yDataArray;// = new float[dataArrayLen];//todo check that these don't break record
@@ -124,13 +124,12 @@ public class dataStorage {
         return bufferFull;
     }
 
-    public float returnCorrectedDataPoint(Axis selectedAxis, int index)
+    public void correctedDataPoints()
     {
 ////////////////////TODO next time: I need to correct all of the data for rotation, right after endRecording();  So, change these input parameters
         //todo should be an enum denoting accel/rotation then correct the value.  Timings do not need correction
-        correctDataOrientation (xRotationArray[index], zRotationArray[index], zRotationArray[index], index);
-
-        return xRotationArray[index];
+        correctDataOrientation (xDataArray, yDataArray, zDataArray);
+        correctDataOrientation (xRotationArray, yRotationArray, zRotationArray);
     }
 
     /* Math for correcting the orientation of collected data.
@@ -158,71 +157,87 @@ public class dataStorage {
 
     //todo call this for every value asked for in graph activity.  That way we don't operate on unused datasets
     //todo needs bounds checking
-    public void correctDataOrientation (double inputX, double inputY, double inputZ, int index) {
+    public void correctDataOrientation (float [] xInputArray, float [] yInputArray, float [] zInputArray) {
         double absValGPRIMEcrossG;
         double absValG;
         double angleW;
+        double inputX;
+        double inputY;
+        double inputZ;
+        double outputX; double outputY; double outputZ;
+        double q0; double q1; double q2;
+        double dPrimeXcompX; double dPrimeXcompY; double dPrimeXcompZ;
+        double dPrimeYcompX; double dPrimeYcompY; double dPrimeYcompZ;
+        double dPrimeZcompX; double dPrimeZcompY; double dPrimeZcompZ;
 
-        double outputX;
-        double outputY;
-        double outputZ;
+        for (int index = 0; index < xInputArray.length; index++)
+        {
+            inputX = xInputArray[index];
+            inputY = yInputArray[index];
+            inputZ = zInputArray[index];
 
-        /*Calculate abs|G'xG| and abs|G|*/
-        absValGPRIMEcrossG = Math.pow(xGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent x component
-        absValGPRIMEcrossG += Math.pow(yGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent y component
-        absValG = absValGPRIMEcrossG + Math.pow(xGravityArray[index], 2); //abs|G| has z component while abs|G'xG| doesn't
+            /*Calculate abs|G'xG| and abs|G|*/
+            if (xGravityArray.length < (index - 1))
+            {
+                absValGPRIMEcrossG = Math.pow(xGravityArray[xGravityArray.length - 1], 2); //abs|G| and abs|G'xG| have equivalent x component
+                absValGPRIMEcrossG += Math.pow(yGravityArray[xGravityArray.length - 1], 2); //abs|G| and abs|G'xG| have equivalent y component
+                absValG = absValGPRIMEcrossG + Math.pow(xGravityArray[xGravityArray.length - 1], 2); //abs|G| has z component while abs|G'xG| doesn't
+            }
+            else
+            {
+                absValGPRIMEcrossG = Math.pow(xGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent x component
+                absValGPRIMEcrossG += Math.pow(yGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent y component
+                absValG = absValGPRIMEcrossG + Math.pow(xGravityArray[index], 2); //abs|G| has z component while abs|G'xG| doesn't
+            }
 
-        absValG = Math.sqrt(absValG);
-        absValGPRIMEcrossG = Math.sqrt(absValGPRIMEcrossG);
+            absValG = Math.sqrt(absValG);
+            absValGPRIMEcrossG = Math.sqrt(absValGPRIMEcrossG);
 
-        /*Calculate angle W*/
-        angleW = Math.asin((absValGPRIMEcrossG/absValG));
-////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//todo do quaternion math here
-        //Pout = q * Pin * conj(q)
-       // Conjugate D by R: D' = RDR'
+            /*Calculate angle W*/
+            angleW = Math.asin((absValGPRIMEcrossG/absValG));
+
+            //Pout = q * Pin * conj(q)
+            // Conjugate D by R: D' = RDR'
             //R = |G'xG|
             //D is data input
-        //q = cos(W/2) + i ( Rx * sin(W/2)) + j (Ry * sin(W/2)) + k ( Rz * sin(W/2))
-        //    W=angle of rotation.
-        //    x,y,z = vector representing axis of rotation.
+            //q = cos(W/2) + i ( Rx * sin(W/2)) + j (Ry * sin(W/2)) + k ( Rz * sin(W/2))
+            //    W=angle of rotation.
+            //    x,y,z = vector representing axis of rotation.
 
-        //so for me, q is the rotation quaternion and needs absolute value to be 1.  Need to normalize |G'xG| = [-Gy,Gx,0]
-        double normRx = (-1)*(yGravityArray[index] / absValGPRIMEcrossG);//normalized Rx
-        double normRy = (xGravityArray[index] / absValGPRIMEcrossG);//normalized Ry
-        //Normalized Rz = 0
+            //so for me, q is the rotation quaternion and needs absolute value to be 1.  Need to normalize |G'xG| = [-Gy,Gx,0]
+            double normRx = (-1)*(yGravityArray[index] / absValGPRIMEcrossG);//normalized Rx
+            double normRy = (xGravityArray[index] / absValGPRIMEcrossG);//normalized Ry
+            //Normalized Rz = 0
 
-        double q0 = Math.cos(angleW/2); //cos(W/2)
-        double q1 = normRx * Math.sin(angleW/2); //( Rx * sin(W/2))i
-        double q2 = normRy * Math.sin(angleW/2); //j (Ry * sin(W/2))
-        double q3 = 0; //k ( Rz * sin(W/2)
-//x component of x output value of rotation
-        double dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
-        dPrimeXcompX *= inputX;
-//y component of x output value of rotation
-        double dPrimeXcompY = (q1*q2);
-        dPrimeXcompY *= (2*inputY);
-//z component of x output value of rotation
-        double dPrimeXcompZ = 2*inputZ*q0*q2;
+            q0 = Math.cos(angleW/2); //cos(W/2)
+            q1 = normRx * Math.sin(angleW/2); //( Rx * sin(W/2))i
+            q2 = normRy * Math.sin(angleW/2); //j (Ry * sin(W/2))
+            //q3 = 0, k ( Rz * sin(W/2)
 
-        outputX = dPrimeXcompX + dPrimeXcompY + dPrimeXcompZ;
-///////////
-        double dPrimeYcompX = 2*inputX*q1*q2;
-        double dPrimeYcompY = Math.pow(q0,2)+Math.pow(q2,2)-Math.pow(q1,2);
-        double dPrimeYcompZ = (-1)*2*inputZ*q0*q1;
+            //x component of x output value of rotation
+            dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
+            dPrimeXcompX *= inputX;
+            //y component of x output value of rotation
+            dPrimeXcompY = (q1*q2);
+            dPrimeXcompY *= (2*inputY);
+            //z component of x output value of rotation
+            dPrimeXcompZ = 2*inputZ*q0*q2;
+            outputX = dPrimeXcompX + dPrimeXcompY + dPrimeXcompZ;
 
-        outputY = dPrimeYcompX + dPrimeYcompY + dPrimeYcompZ;
-////////////
-        double dPrimeZcompX = (-2)*inputX*q0*q2;
-        double dPrimeZcompY = 2*inputY*q0*q1;
-        double dPrimeZcompZ = inputY*(Math.pow(q0,2)-(Math.pow(q1,2)+Math.pow(q2,2)));
+            dPrimeYcompX = 2*inputX*q1*q2;
+            dPrimeYcompY = Math.pow(q0,2)+Math.pow(q2,2)-Math.pow(q1,2);
+            dPrimeYcompZ = (-1)*2*inputZ*q0*q1;
+            outputY = dPrimeYcompX + dPrimeYcompY + dPrimeYcompZ;
 
-        outputZ = dPrimeZcompX + dPrimeZcompY + dPrimeZcompZ;
-        //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        inputX = outputX;
-        inputY = outputY;
-        inputZ = outputZ;
+            dPrimeZcompX = (-2)*inputX*q0*q2;
+            dPrimeZcompY = 2*inputY*q0*q1;
+            dPrimeZcompZ = inputY*(Math.pow(q0,2)-(Math.pow(q1,2)+Math.pow(q2,2)));
+            outputZ = dPrimeZcompX + dPrimeZcompY + dPrimeZcompZ;
 
+            xInputArray[index] = (float)outputX;
+            yInputArray[index] = (float)outputY;
+            zInputArray[index] = (float)outputZ;
+        }
     }
 
 

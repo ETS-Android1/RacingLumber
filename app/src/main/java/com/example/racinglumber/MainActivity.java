@@ -122,5 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         backward_img.setBackgroundColor(Color.WHITE);
         dataIsRecording = false;
         onPause();
+        recordedVars.correctedDataPoints();
     }
 }
