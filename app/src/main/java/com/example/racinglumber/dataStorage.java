@@ -126,8 +126,6 @@ public class dataStorage {
 
     public void correctedDataPoints()
     {
-////////////////////TODO next time: I need to correct all of the data for rotation, right after endRecording();  So, change these input parameters
-        //todo should be an enum denoting accel/rotation then correct the value.  Timings do not need correction
         correctDataOrientation (xDataArray, yDataArray, zDataArray);
         correctDataOrientation (xRotationArray, yRotationArray, zRotationArray);
     }
@@ -155,8 +153,6 @@ public class dataStorage {
     * : Conjugate D by R: D' = RDR'
     * */
 
-    //todo call this for every value asked for in graph activity.  That way we don't operate on unused datasets
-    //todo needs bounds checking
     public void correctDataOrientation (float [] xInputArray, float [] yInputArray, float [] zInputArray) {
         double absValGPRIMEcrossG;
         double absValG;
