@@ -1,11 +1,13 @@
 package com.example.racinglumber;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.hardware.Sensor;
@@ -13,7 +15,10 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener {
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener , BottomNavigationView.OnNavigationItemSelectedListener {
+    private BottomNavigationView bottomNavigationView;
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private Sensor senRotation;
@@ -31,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button recordButton = (Button) findViewById(R.id.recordButton);
         recordButton.setOnClickListener(this);
 
-        Button graphButton = (Button) findViewById(R.id.graphButton);
-        graphButton.setOnClickListener(this);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         recordedVars = new dataStorage();
 
@@ -42,6 +47,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
     }
 ///////////BUTTON FUNCTIONS//////////////
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemID = item.getItemId();
+        boolean returnVal = true;
+
+        switch (itemID)
+        {
+            case R.id.bottom_nav_record_button:
+                break;
+            case R.id.bottom_nav_graph_button:
+                if (!dataIsRecording)
+                {
+                    startActivity(new Intent(MainActivity.this, graphActivity.class));
+                }
+                break;
+            case R.id.bottom_nav_save_button:
+                break;
+            default:
+                returnVal = false;
+                break;
+        }
+
+        return returnVal;
+    }
+
     @Override
     public void onClick(View v)
     {
@@ -57,14 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else
             {
                 endRecording();
-            }
-        }
-        else
-        {
-            /*graph button was pressed.  End recording and switch to new view*/
-            if (!dataIsRecording)
-            {
-                startActivity(new Intent(MainActivity.this, graphActivity.class));
             }
         }
     }
@@ -124,4 +146,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         onPause();
         recordedVars.correctedDataPoints();
     }
-}
+
+}//end of mainActivity class

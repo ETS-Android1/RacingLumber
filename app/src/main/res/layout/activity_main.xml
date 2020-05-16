@@ -12,12 +12,6 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/graphButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GRAPH" />
-
-        <Button
             android:id="@+id/recordButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +19,7 @@
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/bottom_navigation_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
