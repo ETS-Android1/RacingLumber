@@ -4,19 +4,19 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 <item
     android:id="@+id/action_favorites"
     android:enabled="true"
-    android:icon="@drawable/example_icon"
-    android:title="@string/app_name"
+    android:icon="@drawable/ic_fiber_manual_record_black_24dp"
+    android:title="@string/bottom_nav_record"
     app:showAsAction="ifRoom" />
 <item
     android:id="@+id/action_schedules"
     android:enabled="true"
-    android:icon="@drawable/example_icon"
-    android:title="@string/app_name"
+    android:icon="@drawable/ic_timeline_black_24dp"
+    android:title="@string/bottom_nav_graph"
     app:showAsAction="ifRoom" />
 <item
     android:id="@+id/action_music"
     android:enabled="true"
-    android:icon="@drawable/example_icon"
-    android:title="@string/app_name"
+    android:icon="@drawable/ic_file_download_black_24dp"
+    android:title="@string/bottom_nav_save"
     app:showAsAction="ifRoom" />
 </menu>
