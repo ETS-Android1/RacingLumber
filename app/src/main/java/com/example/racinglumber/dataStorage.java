@@ -67,6 +67,11 @@ public class dataStorage {
         gravityIndex = 0;
     }
 
+    public void setDataArrayLen(int inputDataLen)
+    {
+        dataArrayLen = inputDataLen;
+    }
+
     public boolean writeToStorage(float xInput, float yInput, float zInput, int sensorType)
     {
         boolean bufferFull = false;

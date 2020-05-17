@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">RacingLumber</string>
+    <string name="mainUIrecordtimeMin">Record for</string>
+    <string name="mainUIrecordtimeMinUnits">minutes and</string>
+    <string name="mainUIrecordtimeSecUnits">seconds</string>
+    <string name="mainUIautoFillHintMinutes">0</string>
+    <string name="mainUIautoFillHintSeconds">10</string>
     <string name="bottom_nav_record">Record</string>
     <string name="bottom_nav_graph">Graph</string>
     <string name="bottom_nav_save">Save</string>

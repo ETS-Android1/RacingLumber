@@ -14,6 +14,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
+import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -129,6 +130,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ///////////////////Control Functions//////////////////////
     private void startRecording()
     {
+        String inputString;
+        int recordingMinutes;
+        int recordingSeconds;
+        int numRecordedSamples;
+
+        EditText minuteInput = (EditText) findViewById(R.id.textMinuteInput);
+        inputString = minuteInput.getText().toString();
+
+        if (!inputString.isEmpty())
+        {
+            recordingMinutes = Integer.parseInt(inputString);
+        }
+        else
+        {
+            recordingMinutes = 0;
+        }
+
+        EditText secondInput = (EditText) findViewById(R.id.textSecondInput);
+        inputString = secondInput.getText().toString();
+
+        if (!inputString.isEmpty())
+        {
+            recordingSeconds = Integer.parseInt(inputString);
+        }
+        else
+        {
+            recordingSeconds = 10;
+        }
+
+        //todo add variable calcs for different accuracies here.  Assume SensorManager.SENSOR_DELAY_GAME (50 samples/second) for now
+        recordingSeconds += (60 * recordingMinutes);
+        numRecordedSamples = 50*recordingSeconds; //todo this is the assumed sample rate.  Replace with switch statement
+
+        recordedVars.setDataArrayLen(numRecordedSamples);
         recordedVars.clearStorage();
 
         Button backward_img = (Button) findViewById(R.id.recordButton);

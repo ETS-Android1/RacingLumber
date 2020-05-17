@@ -11,10 +11,73 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textRecordFor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/mainUIrecordtimeMin" />
+
+            <EditText
+                android:id="@+id/textMinuteInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/mainUIautoFillHintMinutes"
+                android:autofillHints="@string/mainUIautoFillHintMinutes"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textMinutesAnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/mainUIrecordtimeMinUnits" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textLineTwoSpace"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="" />
+
+            <EditText
+                android:id="@+id/textSecondInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/mainUIautoFillHintSeconds"
+                android:autofillHints="@string/mainUIautoFillHintSeconds"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textSeconds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/mainUIrecordtimeSecUnits" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/recordButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="RECORD" />
     </LinearLayout>
 
