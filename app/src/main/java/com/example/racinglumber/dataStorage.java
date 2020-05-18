@@ -17,7 +17,7 @@ public class dataStorage {
     public static int dataArrayLen = 500;
 
     public static float[] xDataArray;// = new float[dataArrayLen];//todo this is public for now, update with graphActivity
-    private static float[] yDataArray;// = new float[dataArrayLen];//todo check that these don't break record
+    public static float[] yDataArray;// = new float[dataArrayLen];//todo check that these don't break record
     private static float[] zDataArray;// = new float[dataArrayLen];
     private static int accelIndex;// = 0; //index of x/y/zDataArray
     private static long[] accelEventTime;// = new long[dataArrayLen];

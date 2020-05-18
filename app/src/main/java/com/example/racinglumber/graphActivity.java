@@ -14,6 +14,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class graphActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener {
     LineGraphSeries<DataPoint> series = new LineGraphSeries();
+    LineGraphSeries<DataPoint> seriesTESTTEST = new LineGraphSeries();
+
     private BottomNavigationView bottomNavigationView;
     private dataStorage recordedVars;
 
@@ -37,8 +39,9 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
             {
                 break;
             }
-            //series.appendData(new DataPoint(counter, recordedVars.returnCorrectedDataPoint(dataStorage.Axis.X,counter)), false, 500);
+
             series.appendData(new DataPoint(counter, recordedVars.xDataArray[counter]), false, recordedVars.dataArrayLen);
+            seriesTESTTEST.appendData(new DataPoint(counter, recordedVars.yDataArray[counter]), false, recordedVars.dataArrayLen);
         }
 
         graph.getViewport().setYAxisBoundsManual(true);
@@ -54,6 +57,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         graph.getViewport().setScalableY(true);
 
         graph.addSeries(series);
+        graph.addSeries(seriesTESTTEST);
     }
 
     @Override

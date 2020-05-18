@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -130,6 +131,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ///////////////////Control Functions//////////////////////
     private void startRecording()
     {
+        setDataRecordLength();
+
+        recordedVars.clearStorage();
+
+        Button backward_img = (Button) findViewById(R.id.recordButton);
+        dataIsRecording = !dataIsRecording;
+        backward_img.setBackgroundColor(Color.RED);
+
+        dataIsRecording = true;
+        onResume();
+    }
+
+    private void endRecording()
+    {
+        Button backward_img = (Button) findViewById(R.id.recordButton);
+        backward_img.setBackgroundColor(Color.WHITE);
+        dataIsRecording = false;
+        onPause();
+
+        Switch correctTiltSwitch = (Switch) findViewById(R.id.correctTiltSwitch);
+
+        if (correctTiltSwitch.isChecked())
+        {
+            recordedVars.correctedDataPoints();
+        }
+    }
+
+    private void setDataRecordLength()
+    {
         String inputString;
         int recordingMinutes;
         int recordingSeconds;
@@ -164,23 +194,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         numRecordedSamples = 50*recordingSeconds; //todo this is the assumed sample rate.  Replace with switch statement
 
         recordedVars.setDataArrayLen(numRecordedSamples);
-        recordedVars.clearStorage();
-
-        Button backward_img = (Button) findViewById(R.id.recordButton);
-        dataIsRecording = !dataIsRecording;
-        backward_img.setBackgroundColor(Color.RED);
-
-        dataIsRecording = true;
-        onResume();
-    }
-
-    private void endRecording()
-    {
-        Button backward_img = (Button) findViewById(R.id.recordButton);
-        backward_img.setBackgroundColor(Color.WHITE);
-        dataIsRecording = false;
-        onPause();
-        recordedVars.correctedDataPoints();
     }
 
 }//end of mainActivity class
