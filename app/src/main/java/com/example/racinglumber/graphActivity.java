@@ -14,14 +14,14 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class graphActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener {
     LineGraphSeries<DataPoint> series = new LineGraphSeries();
-    LineGraphSeries<DataPoint> seriesTESTTEST = new LineGraphSeries();
-
     private BottomNavigationView bottomNavigationView;
     private dataStorage recordedVars;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        float newVal;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
         GraphView graph = (GraphView)findViewById(R.id.graphTop);
@@ -35,13 +35,13 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         //add series of data
         for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
         {
-            if ((recordedVars.xDataArray.length - 1) < counter)
+            if ((recordedVars.dataArrayLen - 1) < counter)
             {
                 break;
             }
 
-            series.appendData(new DataPoint(counter, recordedVars.xDataArray[counter]), false, recordedVars.dataArrayLen);
-            seriesTESTTEST.appendData(new DataPoint(counter, recordedVars.yDataArray[counter]), false, recordedVars.dataArrayLen);
+            newVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, counter);
+            series.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
         }
 
         graph.getViewport().setYAxisBoundsManual(true);
@@ -57,7 +57,6 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         graph.getViewport().setScalableY(true);
 
         graph.addSeries(series);
-        graph.addSeries(seriesTESTTEST);
     }
 
     @Override

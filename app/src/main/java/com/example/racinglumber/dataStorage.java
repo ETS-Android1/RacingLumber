@@ -14,25 +14,32 @@ public class dataStorage {
         X, Y, Z;
     }
 
+    enum RecordType
+    {
+        acceleration,
+        rotation,
+        gravity
+    }
+
     public static int dataArrayLen = 500;
 
-    public static float[] xDataArray;// = new float[dataArrayLen];//todo this is public for now, update with graphActivity
-    public static float[] yDataArray;// = new float[dataArrayLen];//todo check that these don't break record
-    private static float[] zDataArray;// = new float[dataArrayLen];
-    private static int accelIndex;// = 0; //index of x/y/zDataArray
-    private static long[] accelEventTime;// = new long[dataArrayLen];
+    private static float[] xDataArray;//todo this is public for now, update with graphActivity
+    private static float[] yDataArray;//todo check that these don't break record
+    private static float[] zDataArray;
+    private static int accelIndex; //index of x/y/zDataArray
+    private static long[] accelEventTime;
 
-    private static float[] xRotationArray;// = new float[dataArrayLen];
-    private static float[] yRotationArray;// = new float[dataArrayLen];
-    private static float[] zRotationArray;// = new float[dataArrayLen];
+    private static float[] xRotationArray;
+    private static float[] yRotationArray;
+    private static float[] zRotationArray;
     private static int rotationIndex = 0; //index of x/y/zRotationArray
-    private static long[] rotationEventTime;// = new long[dataArrayLen];
+    private static long[] rotationEventTime;
 
-    private static float[] xGravityArray;// = new float[dataArrayLen];
-    private static float[] yGravityArray;// = new float[dataArrayLen];
-    private static float[] zGravityArray;// = new float[dataArrayLen];
+    private static float[] xGravityArray;
+    private static float[] yGravityArray;
+    private static float[] zGravityArray;
     private static int gravityIndex = 0; //index of x/y/zGravityArray
-    private static long[] gravityEventTime;// = new long[dataArrayLen];
+    private static long[] gravityEventTime;
 
     public void clearStorage()
     {
@@ -241,6 +248,71 @@ public class dataStorage {
         }
     }
 
+    public float getValue(Axis axis, RecordType recordType, int index)
+    {
+        float returnVal;
+
+        switch (axis)
+        {
+            case X:
+                switch (recordType)
+                {
+                    case acceleration:
+                        returnVal = xDataArray[index];
+                        break;
+                    case rotation:
+                        returnVal = xRotationArray[index];
+                        break;
+                    case gravity:
+                        returnVal = xGravityArray[index];
+                        break;
+                    default:
+                        returnVal = 0.0F;
+                }
+                break;
+            case Y:
+                switch (recordType)
+                {
+                    case acceleration:
+                        returnVal = yDataArray[index];
+                        break;
+                    case rotation:
+                        returnVal = yRotationArray[index];
+                        break;
+                    case gravity:
+                        returnVal = yGravityArray[index];
+                        break;
+                    default:
+                        returnVal = 0.0F;
+                }
+                break;
+            case Z:
+                switch (recordType)
+                {
+                    case acceleration:
+                        returnVal = zDataArray[index];
+                        break;
+                    case rotation:
+                        returnVal = zRotationArray[index];
+                        break;
+                    case gravity:
+                        returnVal = zGravityArray[index];
+                        break;
+                    default:
+                        returnVal = 0.0F;
+                }
+                break;
+            default:
+                returnVal = 0.0F;
+                break;
+        }
+        return returnVal;
+    }
+
+//    public float getMaxOfAbsValue(Axis axis, RecordType recordType)
+//    {
+//
+//    }
 
         //stringFromJNI();
         //long testVar = sumIntegers(1,2);
