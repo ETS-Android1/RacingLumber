@@ -168,7 +168,7 @@ public class dataStorage {
     public void correctDataOrientation (float [] xInputArray, float [] yInputArray, float [] zInputArray) {
         double absValGPRIMEcrossG;
         double absValG;
-        double angleW;
+        double angleWinRadians;
         double inputX;
         double inputY;
         double inputZ;
@@ -177,13 +177,16 @@ public class dataStorage {
         double dPrimeXcompX; double dPrimeXcompY; double dPrimeXcompZ;
         double dPrimeYcompX; double dPrimeYcompY; double dPrimeYcompZ;
         double dPrimeZcompX; double dPrimeZcompY; double dPrimeZcompZ;
+        double DEBUGVAR;//todo remove
+        double DEBUGVARTWO;//todo remove
+        double DEBUGVARTHREE;//todo remove
 
         for (int index = 0; index < xInputArray.length; index++)
         {
             inputX = xInputArray[index];
             inputY = yInputArray[index];
             inputZ = zInputArray[index];
-
+//TODO dev notes: gravity array confirmed correct and magnitude is 9.8
             /*Calculate abs|G'xG| and abs|G|*/
             if (xGravityArray.length < (index - 1))
             {
@@ -202,7 +205,9 @@ public class dataStorage {
             absValGPRIMEcrossG = Math.sqrt(absValGPRIMEcrossG);
 
             /*Calculate angle W*/
-            angleW = Math.asin((absValGPRIMEcrossG/absValG));
+            //todo dev note, angle is coming out as radians and is correct
+            angleWinRadians = Math.asin(absValGPRIMEcrossG/absValG);
+            DEBUGVARTHREE = Math.toDegrees(angleWinRadians);
 
             //Pout = q * Pin * conj(q)
             // Conjugate D by R: D' = RDR'
@@ -217,9 +222,9 @@ public class dataStorage {
             double normRy = (xGravityArray[index] / absValGPRIMEcrossG);//normalized Ry
             //Normalized Rz = 0
 
-            q0 = Math.cos(angleW/2); //cos(W/2)
-            q1 = normRx * Math.sin(angleW/2); //( Rx * sin(W/2))i
-            q2 = normRy * Math.sin(angleW/2); //j (Ry * sin(W/2))
+            q0 = Math.cos(angleWinRadians/2); //cos(W/2)
+            q1 = normRx * Math.sin(angleWinRadians/2); //( Rx * sin(W/2))i
+            q2 = normRy * Math.sin(angleWinRadians/2); //j (Ry * sin(W/2))
             //q3 = 0, k ( Rz * sin(W/2)
 
             //x component of x output value of rotation
