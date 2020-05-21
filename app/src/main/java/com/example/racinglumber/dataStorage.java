@@ -186,7 +186,7 @@ public class dataStorage {
             inputX = xInputArray[index];
             inputY = yInputArray[index];
             inputZ = zInputArray[index];
-//TODO dev notes: gravity array confirmed correct and magnitude is 9.8
+
             /*Calculate abs|G'xG| and abs|G|*/
             if (xGravityArray.length < (index - 1))
             {
@@ -198,17 +198,16 @@ public class dataStorage {
             {
                 absValGPRIMEcrossG = Math.pow(xGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent x component
                 absValGPRIMEcrossG += Math.pow(yGravityArray[index], 2); //abs|G| and abs|G'xG| have equivalent y component
-                absValG = absValGPRIMEcrossG + Math.pow(xGravityArray[index], 2); //abs|G| has z component while abs|G'xG| doesn't
+                absValG = absValGPRIMEcrossG + Math.pow(zGravityArray[index], 2); //abs|G| has z component while abs|G'xG| doesn't
             }
 
             absValG = Math.sqrt(absValG);
             absValGPRIMEcrossG = Math.sqrt(absValGPRIMEcrossG);
 
             /*Calculate angle W*/
-            //todo dev note, angle is coming out as radians and is correct
             angleWinRadians = Math.asin(absValGPRIMEcrossG/absValG);
             DEBUGVARTHREE = Math.toDegrees(angleWinRadians);
-
+//////////////////////////TODO DEBUG MESSAGE////////REMOVE ABOVE DEBUG VAR, AND ANGLE IS NOW CORRECT
             //Pout = q * Pin * conj(q)
             // Conjugate D by R: D' = RDR'
             //R = |G'xG|
@@ -238,7 +237,7 @@ public class dataStorage {
             outputX = dPrimeXcompX + dPrimeXcompY + dPrimeXcompZ;
 
             dPrimeYcompX = 2*inputX*q1*q2;
-            dPrimeYcompY = Math.pow(q0,2)+Math.pow(q2,2)-Math.pow(q1,2);
+            dPrimeYcompY = inputY*(Math.pow(q0,2)+Math.pow(q2,2)-Math.pow(q1,2));
             dPrimeYcompZ = (-1)*2*inputZ*q0*q1;
             outputY = dPrimeYcompX + dPrimeYcompY + dPrimeYcompZ;
 
@@ -250,6 +249,38 @@ public class dataStorage {
             xInputArray[index] = (float)outputX;
             yInputArray[index] = (float)outputY;
             zInputArray[index] = (float)outputZ;
+            ////////////////////////////////////////////////TODO VERIFY THAT ROTATION WORKS BY ROTATING GRAVITY VECTOR BY ABOVE ALGORITHM AND CHECK THAT RESULT IS [0,0,9.8]
+            ///////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+            ///////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..//todo it's wrong still?
+            // TODO Confirmed that magnitude of output is approx 9.8, so rotation is not causing a change in magnitude of the output vector.  But I don't know if output vector is correct
+            inputX = xGravityArray[index];
+            inputY = yGravityArray[index];
+            inputZ = zGravityArray[index];
+            //x component of x output value of rotation
+            dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
+            dPrimeXcompX *= inputX;
+            //y component of x output value of rotation
+            dPrimeXcompY = (q1*q2);
+            dPrimeXcompY *= (2*inputY);
+            //z component of x output value of rotation
+            dPrimeXcompZ = 2*inputZ*q0*q2;
+            outputX = dPrimeXcompX + dPrimeXcompY + dPrimeXcompZ;
+
+            dPrimeYcompX = 2*inputX*q1*q2;
+            dPrimeYcompY = inputY*(Math.pow(q0,2)+Math.pow(q2,2)-Math.pow(q1,2));
+            dPrimeYcompZ = (-1)*2*inputZ*q0*q1;
+            outputY = dPrimeYcompX + dPrimeYcompY + dPrimeYcompZ;
+
+            dPrimeZcompX = (-2)*inputX*q0*q2;
+            dPrimeZcompY = 2*inputY*q0*q1;
+            dPrimeZcompZ = inputY*(Math.pow(q0,2)-(Math.pow(q1,2)+Math.pow(q2,2)));
+            outputZ = dPrimeZcompX + dPrimeZcompY + dPrimeZcompZ;
+
+            xInputArray[index] = (float)outputX;
+            yInputArray[index] = (float)outputY;
+            zInputArray[index] = (float)outputZ;
+            //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         }
     }
 
