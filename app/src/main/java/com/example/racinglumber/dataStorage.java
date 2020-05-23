@@ -151,20 +151,19 @@ public class dataStorage {
     * : Recorded gravity vector is [Gx,Gy,Gz], assuming a positive Gz. The goal is to achieve [0,0,Gz']
     * (gravity prime) by rotating the recorded gravity vector to the orientation of gravity prime.
     * Set |G'| to 1. (we only care about the orientation of the vector)
-    * : |G'xG| = |G'||G|sin(W), where W is the angle between the two vectors
-    * : |G'xG| = [-Gy,Gx,0], which is a vector on the XY plane to rotate the G to G'
+    * : |GxG'| = |G'||G|sin(W), where W is the angle between the two vectors
+    * : |GxG'| = [Gy,-Gx,0], which is a vector on the XY plane to rotate the G to G'
     * Now we calculate W
-    * : sin(W) = abs(|G'xG|)/|G'||G|
-    * : sin(W) = abs([-Gy,Gx,0])/abs([Gx,Gy,Gz])
+    * : sin(W) = abs(|GxG'|)/|G'||G|
+    * : sin(W) = abs([Gy,-Gx,0])/abs([Gx,Gy,Gz])
     *
     * We now define the accelerometer data recorded when G was recorded as [Dx,Dy,Dz].  This data's
     * orientation is corrected such that the adjusted data D' would be the equivalent of recording when
     * the phone was flat on the XY axis with its face up (positive Z axis).
-    * To do this we rotate D by angle W about vector |G'xG| (define as R from now on to ease notation)
+    * To do this we rotate D by angle W about vector |GxG'| (define as R from now on to ease notation)
     * using quaternions.  This rotation would also make G and G' parallel, but we only need the output D'.
     * : Conjugate D by R: D' = RDR'
     * */
-
     public void correctDataOrientation (float [] xInputArray, float [] yInputArray, float [] zInputArray) {
         double absValGPRIMEcrossG;
         double absValG;
@@ -174,12 +173,10 @@ public class dataStorage {
         double inputZ;
         double outputX; double outputY; double outputZ;
         double q0; double q1; double q2;
+        double normRx; double normRy;
         double dPrimeXcompX; double dPrimeXcompY; double dPrimeXcompZ;
         double dPrimeYcompX; double dPrimeYcompY; double dPrimeYcompZ;
         double dPrimeZcompX; double dPrimeZcompY; double dPrimeZcompZ;
-        double DEBUGVAR;//todo remove
-        double DEBUGVARTWO;//todo remove
-        double DEBUGVARTHREE;//todo remove
 
         for (int index = 0; index < xInputArray.length; index++)
         {
@@ -206,25 +203,26 @@ public class dataStorage {
 
             /*Calculate angle W*/
             angleWinRadians = Math.asin(absValGPRIMEcrossG/absValG);
-            DEBUGVARTHREE = Math.toDegrees(angleWinRadians);
-//////////////////////////TODO DEBUG MESSAGE////////REMOVE ABOVE DEBUG VAR, AND ANGLE IS NOW CORRECT
+
             //Pout = q * Pin * conj(q)
             // Conjugate D by R: D' = RDR'
-            //R = |G'xG|
+            //R = |GxG'|
             //D is data input
             //q = cos(W/2) + i ( Rx * sin(W/2)) + j (Ry * sin(W/2)) + k ( Rz * sin(W/2))
-            //    W=angle of rotation.
-            //    x,y,z = vector representing axis of rotation.
+            //W=angle of rotation.
+            //x,y,z = vector representing axis of rotation.
 
             //so for me, q is the rotation quaternion and needs absolute value to be 1.  Need to normalize |G'xG| = [-Gy,Gx,0]
-            double normRx = (-1)*(yGravityArray[index] / absValGPRIMEcrossG);//normalized Rx
-            double normRy = (xGravityArray[index] / absValGPRIMEcrossG);//normalized Ry
+            normRx = (yGravityArray[index] / absValGPRIMEcrossG);//normalized Rx
+            normRy = (-1)*(xGravityArray[index] / absValGPRIMEcrossG);//normalized Ry
             //Normalized Rz = 0
 
             q0 = Math.cos(angleWinRadians/2); //cos(W/2)
-            q1 = normRx * Math.sin(angleWinRadians/2); //( Rx * sin(W/2))i
+            q1 = normRx * Math.sin(angleWinRadians/2); //i ( Rx * sin(W/2))
             q2 = normRy * Math.sin(angleWinRadians/2); //j (Ry * sin(W/2))
-            //q3 = 0, k ( Rz * sin(W/2)
+            //q3 = 0, k ( Rz * sin(W/2))
+
+            /*Parameters for quaternion rotation are now calculated, use on inputX, inputY, and inputZ*/
 
             //x component of x output value of rotation
             dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
@@ -243,44 +241,12 @@ public class dataStorage {
 
             dPrimeZcompX = (-2)*inputX*q0*q2;
             dPrimeZcompY = 2*inputY*q0*q1;
-            dPrimeZcompZ = inputY*(Math.pow(q0,2)-(Math.pow(q1,2)+Math.pow(q2,2)));
+            dPrimeZcompZ = inputZ*(Math.pow(q0,2)-(Math.pow(q1,2)+Math.pow(q2,2)));
             outputZ = dPrimeZcompX + dPrimeZcompY + dPrimeZcompZ;
 
             xInputArray[index] = (float)outputX;
             yInputArray[index] = (float)outputY;
             zInputArray[index] = (float)outputZ;
-            ////////////////////////////////////////////////TODO VERIFY THAT ROTATION WORKS BY ROTATING GRAVITY VECTOR BY ABOVE ALGORITHM AND CHECK THAT RESULT IS [0,0,9.8]
-            ///////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
-            ///////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..//todo it's wrong still?
-            // TODO Confirmed that magnitude of output is approx 9.8, so rotation is not causing a change in magnitude of the output vector.  But I don't know if output vector is correct
-            inputX = xGravityArray[index];
-            inputY = yGravityArray[index];
-            inputZ = zGravityArray[index];
-            //x component of x output value of rotation
-            dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
-            dPrimeXcompX *= inputX;
-            //y component of x output value of rotation
-            dPrimeXcompY = (q1*q2);
-            dPrimeXcompY *= (2*inputY);
-            //z component of x output value of rotation
-            dPrimeXcompZ = 2*inputZ*q0*q2;
-            outputX = dPrimeXcompX + dPrimeXcompY + dPrimeXcompZ;
-
-            dPrimeYcompX = 2*inputX*q1*q2;
-            dPrimeYcompY = inputY*(Math.pow(q0,2)+Math.pow(q2,2)-Math.pow(q1,2));
-            dPrimeYcompZ = (-1)*2*inputZ*q0*q1;
-            outputY = dPrimeYcompX + dPrimeYcompY + dPrimeYcompZ;
-
-            dPrimeZcompX = (-2)*inputX*q0*q2;
-            dPrimeZcompY = 2*inputY*q0*q1;
-            dPrimeZcompZ = inputY*(Math.pow(q0,2)-(Math.pow(q1,2)+Math.pow(q2,2)));
-            outputZ = dPrimeZcompX + dPrimeZcompY + dPrimeZcompZ;
-
-            xInputArray[index] = (float)outputX;
-            yInputArray[index] = (float)outputY;
-            zInputArray[index] = (float)outputZ;
-            //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         }
     }
 

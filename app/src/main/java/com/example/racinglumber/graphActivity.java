@@ -40,7 +40,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 break;
             }
 
-            newVal = recordedVars.getValue(dataStorage.Axis.Z, dataStorage.RecordType.acceleration, counter);
+            newVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, counter);
             series.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
         }
 
