@@ -21,6 +21,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
     public void onCreate(Bundle savedInstanceState)
     {
         float newVal;
+        float maxYValue;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
@@ -45,8 +46,10 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         }
 
         graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(-30);
-        graph.getViewport().setMaxY(30);
+
+        maxYValue = recordedVars.getMaxOfAbsValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
+        graph.getViewport().setMinY((-1.0)*maxYValue);
+        graph.getViewport().setMaxY(maxYValue);
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);

@@ -311,10 +311,82 @@ public class dataStorage {
         return returnVal;
     }
 
-//    public float getMaxOfAbsValue(Axis axis, RecordType recordType)
-//    {
-//
-//    }
+    public float getMaxOfAbsValue(Axis axis, RecordType recordType)
+    {
+        int index;
+        float maxValueFound = 0.0F; //todo replace with lowest value
+        float newValueFound;
+
+        for (index = 0; index < xDataArray.length; index++)
+        {
+            switch (axis)
+            {
+                case X:
+                    switch (recordType)
+                    {
+                        case acceleration:
+                            newValueFound = xDataArray[index];
+                            break;
+                        case rotation:
+                            newValueFound = xRotationArray[index];
+                            break;
+                        case gravity:
+                            newValueFound = xGravityArray[index];
+                            break;
+                        default:
+                            newValueFound = 0.0F;
+                    }
+                    break;
+                case Y:
+                    switch (recordType)
+                    {
+                        case acceleration:
+                            newValueFound = yDataArray[index];
+                            break;
+                        case rotation:
+                            newValueFound = yRotationArray[index];
+                            break;
+                        case gravity:
+                            newValueFound = yGravityArray[index];
+                            break;
+                        default:
+                            newValueFound = 0.0F;
+                    }
+                    break;
+                case Z:
+                    switch (recordType)
+                    {
+                        case acceleration:
+                            newValueFound = zDataArray[index];
+                            break;
+                        case rotation:
+                            newValueFound = zRotationArray[index];
+                            break;
+                        case gravity:
+                            newValueFound = zGravityArray[index];
+                            break;
+                        default:
+                            newValueFound = 0.0F;
+                    }
+                    break;
+                default:
+                    newValueFound = 0.0F;
+                    break;
+            }//end of switch
+
+            if (newValueFound < 0)
+            {
+                newValueFound *= -1.0F; //get absolute value of the new value
+            }
+
+            if (newValueFound > maxValueFound)
+            {
+                maxValueFound = newValueFound;
+            }
+        }
+
+        return maxValueFound;
+    }
 
         //stringFromJNI();
         //long testVar = sumIntegers(1,2);
