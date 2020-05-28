@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+//import android.R;///////////debug
 
 import androidx.annotation.NonNull;
 
@@ -25,11 +28,25 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-        GraphView graph = (GraphView)findViewById(R.id.graphTop);
+        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_graph_button);
+
+        /////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        Spinner spinner = (Spinner) findViewById(R.id.graphDataSpinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        R.array.graphDatatypesArray, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         recordedVars = new dataStorage();
 

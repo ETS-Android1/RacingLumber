@@ -12,10 +12,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Spinner
+            android:id="@+id/graphDataSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/graphTop" />
+            android:id="@+id/graphDisplay" />
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
