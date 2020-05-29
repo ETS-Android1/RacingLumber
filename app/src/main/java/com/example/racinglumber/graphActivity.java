@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 //import android.R;///////////debug
@@ -15,7 +17,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class graphActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class graphActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener {
     LineGraphSeries<DataPoint> series = new LineGraphSeries();
     private BottomNavigationView bottomNavigationView;
     private dataStorage recordedVars;
@@ -34,19 +36,14 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_graph_button);
 
-        /////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        Spinner spinner = (Spinner) findViewById(R.id.graphDataSpinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-
+        //Array adapter and onclick listener for graph datatype selection spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.graphDatatypesArray, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
 
-        //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        Spinner spinner = (Spinner) findViewById(R.id.graphDataSpinner);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         recordedVars = new dataStorage();
 
@@ -79,6 +76,8 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         graph.addSeries(series);
     }
 
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
@@ -99,5 +98,44 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         }
 
         return returnVal;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
+        float newVal;
+
+        parent.getItemAtPosition(position);
+
+        switch (position)
+        {
+            case 0:
+                break;
+            case 1:
+                ////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                //add series of data
+                for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
+                {
+                    if ((recordedVars.dataArrayLen - 1) < counter)
+                    {
+                        break;
+                    }
+
+                    newVal = recordedVars.getValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, counter);
+                    newSeries.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
+                }
+
+                GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+                graph.addSeries(newSeries);
+                ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //do nothing
     }
 }
