@@ -76,7 +76,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         graph.addSeries(series);
     }
 
-
+    //////////////////////////User Interface Functions//////////////////////////
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -102,35 +102,57 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
-        float newVal;
+//        LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
+//        float newVal;
 
         parent.getItemAtPosition(position);
 
         switch (position)
         {
-            case 0:
+            case 0: //<item>X Acceleration</item>
+                addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
                 break;
-            case 1:
+            case 1: //<item>Y Acceleration</item>
                 ////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                //add series of data
-                for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
-                {
-                    if ((recordedVars.dataArrayLen - 1) < counter)
-                    {
-                        break;
-                    }
+//                //add series of data
+//                for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
+//                {
+//                    if ((recordedVars.dataArrayLen - 1) < counter)
+//                    {
+//                        break;
+//                    }
+//
+//                    newVal = recordedVars.getValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, counter);
+//                    newSeries.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
+//                }
+//
+//                GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+//                graph.addSeries(newSeries);
 
-                    newVal = recordedVars.getValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, counter);
-                    newSeries.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
-                }
-
-                GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
-                graph.addSeries(newSeries);
+                addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.acceleration);
                 ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 break;
-            default:
+            case 2: //<item>Z Acceleration</item>
+                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
                 break;
+            case 3: //<item>Acceleration Magnitude</item>
+//todo                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
+                break;
+            case 4: //<item>X Rotation</item>
+                addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.rotation);
+                break;
+            case 5: //<item>Y Rotation</item>
+                addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.rotation);
+                break;
+            case 6: //<item>Z Rotation</item>
+                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
+                break;
+            case 7: //<item>Rotation Magnitude</item>
+//todo                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
+                break;
+
+            default:
+                break; //do nothing
         }
     }
 
@@ -138,4 +160,30 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
     public void onNothingSelected(AdapterView<?> parent) {
         //do nothing
     }
+
+    //////////////////////////Graphing Functions//////////////////////////
+
+    //////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+
+    private void addGraphSeries(dataStorage.Axis axis, dataStorage.RecordType recordType)
+    {
+        LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
+        float newVal;
+
+        for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
+        {
+            if ((recordedVars.dataArrayLen - 1) < counter)
+            {
+                break;
+            }
+
+            newVal = recordedVars.getValue(axis, recordType, counter);
+            newSeries.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
+        }
+
+        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+        graph.addSeries(newSeries);
+    }
+
+    ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }

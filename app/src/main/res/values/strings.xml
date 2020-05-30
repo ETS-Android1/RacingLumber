@@ -11,8 +11,14 @@
     <string name="bottom_nav_graph">Graph</string>
     <string name="bottom_nav_save">Save</string>
     <string-array name="graphDatatypesArray">
-        <item>speed</item>
-        <item>xdataarray</item>
+        <item>X Acceleration</item>
+        <item>Y Acceleration</item>
+        <item>Z Acceleration</item>
+        <item>Acceleration Magnitude</item>
+        <item>X Rotation</item>
+        <item>Y Rotation</item>
+        <item>Z Rotation</item>
+        <item>Rotation Magnitude</item>
     </string-array>
 
 </resources>
