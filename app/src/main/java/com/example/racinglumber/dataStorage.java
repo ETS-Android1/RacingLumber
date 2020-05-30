@@ -11,7 +11,10 @@ public class dataStorage {
 
     enum Axis
     {
-        X, Y, Z;
+        X,
+        Y,
+        Z,
+        Magnitude
     }
 
     enum RecordType
@@ -253,6 +256,7 @@ public class dataStorage {
     public float getValue(Axis axis, RecordType recordType, int index)
     {
         float returnVal;
+        double squaredMag;
 
         switch (axis)
         {
@@ -286,6 +290,7 @@ public class dataStorage {
                         break;
                     default:
                         returnVal = 0.0F;
+                        break;
                 }
                 break;
             case Z:
@@ -302,6 +307,27 @@ public class dataStorage {
                         break;
                     default:
                         returnVal = 0.0F;
+                        break;
+                }
+                break;
+            case Magnitude:
+                switch (recordType)
+                {
+                    case acceleration:
+                        squaredMag = Math.pow(xDataArray[index],2) + Math.pow(yDataArray[index],2) + Math.pow(zDataArray[index],2);
+                        returnVal = (float)(Math.sqrt(squaredMag));
+                        break;
+                    case rotation:
+                        squaredMag = Math.pow(xRotationArray[index],2) + Math.pow(yRotationArray[index],2) + Math.pow(zRotationArray[index],2);
+                        returnVal = (float)(Math.sqrt(squaredMag));
+                        break;
+                    case gravity:
+                        squaredMag = Math.pow(xGravityArray[index],2) + Math.pow(yGravityArray[index],2) + Math.pow(zGravityArray[index],2);
+                        returnVal = (float)(Math.sqrt(squaredMag));
+                        break;
+                    default:
+                        returnVal = 0.0F;
+                        break;
                 }
                 break;
             default:

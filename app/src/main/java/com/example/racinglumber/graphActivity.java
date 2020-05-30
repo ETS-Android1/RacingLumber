@@ -102,9 +102,6 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
-//        float newVal;
-
         parent.getItemAtPosition(position);
 
         switch (position)
@@ -113,30 +110,13 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
                 break;
             case 1: //<item>Y Acceleration</item>
-                ////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//                //add series of data
-//                for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
-//                {
-//                    if ((recordedVars.dataArrayLen - 1) < counter)
-//                    {
-//                        break;
-//                    }
-//
-//                    newVal = recordedVars.getValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, counter);
-//                    newSeries.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
-//                }
-//
-//                GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
-//                graph.addSeries(newSeries);
-
                 addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.acceleration);
-                ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 break;
             case 2: //<item>Z Acceleration</item>
                 addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
                 break;
             case 3: //<item>Acceleration Magnitude</item>
-//todo                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
+                addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.acceleration);
                 break;
             case 4: //<item>X Rotation</item>
                 addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.rotation);
@@ -148,7 +128,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
                 break;
             case 7: //<item>Rotation Magnitude</item>
-//todo                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
+                addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.rotation);
                 break;
 
             default:
@@ -162,8 +142,6 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
     }
 
     //////////////////////////Graphing Functions//////////////////////////
-
-    //////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
     private void addGraphSeries(dataStorage.Axis axis, dataStorage.RecordType recordType)
     {
@@ -184,6 +162,4 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
         graph.addSeries(newSeries);
     }
-
-    ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
