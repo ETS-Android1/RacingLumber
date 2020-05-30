@@ -25,12 +25,8 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        float newVal;
-        float maxYValue;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -47,23 +43,13 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
 
         recordedVars = new dataStorage();
 
-        //add series of data
-        for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
-        {
-            if ((recordedVars.dataArrayLen - 1) < counter)
-            {
-                break;
-            }
-
-            newVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, counter);
-            series.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
-        }
+        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 
         graph.getViewport().setYAxisBoundsManual(true);
 
-        maxYValue = recordedVars.getMaxOfAbsValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
-        graph.getViewport().setMinY((-1.0)*maxYValue);
-        graph.getViewport().setMaxY(maxYValue);
+//        float maxYValue = recordedVars.getMaxOfAbsValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
+        graph.getViewport().setMinY(-0.05); //tiny default min max
+        graph.getViewport().setMaxY(0.05);
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
@@ -72,8 +58,6 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         // enable scaling and scrolling
         graph.getViewport().setScalable(true);
         graph.getViewport().setScalableY(true);
-
-        graph.addSeries(series);
     }
 
     //////////////////////////User Interface Functions//////////////////////////
@@ -147,6 +131,8 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
     {
         LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
         float newVal;
+        float currentMaxGraphY;
+        float maxAbsValue;
 
         for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
         {
@@ -160,6 +146,17 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         }
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+
+        /*Check if the new data has a maximum larger than existing data.  If so, update the maximum Y value displayed on the graph*/
+        currentMaxGraphY = (float)(graph.getViewport().getMaxY(true));
+        maxAbsValue = recordedVars.getMaxOfAbsValue(axis, recordType);
+
+        if (maxAbsValue > currentMaxGraphY)
+        {
+            graph.getViewport().setMinY((-1.0)*maxAbsValue);
+            graph.getViewport().setMaxY(maxAbsValue);
+        }
+
         graph.addSeries(newSeries);
     }
 }
