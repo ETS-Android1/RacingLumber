@@ -345,60 +345,7 @@ public class dataStorage {
 
         for (index = 0; index < xDataArray.length; index++)
         {
-            switch (axis)
-            {
-                case X:
-                    switch (recordType)
-                    {
-                        case acceleration:
-                            newValueFound = xDataArray[index];
-                            break;
-                        case rotation:
-                            newValueFound = xRotationArray[index];
-                            break;
-                        case gravity:
-                            newValueFound = xGravityArray[index];
-                            break;
-                        default:
-                            newValueFound = 0.0F;
-                    }
-                    break;
-                case Y:
-                    switch (recordType)
-                    {
-                        case acceleration:
-                            newValueFound = yDataArray[index];
-                            break;
-                        case rotation:
-                            newValueFound = yRotationArray[index];
-                            break;
-                        case gravity:
-                            newValueFound = yGravityArray[index];
-                            break;
-                        default:
-                            newValueFound = 0.0F;
-                    }
-                    break;
-                case Z:
-                    switch (recordType)
-                    {
-                        case acceleration:
-                            newValueFound = zDataArray[index];
-                            break;
-                        case rotation:
-                            newValueFound = zRotationArray[index];
-                            break;
-                        case gravity:
-                            newValueFound = zGravityArray[index];
-                            break;
-                        default:
-                            newValueFound = 0.0F;
-                    }
-                    break;
-                default:
-                    newValueFound = 0.0F;
-                    break;
-            }//end of switch
+            newValueFound = getValue(axis, recordType, index);
 
             if (newValueFound < 0)
             {

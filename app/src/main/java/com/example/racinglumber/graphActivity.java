@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 //import android.R;///////////debug
 
 import androidx.annotation.NonNull;
@@ -88,30 +89,33 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         parent.getItemAtPosition(position);
 
+
         switch (position)
         {
-            case 0: //<item>X Acceleration</item>
+            case 0: //<item>Choose dataset to display</item>
+                break; //do nothing
+            case 1: //<item>X Acceleration</item>
                 addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
                 break;
-            case 1: //<item>Y Acceleration</item>
+            case 2: //<item>Y Acceleration</item>
                 addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.acceleration);
                 break;
-            case 2: //<item>Z Acceleration</item>
+            case 3: //<item>Z Acceleration</item>
                 addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
                 break;
-            case 3: //<item>Acceleration Magnitude</item>
+            case 4: //<item>Acceleration Magnitude</item>
                 addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.acceleration);
                 break;
-            case 4: //<item>X Rotation</item>
+            case 5: //<item>X Rotation</item>
                 addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.rotation);
                 break;
-            case 5: //<item>Y Rotation</item>
+            case 6: //<item>Y Rotation</item>
                 addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.rotation);
                 break;
-            case 6: //<item>Z Rotation</item>
+            case 7: //<item>Z Rotation</item>
                 addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
                 break;
-            case 7: //<item>Rotation Magnitude</item>
+            case 8: //<item>Rotation Magnitude</item>
                 addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.rotation);
                 break;
 
