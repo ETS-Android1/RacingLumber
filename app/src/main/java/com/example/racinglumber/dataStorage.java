@@ -274,8 +274,10 @@ public class dataStorage {
                         break;
                     default:
                         returnVal = 0.0F;
+                        break;
                 }
                 break;
+
             case Y:
                 switch (recordType)
                 {
@@ -293,6 +295,7 @@ public class dataStorage {
                         break;
                 }
                 break;
+
             case Z:
                 switch (recordType)
                 {
@@ -310,6 +313,7 @@ public class dataStorage {
                         break;
                 }
                 break;
+
             case Magnitude:
                 switch (recordType)
                 {
@@ -330,6 +334,7 @@ public class dataStorage {
                         break;
                 }
                 break;
+
             default:
                 returnVal = 0.0F;
                 break;

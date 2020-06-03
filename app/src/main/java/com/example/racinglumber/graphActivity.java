@@ -2,6 +2,7 @@ package com.example.racinglumber;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,8 +16,11 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import org.w3c.dom.Text;
 
 public class graphActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener {
     LineGraphSeries<DataPoint> series = new LineGraphSeries();
@@ -88,8 +92,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         parent.getItemAtPosition(position);
-
-
+        
         switch (position)
         {
             case 0: //<item>Choose dataset to display</item>
@@ -162,5 +165,101 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         }
 
         graph.addSeries(newSeries);
+        ////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+        /*Set series-specific graph elements*/
+
+        switch (axis)
+        {
+            case X:
+                switch (recordType)
+                {
+                    case acceleration:
+                        newSeries.setTitle("X Acceleration");
+                        break;
+                    case rotation:
+                        newSeries.setTitle("X Rotation");
+                        break;
+                    case gravity:
+                        newSeries.setTitle("X Gravity");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case Y:
+                switch (recordType)
+                {
+                    case acceleration:
+                        newSeries.setTitle("Y Acceleration");
+                        break;
+                    case rotation:
+                        newSeries.setTitle("Y Rotation");
+                        break;
+                    case gravity:
+                        newSeries.setTitle("Y Gravity");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case Z:
+                switch (recordType)
+                {
+                    case acceleration:
+                        newSeries.setTitle("Z Acceleration");
+                        break;
+                    case rotation:
+                        newSeries.setTitle("Z Rotation");
+                        break;
+                    case gravity:
+                        newSeries.setTitle("Z Gravity");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case Magnitude:
+                switch (recordType)
+                {
+                    case acceleration:
+                        newSeries.setTitle("Acceleration Magnitude");
+                        break;
+                    case rotation:
+                        newSeries.setTitle("Rotation Magnitude");
+                        break;
+                    case gravity:
+                        newSeries.setTitle("Gravity Magnitude");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+//        Paint test123 = new Paint();
+//        test123.setColor(0x0000FFFF);
+//        newSeries.setCustomPaint(test123);
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
+
+
+
+
+
+
 }
