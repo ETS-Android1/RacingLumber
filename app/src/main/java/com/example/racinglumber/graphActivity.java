@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-//import android.R;///////////debug
 
 import androidx.annotation.NonNull;
 
@@ -20,10 +18,7 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import org.w3c.dom.Text;
-
 public class graphActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener {
-    LineGraphSeries<DataPoint> series = new LineGraphSeries();
     private BottomNavigationView bottomNavigationView;
     private dataStorage recordedVars;
 
@@ -52,7 +47,6 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
 
         graph.getViewport().setYAxisBoundsManual(true);
 
-//        float maxYValue = recordedVars.getMaxOfAbsValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
         graph.getViewport().setMinY(-0.05); //tiny default min max
         graph.getViewport().setMaxY(0.05);
 
@@ -165,10 +159,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
         }
 
         graph.addSeries(newSeries);
-        ////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
-////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
-////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
-////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+
         /*Set series-specific graph elements*/
 
         switch (axis)
@@ -178,12 +169,15 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 {
                     case acceleration:
                         newSeries.setTitle("X Acceleration");
+                        newSeries.setColor(0xFFFF4500); //orangered, https://www.rapidtables.com/web/color/red-color.html
                         break;
                     case rotation:
                         newSeries.setTitle("X Rotation");
+                        newSeries.setColor(0xFF4169E1); //royalblue
                         break;
                     case gravity:
                         newSeries.setTitle("X Gravity");
+                        newSeries.setColor(0xFF7CFC00); //lawngreen
                         break;
                     default:
                         break;
@@ -195,12 +189,15 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 {
                     case acceleration:
                         newSeries.setTitle("Y Acceleration");
+                        newSeries.setColor(0xFFFF6347); //tomato
                         break;
                     case rotation:
                         newSeries.setTitle("Y Rotation");
+                        newSeries.setColor(0xFF6495ED); //cornflowerblue
                         break;
                     case gravity:
                         newSeries.setTitle("Y Gravity");
+                        newSeries.setColor(0xFF90EE90); //lightgreen
                         break;
                     default:
                         break;
@@ -212,12 +209,15 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 {
                     case acceleration:
                         newSeries.setTitle("Z Acceleration");
+                        newSeries.setColor(0xFFDC143C); //crimson
                         break;
                     case rotation:
                         newSeries.setTitle("Z Rotation");
+                        newSeries.setColor(0xFF00008B); //darkblue
                         break;
                     case gravity:
                         newSeries.setTitle("Z Gravity");
+                        newSeries.setColor(0xFF008000); //green
                         break;
                     default:
                         break;
@@ -229,12 +229,15 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 {
                     case acceleration:
                         newSeries.setTitle("Acceleration Magnitude");
+                        newSeries.setColor(0xFFFF0000); //red
                         break;
                     case rotation:
                         newSeries.setTitle("Rotation Magnitude");
+                        newSeries.setColor(0xFF0000FF); //blue
                         break;
                     case gravity:
                         newSeries.setTitle("Gravity Magnitude");
+                        newSeries.setColor(0xFF00FF00); //lime
                         break;
                     default:
                         break;
@@ -243,18 +246,12 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
             default:
                 break;
         }
-        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-//        Paint test123 = new Paint();
-//        test123.setColor(0x0000FFFF);
-//        newSeries.setCustomPaint(test123);
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        if (!graph.getLegendRenderer().isVisible())
+        {
+            graph.getLegendRenderer().setVisible(true);
+            graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        }
     }
 
 
