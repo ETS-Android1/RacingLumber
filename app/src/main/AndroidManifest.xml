@@ -25,6 +25,10 @@
             android:label="graphActivity">
         </activity>
 
+        <activity
+            android:name=".fileManageActivity"
+            android:label="fileManageActivity">
+        </activity>
     </application>
 
 </manifest>

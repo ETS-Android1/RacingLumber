@@ -228,7 +228,7 @@ public class dataStorage {
             /*Parameters for quaternion rotation are now calculated, use on inputX, inputY, and inputZ*/
 
             //x component of x output value of rotation
-            dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
+            dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//todo remove https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
             dPrimeXcompX *= inputX;
             //y component of x output value of rotation
             dPrimeXcompY = (q1*q2);

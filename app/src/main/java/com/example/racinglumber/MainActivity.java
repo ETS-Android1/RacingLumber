@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.bottom_nav_save_button:
+                if (!dataIsRecording)
+                {
+                    startActivity(new Intent(MainActivity.this, fileManageActivity.class));
+                }
                 break;
             default:
                 returnVal = false;

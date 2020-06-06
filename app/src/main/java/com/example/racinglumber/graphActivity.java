@@ -74,6 +74,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
             case R.id.bottom_nav_graph_button:
                 break;
             case R.id.bottom_nav_save_button:
+                startActivity(new Intent(graphActivity.this, fileManageActivity.class));
                 break;
             default:
                 returnVal = false;
