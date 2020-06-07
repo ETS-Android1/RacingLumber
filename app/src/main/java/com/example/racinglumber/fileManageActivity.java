@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -13,7 +15,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /////////////////////////////////////////////////////////
-public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
     private dataStorage recordedVars;
 
@@ -22,12 +24,23 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_manage);
 
+        Button saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(this);
+
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_save_button);
     }
 
     //////////////////////////User Interface Functions//////////////////////////
+
+    @Override
+    public void onClick(View v)
+    {
+        //do something
+        int test = 1;
+        test = 2;
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
