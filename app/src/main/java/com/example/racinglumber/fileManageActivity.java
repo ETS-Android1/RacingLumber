@@ -29,6 +29,9 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
 
+        Button loadButton = (Button) findViewById(R.id.loadButton);
+        loadButton.setOnClickListener(this);
+
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_save_button);
@@ -47,8 +50,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     private void createFile() { //Uri pickerInitialUri
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/pdf");
-        intent.putExtra(Intent.EXTRA_TITLE, "invoice.pdf");
+        intent.setType("application/txt");
+        intent.putExtra(Intent.EXTRA_TITLE, "invoice.txt");
 
         // Optionally, specify a URI for the directory that should be opened in
         // the system file picker when your app creates the document.
@@ -62,7 +65,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     private void openFile() { //Uri pickerInitialUri
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/pdf");
+        intent.setType("application/txt");
 
         // Optionally, specify a URI for the file that should appear in the
         // system file picker when it loads.
@@ -93,14 +96,21 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     @Override
     public void onClick(View v)
     {
-        //do something
-        int test = 1;
-        test = 2;
-        this.createFile();
- //       this.openFile();
+        if (v.getId() == R.id.saveButton)
+        {
+            //Save button clicked
+            this.createFile();
+        }
+        else
+        {
+            //Load button clicked
+            this.openFile();
+        }
+
+ //
         //this.getExternalFilesDir()
 
-        openDirectory();
+        //openDirectory();
     }
 
     @Override
