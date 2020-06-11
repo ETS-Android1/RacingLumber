@@ -16,10 +16,9 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-/////////////////////////////////////////////////////////
 public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
-    private dataStorage recordedVars;
+    private static String returnString;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,14 +36,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_save_button);
     }
 
-    private static final int OPEN_DIRECTORY_REQUEST_CODE = 1;
-    void openDirectory() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-        startActivityForResult(intent, OPEN_DIRECTORY_REQUEST_CODE);
-    }
-///////////////////////////////////////////////////////FROM ANDROID TUTORIAL
-    ////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //////////////////////////File Access Functions//////////////////////////
+
     // Request code for creating a PDF document.
     private static final int CREATE_FILE = 1;
     private void createFile() { //Uri pickerInitialUri
@@ -74,22 +67,23 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         startActivityForResult(intent, PICK_PDF_FILE);
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode,
-//                                 Intent resultData) {
-//    //    if (requestCode == your-request-code
-//    //            && resultCode == Activity.RESULT_OK) {
-//            // The result data contains a URI for the document or directory that
-//            // the user selected.
-//            Uri uri = null;
-//            if (resultData != null) {
-//                uri = resultData.getData();
-//                // Perform operations on the document using its URI.
-//            }
-//    //    }
-//    }
-///////////////////////////////////////////////////////FROM ANDROID TUTORIAL///
-    ////////////////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    private static final int fileLoad = 2; //todo replace with the standard define
+
+    //todo debug note, below runs after load button
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+        if ((requestCode == fileLoad) && (requestCode == Activity.RESULT_OK))
+        {
+            // The result data contains a URI for the document or directory that the user selected
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                // Perform operations on the document using its URI.
+                returnString = uri.toString();
+            }
+        }
+    }
 
     //////////////////////////User Interface Functions//////////////////////////
 
@@ -105,12 +99,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         {
             //Load button clicked
             this.openFile();
+            //////////////////////String testString = returnString;
         }
-
- //
-        //this.getExternalFilesDir()
-
-        //openDirectory();
     }
 
     @Override
