@@ -16,6 +16,11 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
     private static String returnString;
@@ -39,18 +44,18 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     //////////////////////////File Access Functions//////////////////////////
 
     // Request code for creating a PDF document.
-    private static final int CREATE_FILE = 1;
+  ////  private static final int CREATE_FILE = 1;
     private void createFile() { //Uri pickerInitialUri
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/txt");
-        intent.putExtra(Intent.EXTRA_TITLE, "invoice.txt");
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, "DUMMY.txt");
 
         // Optionally, specify a URI for the directory that should be opened in
         // the system file picker when your app creates the document.
         //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
-        startActivityForResult(intent, CREATE_FILE);
+        startActivityForResult(intent, fileSave);//CREATE_FILE
     }
 
     // Request code for selecting a PDF document.
@@ -67,22 +72,52 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         startActivityForResult(intent, PICK_PDF_FILE);
     }
 
+    private static final int fileSave = 101; //todo replace with the standard define
     private static final int fileLoad = 2; //todo replace with the standard define
 
     //todo debug note, below runs after load button
+
+    //todo clean this code up, these branches are terrible
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
-        if ((requestCode == fileLoad) && (requestCode == Activity.RESULT_OK))
+        Uri uri;
+
+        if ((requestCode == fileLoad) && (resultCode == Activity.RESULT_OK))
         {
             // The result data contains a URI for the document or directory that the user selected
-            Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
                 // Perform operations on the document using its URI.
                 returnString = uri.toString();
             }
         }
+        else if ((requestCode == fileSave) && (resultCode == Activity.RESULT_OK))
+        {
+            // The result data contains a URI for the document or directory that the user created
+            if (resultData != null) {
+                // Perform operations on the document using its URI.
+                writeInFile(resultData.getData(), "THIS TEXT IS NOT NULL.  IT EXISTS");
+            }
+        }
+        else
+        {
+            //do nothing
+        }
+    }
+
+    private void writeInFile(@NonNull Uri uri, @NonNull String text) {
+        OutputStream outputStream;
+        try {
+            outputStream = getContentResolver().openOutputStream(uri);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
+            bw.write(text);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //////////////////////////User Interface Functions//////////////////////////
@@ -99,7 +134,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         {
             //Load button clicked
             this.openFile();
-            //////////////////////String testString = returnString;
         }
     }
 
