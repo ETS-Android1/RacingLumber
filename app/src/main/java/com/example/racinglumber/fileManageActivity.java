@@ -63,7 +63,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     private void openFile() { //Uri pickerInitialUri
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/txt");
+        intent.setType("text/plain");
 
         // Optionally, specify a URI for the file that should appear in the
         // system file picker when it loads.
