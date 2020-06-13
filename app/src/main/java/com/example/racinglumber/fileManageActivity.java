@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 
@@ -43,39 +39,26 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     //////////////////////////File Access Functions//////////////////////////
 
-    // Request code for creating a PDF document.
-  ////  private static final int CREATE_FILE = 1;
-    private void createFile() { //Uri pickerInitialUri
+    private static final int fileSaveRequestCode = 1;
+    private static final int fileLoadRequestCode = 2;
+
+    private void createFile() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TITLE, "DUMMY.txt");
+        intent.putExtra(Intent.EXTRA_TITLE, "saveData.txt");
 
-        // Optionally, specify a URI for the directory that should be opened in
-        // the system file picker when your app creates the document.
-        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-
-        startActivityForResult(intent, fileSave);//CREATE_FILE
+        startActivityForResult(intent, fileSaveRequestCode);
     }
 
     // Request code for selecting a PDF document.
-    private static final int PICK_PDF_FILE = 2;
-    private void openFile() { //Uri pickerInitialUri
+    private void openFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
 
-        // Optionally, specify a URI for the file that should appear in the
-        // system file picker when it loads.
-        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-
-        startActivityForResult(intent, PICK_PDF_FILE);
+        startActivityForResult(intent, fileLoadRequestCode);
     }
-
-    private static final int fileSave = 101; //todo replace with the standard define
-    private static final int fileLoad = 2; //todo replace with the standard define
-
-    //todo debug note, below runs after load button
 
     //todo clean this code up, these branches are terrible
     @Override
@@ -83,7 +66,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                                  Intent resultData) {
         Uri uri;
 
-        if ((requestCode == fileLoad) && (resultCode == Activity.RESULT_OK))
+        if ((requestCode == fileLoadRequestCode) && (resultCode == Activity.RESULT_OK))
         {
             // The result data contains a URI for the document or directory that the user selected
             if (resultData != null) {
@@ -92,7 +75,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 returnString = uri.toString();
             }
         }
-        else if ((requestCode == fileSave) && (resultCode == Activity.RESULT_OK))
+        else if ((requestCode == fileSaveRequestCode) && (resultCode == Activity.RESULT_OK))
         {
             // The result data contains a URI for the document or directory that the user created
             if (resultData != null) {
