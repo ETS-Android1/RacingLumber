@@ -32,6 +32,9 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         Button loadButton = (Button) findViewById(R.id.loadButton);
         loadButton.setOnClickListener(this);
 
+        Button deleteButton = (Button) findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(this);
+
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_save_button);
@@ -41,6 +44,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     private static final int fileSaveRequestCode = 1;
     private static final int fileLoadRequestCode = 2;
+    private static final int fileDeleteRequestCode = 3;
 
     private void createFile() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -51,7 +55,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         startActivityForResult(intent, fileSaveRequestCode);
     }
 
-    // Request code for selecting a PDF document.
     private void openFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -59,6 +62,20 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         startActivityForResult(intent, fileLoadRequestCode);
     }
+
+    private void deleteFile() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/plain");
+
+        startActivityForResult(intent, fileDeleteRequestCode);
+    }
+
+    private void deleteFilePartTwo() {
+    //todo delete file here using its uri
+    }
+
+    private Uri deleteUri;
 
     //todo clean this code up, these branches are terrible
     @Override
@@ -71,7 +88,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             // The result data contains a URI for the document or directory that the user selected
             if (resultData != null) {
                 uri = resultData.getData();
-                // Perform operations on the document using its URI.
                 returnString = uri.toString();
             }
         }
@@ -79,8 +95,14 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         {
             // The result data contains a URI for the document or directory that the user created
             if (resultData != null) {
-                // Perform operations on the document using its URI.
-                writeInFile(resultData.getData(), "THIS TEXT IS NOT NULL.  IT EXISTS");
+                writeInFile(resultData.getData(), getEncodedDataString());
+            }
+        }
+        else if ((requestCode == fileDeleteRequestCode) && (resultCode == Activity.RESULT_OK))
+        {
+            // The result data contains a URI for the document or directory that the user created
+            if (resultData != null) {
+                deleteUri = resultData.getData();
             }
         }
         else
@@ -103,20 +125,58 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     }
 
+    //////////////////////////File Encoding and Decoding Functions//////////////////////////
+    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private String getEncodedDataString()
+    {
+        //TODO replace with proper encoding
+        dataStorage recordedVars;
+        String returnString = "";
+        int dataArrayLen;
+        float accelVal;
+
+        recordedVars = new dataStorage();
+        dataArrayLen = recordedVars.getDataArrayLen();
+
+        returnString += Integer.toString(dataArrayLen); //first encode number of data points
+        returnString += " ";
+
+        for (int index = 0; index < dataArrayLen; index++)
+        {
+            accelVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
+            returnString += Float.toString(accelVal);
+            returnString += " ";
+        }
+        return returnString;
+    }
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //////////////////////////User Interface Functions//////////////////////////
 
     @Override
     public void onClick(View v)
     {
-        if (v.getId() == R.id.saveButton)
+        if (v.getId() == R.id.saveButton) ///TODO this should be a switch statement
         {
             //Save button clicked
             this.createFile();
         }
-        else
+        else if (v.getId() == R.id.loadButton)
         {
             //Load button clicked
             this.openFile();
+        }
+        else //delete button
+        {
+            this.deleteFile();
+            this.deleteFilePartTwo();
         }
     }
 

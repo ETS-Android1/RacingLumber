@@ -81,6 +81,10 @@ public class dataStorage {
     {
         dataArrayLen = inputDataLen;
     }
+    public int getDataArrayLen()
+    {
+        return dataArrayLen;
+    }
 
     public boolean writeToStorage(float xInput, float yInput, float zInput, int sensorType)
     {
