@@ -1,10 +1,14 @@
 package com.example.racinglumber;
 
 import android.app.Activity;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -13,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.documentfile.provider.DocumentFile;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -55,7 +60,9 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
+        //intent.setType(DocumentsContract.Document.MIME_TYPE_DIR);
         intent.putExtra(Intent.EXTRA_TITLE, "saveData.txt");
+
 
         startActivityForResult(intent, fileSaveRequestCode);
     }
@@ -105,15 +112,12 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 uri = resultData.getData();
 ////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 String fileName = getFileName(uri);
-
-                File dir =new File(getApplicationContext().getExternalFilesDir(null)+"/"+fileName);
-                boolean success = dir.delete();
-
                 String path = uri.getPath();
+                String path2;
                 File filesDir = getFilesDir();
-                //File[] files = filesDir.listFiles();
 
                 File file2 = new File(filesDir, path);
+                File file3 = new File(path);
 ////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 File file = new File(uri.getPath());
                 //File file2 = new File(getFilesDir(), uri.getPath());
@@ -125,6 +129,13 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 {
                     file2.delete();
                 }
+                else if (file3.exists())
+                {
+                    file3.delete();
+                }
+
+                DocumentFile test = DocumentFile.fromSingleUri(getApplicationContext(), uri);
+                boolean success = test.delete();
                 //////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             }
         }
