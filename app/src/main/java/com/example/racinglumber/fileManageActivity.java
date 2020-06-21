@@ -2,8 +2,11 @@ package com.example.racinglumber;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,20 +76,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         startActivityForResult(intent, fileDeleteRequestCode);
     }
 
-    private void deleteFilePartTwo() {
-    //todo delete file here using its uri
-        String fileName = deleteUri.getPath();
-        File file = new File(fileName);
-//        File file = new File(getFilesDir(), fileName);
-
-        if (file.exists())
-        {
-            deleteFile(fileName);
-        }
-    }
-
-    private Uri deleteUri;
-
     //todo clean this code up, these branches are terrible
     @Override
     public void onActivityResult(int requestCode, int resultCode,
@@ -112,14 +101,59 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         {
             // The result data contains a URI for the document or directory that the user created
             if (resultData != null) {
-                deleteUri = resultData.getData();
-                this.deleteFilePartTwo();
+
+                uri = resultData.getData();
+////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                String fileName = getFileName(uri);
+
+                File dir =new File(getApplicationContext().getExternalFilesDir(null)+"/"+fileName);
+                boolean success = dir.delete();
+
+                String path = uri.getPath();
+                File filesDir = getFilesDir();
+                //File[] files = filesDir.listFiles();
+
+                File file2 = new File(filesDir, path);
+////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                File file = new File(uri.getPath());
+                //File file2 = new File(getFilesDir(), uri.getPath());
+                if (file.exists())
+                {
+                    deleteFile(uri.getPath());
+                }
+                else if(file2.exists())
+                {
+                    file2.delete();
+                }
+                //////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             }
         }
         else
         {
             //do nothing
         }
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
     private void writeInFile(@NonNull Uri uri, @NonNull String text) {
