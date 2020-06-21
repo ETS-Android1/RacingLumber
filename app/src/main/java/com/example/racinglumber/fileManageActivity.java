@@ -75,7 +75,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         startActivityForResult(intent, fileLoadRequestCode);
     }
 
-    private void deleteFile() { //todo remove all delete functionality
+    private void deleteFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
@@ -108,63 +108,15 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         {
             // The result data contains a URI for the document or directory that the user created
             if (resultData != null) {
-
                 uri = resultData.getData();
-////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                String fileName = getFileName(uri);
-                String path = uri.getPath();
-                String path2;
-                File filesDir = getFilesDir();
-
-                File file2 = new File(filesDir, path);
-                File file3 = new File(path);
-////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                File file = new File(uri.getPath());
-                //File file2 = new File(getFilesDir(), uri.getPath());
-                if (file.exists())
-                {
-                    deleteFile(uri.getPath());
-                }
-                else if(file2.exists())
-                {
-                    file2.delete();
-                }
-                else if (file3.exists())
-                {
-                    file3.delete();
-                }
-
-                DocumentFile test = DocumentFile.fromSingleUri(getApplicationContext(), uri);
-                boolean success = test.delete();
-                //////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                DocumentFile openedDoc = DocumentFile.fromSingleUri(getApplicationContext(), uri);
+                openedDoc.delete();
             }
         }
         else
         {
             //do nothing
         }
-    }
-
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
     }
 
     private void writeInFile(@NonNull Uri uri, @NonNull String text) {
