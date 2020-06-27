@@ -134,11 +134,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     }
 
     //////////////////////////File Encoding and Decoding Functions//////////////////////////
-    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     private String getEncodedDataString()
     {
         //TODO replace with proper encoding
@@ -150,22 +146,27 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         recordedVars = new dataStorage();
         dataArrayLen = recordedVars.getDataArrayLen();
 
+        /*1. Encode the number of data points on its own line*/
+
+        returnString += "Length of Data Arrays";
+        returnString += '\t';
         returnString += Integer.toString(dataArrayLen); //first encode number of data points
-        returnString += " ";
+        returnString += '\n';
+
+        /*2. Encode X Acceleration Array*/
+
+        returnString += "X Acceleration"+'\t';
 
         for (int index = 0; index < dataArrayLen; index++)
         {
             accelVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
             returnString += Float.toString(accelVal);
-            returnString += " ";
+            returnString += '\t';
         }
+        returnString += '\n';
         return returnString;
     }
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     //////////////////////////User Interface Functions//////////////////////////
 
     @Override
