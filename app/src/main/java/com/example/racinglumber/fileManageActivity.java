@@ -155,15 +155,15 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         /*2. Encode X Acceleration Array*/
 
-        returnString += "X Acceleration"+'\t';
+        returnString += "X Acceleration"+' ';//backslash t
 
         for (int index = 0; index < dataArrayLen; index++)
         {
             accelVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
             returnString += Float.toString(accelVal);
-            returnString += '\t';
+//            returnString += ' ';
         }
-//        returnString += '\n';
+        returnString += '\n';
         return returnString;
     }
 
