@@ -148,10 +148,10 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         /*1. Encode the number of data points on its own line*/
 
-        returnString += "Length of Data Arrays";
-        returnString += '\t';
-        returnString += Integer.toString(dataArrayLen); //first encode number of data points
-        returnString += '\n';
+//        returnString += "Length of Data Arrays";
+//        returnString += '\t';
+//        returnString += Integer.toString(dataArrayLen); //first encode number of data points
+//        returnString += '\n';
 
         /*2. Encode X Acceleration Array*/
 
@@ -163,7 +163,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             returnString += Float.toString(accelVal);
             returnString += '\t';
         }
-        returnString += '\n';
+//        returnString += '\n';
         return returnString;
     }
 

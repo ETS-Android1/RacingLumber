@@ -131,6 +131,8 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
 
     private void addGraphSeries(dataStorage.Axis axis, dataStorage.RecordType recordType)
     {
+        final int graphLineThickness = 10;
+
         LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
         float newVal;
         float currentMaxGraphY;
@@ -247,6 +249,8 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
             default:
                 break;
         }
+
+        newSeries.setThickness(graphLineThickness);
 
         if (!graph.getLegendRenderer().isVisible())
         {
