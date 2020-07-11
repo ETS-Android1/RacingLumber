@@ -345,6 +345,97 @@ public class dataStorage {
         }
         return returnVal;
     }
+    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    public String getName(Axis axis, RecordType recordType)
+    {
+        String returnVal;
+
+        switch (axis)
+        {
+            case X:
+                switch (recordType)
+                {
+                    case acceleration:
+                        returnVal = "X Acceleration";
+                        break;
+                    case rotation:
+                        returnVal = "X Rotation";
+                        break;
+                    case gravity:
+                        returnVal = "X Gravity";
+                        break;
+                    default:
+                        returnVal = "INVALID REFERENCE";
+                        break;
+                }
+                break;
+
+            case Y:
+                switch (recordType)
+                {
+                    case acceleration:
+                        returnVal = "Y Acceleration";
+                        break;
+                    case rotation:
+                        returnVal = "Y Rotation";
+                        break;
+                    case gravity:
+                        returnVal = "Y Gravity";
+                        break;
+                    default:
+                        returnVal = "INVALID REFERENCE";
+                        break;
+                }
+                break;
+
+            case Z:
+                switch (recordType)
+                {
+                    case acceleration:
+                        returnVal = "Z Acceleration";
+                        break;
+                    case rotation:
+                        returnVal = "Z Rotation";
+                        break;
+                    case gravity:
+                        returnVal = "Z Gravity";
+                        break;
+                    default:
+                        returnVal = "INVALID REFERENCE";
+                        break;
+                }
+                break;
+
+            case Magnitude:
+                switch (recordType)
+                {
+                    case acceleration:
+                        returnVal = "Acceleration Magnitude";
+                        break;
+                    case rotation:
+                        returnVal = "Rotation Magnitude";
+                        break;
+                    case gravity:
+                        returnVal = "Gravity Magnitude";
+                        break;
+                    default:
+                        returnVal = "INVALID REFERENCE";
+                        break;
+                }
+                break;
+
+            default:
+                returnVal = "INVALID REFERENCE";
+                break;
+        }
+        return returnVal;
+    }
+////////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ////////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ////////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     public float getMaxOfAbsValue(Axis axis, RecordType recordType)
     {

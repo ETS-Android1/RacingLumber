@@ -137,9 +137,13 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     private String getEncodedDataString()
     {
+        final char dataDelimiter = '\t';
+
         //TODO replace with proper encoding
+        //TODO look into writing to text file in stages instead of all at once
         dataStorage recordedVars;
         String returnString = "";
+
         int dataArrayLen;
         float accelVal;
 
@@ -148,22 +152,39 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         /*1. Encode the number of data points on its own line*/
 
-//        returnString += "Length of Data Arrays";
-//        returnString += '\t';
-//        returnString += Integer.toString(dataArrayLen); //first encode number of data points
-//        returnString += '\n';
-
-        /*2. Encode X Acceleration Array*/
-
-        returnString += "X Acceleration"+' ';//backslash t
-
-        for (int index = 0; index < dataArrayLen; index++)
-        {
-            accelVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
-            returnString += Float.toString(accelVal);
-//            returnString += ' ';
-        }
+        returnString += "Length of Data Arrays";
+        returnString += dataDelimiter;
+        returnString += Integer.toString(dataArrayLen); //first encode number of data points
         returnString += '\n';
+////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /*2. Encode Acceleration Arrays. Split X, Y, etc. by line*/
+
+        dataStorage.Axis axisVals[] = dataStorage.Axis.values();
+
+        for (dataStorage.Axis axis : axisVals)
+        {
+
+            returnString += recordedVars.getName(axis, dataStorage.RecordType.acceleration)+dataDelimiter;
+
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = recordedVars.getValue(axis, dataStorage.RecordType.acceleration, index);
+                returnString += Float.toString(accelVal);
+                returnString += dataDelimiter;
+            }
+            returnString += '\n';
+        }
+        //////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//        /*2. Encode X Acceleration Array*/
+//        returnString += "X Acceleration"+dataDelimiter; //todo replace string with generic
+//
+//        for (int index = 0; index < dataArrayLen; index++)
+//        {
+//            accelVal = recordedVars.getValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
+//            returnString += Float.toString(accelVal);
+//            returnString += dataDelimiter;
+//        }
+//        returnString += '\n';
         return returnString;
     }
 
