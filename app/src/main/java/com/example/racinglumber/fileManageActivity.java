@@ -60,9 +60,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
-        //intent.setType(DocumentsContract.Document.MIME_TYPE_DIR);
         intent.putExtra(Intent.EXTRA_TITLE, "saveData.txt");
-
 
         startActivityForResult(intent, fileSaveRequestCode);
     }
@@ -83,39 +81,31 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         startActivityForResult(intent, fileDeleteRequestCode);
     }
 
-    //todo clean this code up, these branches are terrible
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
         Uri uri;
 
-        if ((requestCode == fileLoadRequestCode) && (resultCode == Activity.RESULT_OK))
+        /*The result data contains a URI for the document or directory that the user created*/
+        if ((resultCode == Activity.RESULT_OK) && (resultData != null))
         {
-            // The result data contains a URI for the document or directory that the user selected
-            if (resultData != null) {
-                uri = resultData.getData();
-                returnString = uri.toString();
+            switch (requestCode)
+            {
+                case fileLoadRequestCode:
+                    uri = resultData.getData();
+                    returnString = uri.toString();
+                    break;
+
+                case fileSaveRequestCode:
+                    writeInFile(resultData.getData(), getEncodedDataString());
+                    break;
+
+                case fileDeleteRequestCode:
+                    uri = resultData.getData();
+                    DocumentFile openedDoc = DocumentFile.fromSingleUri(getApplicationContext(), uri);
+                    openedDoc.delete();
+                    break;
             }
-        }
-        else if ((requestCode == fileSaveRequestCode) && (resultCode == Activity.RESULT_OK))
-        {
-            // The result data contains a URI for the document or directory that the user created
-            if (resultData != null) {
-                writeInFile(resultData.getData(), getEncodedDataString());
-            }
-        }
-        else if ((requestCode == fileDeleteRequestCode) && (resultCode == Activity.RESULT_OK))
-        {
-            // The result data contains a URI for the document or directory that the user created
-            if (resultData != null) {
-                uri = resultData.getData();
-                DocumentFile openedDoc = DocumentFile.fromSingleUri(getApplicationContext(), uri);
-                openedDoc.delete();
-            }
-        }
-        else
-        {
-            //do nothing
         }
     }
 
@@ -152,10 +142,10 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         returnString += "Length of Data Arrays";
         returnString += dataDelimiter;
-        returnString += Integer.toString(dataArrayLen); //first encode number of data points
+        returnString += Integer.toString(dataArrayLen);
         returnString += '\n';
 
-        /*2. Encode Data Arrays. Split X, Y, etc. by line*/
+        /*2. Encode Data Arrays. Split axis and recordType by line*/
 
         dataStorage.Axis axisVals[] = dataStorage.Axis.values();
         dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
@@ -183,20 +173,22 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     @Override
     public void onClick(View v)
     {
-        if (v.getId() == R.id.saveButton) ///TODO this should be a switch statement
+        switch (v.getId())
         {
-            //Save button clicked
-            this.createFile();
-        }
-        else if (v.getId() == R.id.loadButton)
-        {
-            //Load button clicked
-            this.openFile();
-        }
-        else //delete button
-        {
-            this.deleteFile();
-           // this.deleteFilePartTwo();
+            case R.id.saveButton:
+                this.createFile(); //Save button clicked
+                break;
+
+            case R.id.loadButton:
+                this.openFile(); //Load button clicked
+                break;
+
+            case R.id.deleteButton:
+                this.deleteFile(); //Delete button clicked
+                break;
+
+            default:
+                break; //invalid button click, do nothing
         }
     }
 
