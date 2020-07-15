@@ -24,10 +24,10 @@ public class dataStorage {
         gravity
     }
 
-    public static int dataArrayLen = 500;
+    public static int dataArrayLen = 500; //default to 500
 
-    private static float[] xDataArray;//todo this is public for now, update with graphActivity
-    private static float[] yDataArray;//todo check that these don't break record
+    private static float[] xDataArray;
+    private static float[] yDataArray;
     private static float[] zDataArray;
     private static int accelIndex; //index of x/y/zDataArray
     private static long[] accelEventTime;
