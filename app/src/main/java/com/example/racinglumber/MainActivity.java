@@ -27,7 +27,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback{
     private BottomNavigationView bottomNavigationView;
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
@@ -83,42 +83,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 ////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     ///////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ///////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//    @Override
-//    public void onRequestPermissionsResults(int requestCode, String[] permissions,
-//                                            int[] grantResults) {
-//        switch (requestCode) {
-//            case 121: //todo debug request code
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0 &&
-//                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    // Permission is granted. Continue the action or workflow
-//                    // in your app.
-//                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    {
-//                        fusedLocationClient.getLastLocation()
-//                                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-//                                    @Override
-//                                    public void onSuccess(Location location) {
-//                                        // Got last known location. In some rare situations this can be null.
-//                                        if (location != null) {
-//                                            // Logic to handle location object
-//                                        }
-//                                    }
-//                                });
-//                    }
-//                }  else {
-//                    // Explain to the user that the feature is unavailable because
-//                    // the features requires a permission that the user has denied.
-//                    // At the same time, respect the user's decision. Don't link to
-//                    // system settings in an effort to convince the user to change
-//                    // their decision.
-//                }
-//                return;
-//        }
-//        // Other 'case' lines to check for other
-//        // permissions this app might request.
-//    }
-//}
+    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                            int[] grantResults) {
+        switch (requestCode) {
+            case 121: //todo debug request code
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+                    {
+                        /*Permission granted*/
+                        fusedLocationClient.getLastLocation()
+                                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                                    @Override
+                                    public void onSuccess(Location location) {
+                                        // Got last known location. In some rare situations this can be null.
+                                        if (location != null) {
+                                            // Logic to handle location object
+                                        }
+                                    }
+                                });
+                    }
+                }  else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
+}
 ////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
