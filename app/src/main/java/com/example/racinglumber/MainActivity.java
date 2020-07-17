@@ -2,9 +2,14 @@ package com.example.racinglumber;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
@@ -17,15 +22,19 @@ import android.hardware.SensorEvent;
 import android.widget.EditText;
 import android.widget.Switch;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener , BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView bottomNavigationView;
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
     private dataStorage recordedVars;
+    private FusedLocationProviderClient fusedLocationClient;
 
     /*Control Flags*/
     boolean dataIsRecording = false;
@@ -48,7 +57,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         senRotation = senSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+//////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, 121); //todo debug request code
+        }
+        else {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                            }
+                        }
+                    });
+        }
+
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
+
+////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ///////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+///////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//    @Override
+//    public void onRequestPermissionsResults(int requestCode, String[] permissions,
+//                                            int[] grantResults) {
+//        switch (requestCode) {
+//            case 121: //todo debug request code
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0 &&
+//                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    // Permission is granted. Continue the action or workflow
+//                    // in your app.
+//                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                    {
+//                        fusedLocationClient.getLastLocation()
+//                                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+//                                    @Override
+//                                    public void onSuccess(Location location) {
+//                                        // Got last known location. In some rare situations this can be null.
+//                                        if (location != null) {
+//                                            // Logic to handle location object
+//                                        }
+//                                    }
+//                                });
+//                    }
+//                }  else {
+//                    // Explain to the user that the feature is unavailable because
+//                    // the features requires a permission that the user has denied.
+//                    // At the same time, respect the user's decision. Don't link to
+//                    // system settings in an effort to convince the user to change
+//                    // their decision.
+//                }
+//                return;
+//        }
+//        // Other 'case' lines to check for other
+//        // permissions this app might request.
+//    }
+//}
+////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 ///////////BUTTON FUNCTIONS//////////////
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

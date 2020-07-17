@@ -31,6 +31,6 @@
             android:name=".fileManageActivity"
             android:label="fileManageActivity">
         </activity>
-    </application>
+</application>
 
 </manifest>
