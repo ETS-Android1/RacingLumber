@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -67,11 +66,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>()
+                    {
                         @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                location.getSpeed(); //todo should be in its own function
+                        public void onSuccess(Location location)
+                        {
+                            if (location != null)
+                            {
+                                processReceivedLocation(location);
                             }
                         }
                     });
@@ -92,15 +94,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
                     {
                         /*Permission granted*/
-                        fusedLocationClient.getLastLocation()
-                                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                                    @Override
-                                    public void onSuccess(Location location) {
-                                        if (location != null) {
-                                            location.getSpeed(); //todo should be in its own function
-                                        }
-                                    }
-                                });
+                        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>()
+                        {
+                            @Override
+                            public void onSuccess(Location location)
+                            {
+                                if (location != null)
+                                {
+                                    processReceivedLocation(location);
+                                }
+                            }
+                        });
                     }
                 }
                 else
@@ -114,6 +118,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
     }
 }
+///////////LOCATION FUNCTIONS//////////////
+////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //todo finish stub
+    public void processReceivedLocation(Location location)
+    {
+        boolean bufferFull;
+
+        if (dataIsRecording)
+        {
+            bufferFull = recordedVars.writeGPSValToStorage(location.getLatitude(), location.getLongitude());
+            if (bufferFull)
+            {
+                endRecording();
+            }
+        }
+    }
+    ///////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ///////////BUTTON FUNCTIONS//////////////
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -190,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (dataIsRecording)
         {
-            bufferFull = recordedVars.writeToStorage(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2], mySensor.getType());
+            bufferFull = recordedVars.writeSensorValToStorage(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2], mySensor.getType());
             if (bufferFull)
             {
                 endRecording();

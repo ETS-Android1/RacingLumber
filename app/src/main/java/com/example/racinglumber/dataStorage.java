@@ -86,7 +86,16 @@ public class dataStorage {
         return dataArrayLen;
     }
 
-    public boolean writeToStorage(float xInput, float yInput, float zInput, int sensorType)
+    //todo finish stub
+    public boolean writeGPSValToStorage(double latitude, double longitude)
+    {
+        boolean bufferFull = false;
+
+
+        return bufferFull;
+    }
+
+    public boolean writeSensorValToStorage(float xInput, float yInput, float zInput, int sensorType)
     {
         boolean bufferFull = false;
 
