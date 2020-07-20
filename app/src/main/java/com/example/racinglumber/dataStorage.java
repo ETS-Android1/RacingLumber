@@ -44,6 +44,12 @@ public class dataStorage {
     private static int gravityIndex = 0; //index of x/y/zGravityArray
     private static long[] gravityEventTime;
 
+    private static double[] latitudeArray;
+    private static double[] longitudeArray;
+    private static int GPSIndex = 0; //index of GPS data
+    private static boolean GPSWriteEnable = false; //only allow a write of gps data if sensor value has just been written
+    private static long[] GPSEventTime;
+
     public void clearStorage()
     {
         xDataArray = null;
@@ -75,6 +81,15 @@ public class dataStorage {
         gravityEventTime = null;
         gravityEventTime = new long[dataArrayLen];
         gravityIndex = 0;
+
+        latitudeArray = null;
+        latitudeArray = new double[dataArrayLen];
+        longitudeArray = null;
+        longitudeArray = new double[dataArrayLen];
+        GPSEventTime = null;
+        GPSEventTime = new long[dataArrayLen];
+        GPSIndex = 0;
+        GPSWriteEnable = false;
     }
 
     public void setDataArrayLen(int inputDataLen)
@@ -91,6 +106,23 @@ public class dataStorage {
     {
         boolean bufferFull = false;
 
+        if (GPSIndex >= dataArrayLen)
+        {
+            bufferFull = true;
+        }
+        else
+        {
+            if (GPSWriteEnable)
+            {
+                latitudeArray[GPSIndex] = latitude;
+                longitudeArray[GPSIndex] = longitude;
+
+                GPSEventTime[accelIndex] = SystemClock.elapsedRealtime();
+                GPSIndex = GPSIndex + 1;
+
+                GPSWriteEnable = false;
+            }
+        }
 
         return bufferFull;
     }
@@ -112,6 +144,8 @@ public class dataStorage {
                 zDataArray[accelIndex] = zInput;
                 accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
                 accelIndex = accelIndex + 1;
+
+                GPSWriteEnable = true; //allow a write to gps data storage
             }
         }
         else if (sensorType == Sensor.TYPE_ROTATION_VECTOR)
@@ -127,6 +161,8 @@ public class dataStorage {
                 zRotationArray[rotationIndex] = zInput;//z is yaw
                 rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
                 rotationIndex = rotationIndex + 1;
+
+                GPSWriteEnable = true; //allow a write to gps data storage
             }
         }
         else if (sensorType == Sensor.TYPE_GRAVITY)
@@ -142,6 +178,8 @@ public class dataStorage {
                 zGravityArray[gravityIndex] = zInput;
                 gravityEventTime[gravityIndex] = SystemClock.elapsedRealtime();
                 gravityIndex = gravityIndex + 1;
+
+                GPSWriteEnable = true; //allow a write to gps data storage
             }
         }
         else
@@ -265,8 +303,24 @@ public class dataStorage {
             zInputArray[index] = (float)outputZ;
         }
     }
+    //////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //todo finish stub and add enums to gps vals, when I know what I want to record
+    public double getGPSValue(boolean latOrLong, int index) {
+        double returnVal;
 
-    public float getValue(Axis axis, RecordType recordType, int index)
+        if (latOrLong)
+        {
+            returnVal = latitudeArray[index];
+        }
+        else
+        {
+            returnVal = longitudeArray[index];
+        }
+
+        return returnVal;
+    }
+    ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    public float getSensorValue(Axis axis, RecordType recordType, int index)
     {
         float returnVal;
         double squaredMag;
@@ -354,10 +408,7 @@ public class dataStorage {
         }
         return returnVal;
     }
-    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //////////////////////////////////////////////////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     public static String getName(Axis axis, RecordType recordType)
     {
         String returnVal;
@@ -442,9 +493,6 @@ public class dataStorage {
         }
         return returnVal;
     }
-////////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ////////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ////////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     public float getMaxOfAbsValue(Axis axis, RecordType recordType)
     {
@@ -454,7 +502,7 @@ public class dataStorage {
 
         for (index = 0; index < xDataArray.length; index++)
         {
-            newValueFound = getValue(axis, recordType, index);
+            newValueFound = getSensorValue(axis, recordType, index);
 
             if (newValueFound < 0)
             {

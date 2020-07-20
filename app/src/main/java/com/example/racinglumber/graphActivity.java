@@ -2,7 +2,6 @@ package com.example.racinglumber;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -145,7 +144,7 @@ public class graphActivity extends Activity implements BottomNavigationView.OnNa
                 break;
             }
 
-            newVal = recordedVars.getValue(axis, recordType, counter);
+            newVal = recordedVars.getSensorValue(axis, recordType, counter);
             newSeries.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
         }
 

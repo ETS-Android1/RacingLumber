@@ -1,17 +1,9 @@
 package com.example.racinglumber;
 
 import android.app.Activity;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +14,6 @@ import androidx.documentfile.provider.DocumentFile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -132,6 +123,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         dataStorage recordedVars;
         int dataArrayLen;
         float accelVal;
+        double GPSVal;
 
         String returnString = "";
 
@@ -158,13 +150,40 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
                 for (int index = 0; index < dataArrayLen; index++)
                 {
-                    accelVal = recordedVars.getValue(axis, recordType, index);
+                    accelVal = recordedVars.getSensorValue(axis, recordType, index);
                     returnString += Float.toString(accelVal);
                     returnString += dataDelimiter;
                 }
                 returnString += '\n';
             }
         }
+        //todo need to encode corresponding timestamps as well for all of above data
+
+        /////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /*2. Encode GPS Arrays. Split axis and recordType by line*/
+        ////TODO use proper encoding; this is a prototype implementation
+
+        returnString += "LATITUDE"+dataDelimiter;
+
+        for (int index = 0; index < dataArrayLen; index++)
+        {
+            GPSVal = recordedVars.getGPSValue(true, index);
+            returnString += Double.toString(GPSVal);
+            returnString += dataDelimiter;
+        }
+        returnString += '\n';
+
+        returnString += "LONGITUDE"+dataDelimiter;
+
+        for (int index = 0; index < dataArrayLen; index++)
+        {
+            GPSVal = recordedVars.getGPSValue(true, index);
+            returnString += Double.toString(GPSVal);
+            returnString += dataDelimiter;
+        }
+        returnString += '\n';
+
+        ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         return returnString;
     }
 
