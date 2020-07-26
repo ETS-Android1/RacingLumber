@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senGravity;
     private dataStorage recordedVars;
     private FusedLocationProviderClient fusedLocationClient;
+    private boolean DEBUGVAR;
 
     private final int locationPermissionsRequestCode = 121;
 
@@ -59,25 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         senRotation = senSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        //todo clean up if below: make a function for this check?
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);
-        }
-        else {
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>()
-                    {
-                        @Override
-                        public void onSuccess(Location location)
-                        {
-                            if (location != null)
-                            {
-                                processReceivedLocation(location);
-                            }
-                        }
-                    });
-        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this); //todo make this a service?
     }
 ///////////PERMISSION FUNCTIONS//////////////
     @Override
@@ -93,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //todo clean up if below: make a function for this check?
                     if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
                     {
+                        DEBUGVAR = true; //waiting for response
                         /*Permission granted*/
                         fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>()
                         {
@@ -101,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             {
                                 if (location != null)
                                 {
+                                    DEBUGVAR = false;
                                     processReceivedLocation(location);
                                 }
                             }
@@ -134,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 endRecording();
             }
+
+            //todo timestamp record here or in above function? (writegpsvaltostorage())
         }
     }
     ///////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -220,6 +207,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 endRecording();
             }
+            /////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //todo clean up if below: make a function for this check?
+            if (DEBUGVAR == false) //not waiting for a response
+            {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);
+                }
+                else {
+                    DEBUGVAR = true;
+                    fusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(this, new OnSuccessListener<Location>()
+                            {
+                                @Override
+                                public void onSuccess(Location location)
+                                {
+                                    if (location != null)
+                                    {
+                                        DEBUGVAR = false;
+                                        processReceivedLocation(location);
+                                    }
+                                }
+                            });
+                }
+            }
+             //////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         }
     }
     ///////////////////Control Functions//////////////////////

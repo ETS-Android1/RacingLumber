@@ -182,6 +182,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             returnString += dataDelimiter;
         }
         returnString += '\n';
+        //todo need to encode corresponding timestamps as well for all of above data
 
         ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         return returnString;

@@ -117,7 +117,7 @@ public class dataStorage {
                 latitudeArray[GPSIndex] = latitude;
                 longitudeArray[GPSIndex] = longitude;
 
-                GPSEventTime[accelIndex] = SystemClock.elapsedRealtime();
+                GPSEventTime[GPSIndex] = SystemClock.elapsedRealtime();
                 GPSIndex = GPSIndex + 1;
 
                 GPSWriteEnable = false;
