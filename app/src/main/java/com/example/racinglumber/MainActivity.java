@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senGravity;
     private dataStorage recordedVars;
     private FusedLocationProviderClient fusedLocationClient;
-    private boolean DEBUGVAR;
+    private boolean waitingForLocationResponse;
 
     private final int locationPermissionsRequestCode = 121;
 
@@ -62,53 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this); //todo make this a service?
     }
-///////////PERMISSION FUNCTIONS//////////////
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                            int[] grantResults) {
-        switch (requestCode)
-        {
-            case locationPermissionsRequestCode:
-                /*Check if permission was cancelled*/
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    /*Check if permission was granted*/
-                    //todo clean up if below: make a function for this check?
-                    if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
-                    {
-                        DEBUGVAR = true; //waiting for response
-                        /*Permission granted*/
-                        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>()
-                        {
-                            @Override
-                            public void onSuccess(Location location)
-                            {
-                                if (location != null)
-                                {
-                                    DEBUGVAR = false;
-                                    processReceivedLocation(location);
-                                }
-                            }
-                        });
-                    }
-                }
-                else
-                {
-                    //todo continue logging without location logging (after alpha target)
-                }
-                break;
 
-            default:
-                /*Unrecognized permission request.  Ignore*/
-                break;
-    }
-}
 ///////////LOCATION FUNCTIONS//////////////
-////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //todo finish stub
-    public void processReceivedLocation(Location location)
+
+    public void processReceivedLocation(Location location)//todo put in a service?
     {
         boolean bufferFull;
 
@@ -123,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //todo timestamp record here or in above function? (writegpsvaltostorage())
         }
     }
-    ///////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 ///////////BUTTON FUNCTIONS//////////////
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -209,13 +164,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             /////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //todo clean up if below: make a function for this check?
-            if (DEBUGVAR == false) //not waiting for a response
+            if (waitingForLocationResponse == false) //not waiting for a response
             {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);
                 }
                 else {
-                    DEBUGVAR = true;
+                    waitingForLocationResponse = true;
                     fusedLocationClient.getLastLocation()
                             .addOnSuccessListener(this, new OnSuccessListener<Location>()
                             {
@@ -224,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 {
                                     if (location != null)
                                     {
-                                        DEBUGVAR = false;
+                                        waitingForLocationResponse = false;
                                         processReceivedLocation(location);
                                     }
                                 }

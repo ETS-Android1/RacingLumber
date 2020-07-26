@@ -1,0 +1,44 @@
+/-----Below is old code used when location permissions where enabled.  Missing the first 
+sample of location data isn't a big deal though and is more trouble than its worth-----/
+
+///////////PERMISSION FUNCTIONS//////////////
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                                            int[] grantResults) {
+//        switch (requestCode)
+//        {
+//            case locationPermissionsRequestCode:
+//                /*Check if permission was cancelled*/
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+//                {
+//                    /*Check if permission was granted*/
+//                    //todo clean up if below: make a function for this check?
+//                    if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+//                    {
+//                        waitingForLocationResponse = true; //waiting for response
+//                        /*Permission granted*/
+//                        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>()
+//                        {
+//                            @Override
+//                            public void onSuccess(Location location)
+//                            {
+//                                if (location != null)
+//                                {
+//                                    waitingForLocationResponse = false;
+//                                    processReceivedLocation(location);
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//                else
+//                {
+//                    //todo continue logging without location logging (after alpha target)
+//                }
+//                break;
+//
+//            default:
+//                /*Unrecognized permission request.  Ignore*/
+//                break;
+//        }
+//    }
