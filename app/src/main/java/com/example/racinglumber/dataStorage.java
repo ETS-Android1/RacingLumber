@@ -89,7 +89,6 @@ public class dataStorage {
         GPSEventTime = null;
         GPSEventTime = new long[dataArrayLen];
         GPSIndex = 0;
-        GPSWriteEnable = false;
     }
 
     public void setDataArrayLen(int inputDataLen)
@@ -112,16 +111,10 @@ public class dataStorage {
         }
         else
         {
-            if (GPSWriteEnable)
-            {
-                latitudeArray[GPSIndex] = latitude;
-                longitudeArray[GPSIndex] = longitude;
-
-                GPSEventTime[GPSIndex] = SystemClock.elapsedRealtime();
-                GPSIndex = GPSIndex + 1;
-
-                GPSWriteEnable = false;
-            }
+            latitudeArray[GPSIndex] = latitude;
+            longitudeArray[GPSIndex] = longitude;
+            GPSEventTime[GPSIndex] = SystemClock.elapsedRealtime();
+            GPSIndex = GPSIndex + 1;
         }
 
         return bufferFull;
@@ -144,8 +137,6 @@ public class dataStorage {
                 zDataArray[accelIndex] = zInput;
                 accelEventTime[accelIndex] = SystemClock.elapsedRealtime();
                 accelIndex = accelIndex + 1;
-
-                GPSWriteEnable = true; //allow a write to gps data storage
             }
         }
         else if (sensorType == Sensor.TYPE_ROTATION_VECTOR)
@@ -161,8 +152,6 @@ public class dataStorage {
                 zRotationArray[rotationIndex] = zInput;//z is yaw
                 rotationEventTime[rotationIndex] = SystemClock.elapsedRealtime();
                 rotationIndex = rotationIndex + 1;
-
-                GPSWriteEnable = true; //allow a write to gps data storage
             }
         }
         else if (sensorType == Sensor.TYPE_GRAVITY)
@@ -178,8 +167,6 @@ public class dataStorage {
                 zGravityArray[gravityIndex] = zInput;
                 gravityEventTime[gravityIndex] = SystemClock.elapsedRealtime();
                 gravityIndex = gravityIndex + 1;
-
-                GPSWriteEnable = true; //allow a write to gps data storage
             }
         }
         else

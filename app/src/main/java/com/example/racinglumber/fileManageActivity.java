@@ -177,7 +177,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         for (int index = 0; index < dataArrayLen; index++)
         {
-            GPSVal = recordedVars.getGPSValue(true, index);
+            GPSVal = recordedVars.getGPSValue(false, index);
             returnString += Double.toString(GPSVal);
             returnString += dataDelimiter;
         }

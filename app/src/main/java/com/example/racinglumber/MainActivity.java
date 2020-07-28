@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         senRotation = senSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this); //todo make this a service?
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
 ///////////BUTTON FUNCTIONS//////////////
@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
 ///////////ACCELEROMETER FUNCTIONS/////////////
     protected void onPause()
     {
@@ -148,62 +149,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 endRecording();
             }
-
-//            if (waitingForLocationResponse == false) //not waiting for a response
-//            {
-//                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);
-//                }
-//                else {
-//                    waitingForLocationResponse = true;
-//                    fusedLocationClient.getLastLocation()
-//                            .addOnSuccessListener(this, new OnSuccessListener<Location>()
-//                            {
-//                                @Override
-//                                public void onSuccess(Location location)
-//                                {
-//                                    if (location != null)
-//                                    {
-//                                        waitingForLocationResponse = false;
-//                                        processReceivedLocation(location);
-//                                    }
-//                                }
-//                            });
-//                }
-//            }
         }
     }
-
-//    public void processReceivedLocation(Location location)//todo put in a service?
-//    {
-//        boolean bufferFull;
-//
-//        if (dataIsRecording)
-//        {
-//            bufferFull = recordedVars.writeGPSValToStorage(location.getLatitude(), location.getLongitude());
-//            if (bufferFull)
-//            {
-//                endRecording();
-//            }
-//
-//            //todo timestamp record here or in above function? (writegpsvaltostorage())
-//        }
-//    }
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             Location location = locationResult.getLastLocation();
-            if (location == null) return;
-//            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//            streetViewPanorama.setPosition(latLng);
-
             boolean bufferFull;
 
-            if (dataIsRecording)
+            if (dataIsRecording && (location != null))
             {
-                bufferFull = recordedVars.writeGPSValToStorage(location.getLatitude(), location.getLongitude());
+                bufferFull = recordedVars.writeGPSValToStorage(location.getLatitude(), location.getLongitude()); //todo should just pass the location object
                 if (bufferFull)
                 {
                     endRecording();
@@ -211,9 +169,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //todo timestamp record here or in above function? (writegpsvaltostorage())
             }
-
-            // If you do not want to cancel the location updates after receiving the first location then comment the below line.
-            //fusedLocationClient.removeLocationUpdates(locationCallback); //todo run this at end recording
         }
     };
 
@@ -225,39 +180,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recordedVars.clearStorage();
 
         Button backward_img = (Button) findViewById(R.id.recordButton);
-        dataIsRecording = !dataIsRecording;
         backward_img.setBackgroundColor(Color.RED);
 
         dataIsRecording = true;
 
-        ///////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(3000);
+        locationRequest.setInterval(1000); //1000 millisecond interval, debug setting.  Make configurable?
 
-        ////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>code from https://codinginfinite.com/current-location-google-map-street-view-android/
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);
         }
-        else {
-
+        else
+        {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-//                waitingForLocationResponse = true;
-//                fusedLocationClient.getLastLocation()
-//                        .addOnSuccessListener(this, new OnSuccessListener<Location>()
-//                        {
-//                            @Override
-//                            public void onSuccess(Location location)
-//                            {
-//                                if (location != null)
-//                                {
-//                                    waitingForLocationResponse = false;
-//                                    processReceivedLocation(location);
-//                                }
-//                            }
-//                        });
         }
-        //////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         onResume();
     }
@@ -268,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         backward_img.setBackgroundColor(Color.WHITE);
         dataIsRecording = false;
 
-        fusedLocationClient.removeLocationUpdates(locationCallback); //todo run this at end recording
+        fusedLocationClient.removeLocationUpdates(locationCallback); //this ends gps data polling
 
         onPause();
 
