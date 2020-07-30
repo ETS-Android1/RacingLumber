@@ -115,7 +115,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     }
 
     //////////////////////////File Encoding and Decoding Functions//////////////////////////
-
+//todo need to encode corresponding timestamps as well for all of above data
     private String getEncodedDataString()
     {
         final char dataDelimiter = '\t';
@@ -137,7 +137,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         returnString += Integer.toString(dataArrayLen);
         returnString += '\n';
 
-        /*2. Encode Data Arrays. Split axis and recordType by line*/
+        /*2. Encode Accelerometer Arrays. Split axis and recordType by line*/
 
         dataStorage.Axis axisVals[] = dataStorage.Axis.values();
         dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
@@ -157,11 +157,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 returnString += '\n';
             }
         }
-        //todo need to encode corresponding timestamps as well for all of above data
 
-        /////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        /*2. Encode GPS Arrays. Split axis and recordType by line*/
-        ////TODO use proper encoding; this is a prototype implementation
+        /*3. Encode GPS Arrays. Split axis and recordType by line*/
 
         returnString += "LATITUDE"+dataDelimiter;
 
@@ -182,9 +179,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             returnString += dataDelimiter;
         }
         returnString += '\n';
-        //todo need to encode corresponding timestamps as well for all of above data
 
-        ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         return returnString;
     }
 

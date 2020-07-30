@@ -27,8 +27,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback{
@@ -161,13 +159,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (dataIsRecording && (location != null))
             {
-                bufferFull = recordedVars.writeGPSValToStorage(location.getLatitude(), location.getLongitude()); //todo should just pass the location object
+                bufferFull = recordedVars.writeGPSValToStorage(location);
                 if (bufferFull)
                 {
                     endRecording();
                 }
-
-                //todo timestamp record here or in above function? (writegpsvaltostorage())
             }
         }
     };
@@ -186,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000); //1000 millisecond interval, debug setting.  Make configurable?
+        locationRequest.setInterval(1000); //todo 1000 millisecond interval, debug setting.  Make configurable?
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);
@@ -213,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (correctTiltSwitch.isChecked())
         {
-            recordedVars.correctedDataPoints();
+            recordedVars.correctDataSetOrientation();
         }
     }
 
@@ -250,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //todo add variable calcs for different accuracies here.  Assume SensorManager.SENSOR_DELAY_GAME (50 samples/second) for now
         recordingSeconds += (60 * recordingMinutes);
-        numRecordedSamples = 50*recordingSeconds; //todo this is the assumed sample rate.  Replace with switch statement
+        numRecordedSamples = 50*recordingSeconds;
 
         recordedVars.setDataArrayLen(numRecordedSamples);
     }
