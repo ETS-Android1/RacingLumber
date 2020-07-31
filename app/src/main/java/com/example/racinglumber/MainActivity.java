@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-
+///////////////TODO this is the api key for the maps api:AIzaSyBI5KNvr7GBNrcKqXujvipmhdF8hKotvIw
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
