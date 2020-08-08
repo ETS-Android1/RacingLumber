@@ -36,11 +36,6 @@
         </activity>
 
         <activity
-            android:name=".mapActivity"
-            android:label="mapActivity">
-        </activity>
-
-        <activity
             android:name=".graphActivity"
             android:label="graphActivity">
         </activity>
