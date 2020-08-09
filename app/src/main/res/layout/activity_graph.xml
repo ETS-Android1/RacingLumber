@@ -18,16 +18,19 @@
             android:layout_height="wrap_content" />
 
         <com.jjoe64.graphview.GraphView
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
             android:id="@+id/graphDisplay" />
 
         <fragment
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
             android:id="@+id/map"
             tools:context=".mapActivity"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            tools:layout="@layout/activity_graph" />
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
