@@ -38,9 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private dataStorage recordedVars;
     private FusedLocationProviderClient fusedLocationClient;
 
+    private final int gpsPollingInterval = 1000;
     private final int locationPermissionsRequestCode = 121;
-
-    /*Control Flags*/
     boolean dataIsRecording = false;
 
     @Override
@@ -65,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-///////////BUTTON FUNCTIONS//////////////
+    /************ BUTTON FUNCTIONS ************/
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-///////////ACCELEROMETER FUNCTIONS/////////////
+    /************ ACCELEROMETER FUNCTIONS ************/
+
     protected void onPause()
     {
         super.onPause();
@@ -149,7 +150,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-///////////////TODO this is the api key for the maps api:AIzaSyBI5KNvr7GBNrcKqXujvipmhdF8hKotvIw
+
+    /************ GPS FUNCTIONS ************/
+
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -168,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    ///////////////////Control Functions//////////////////////
+    /************ CONTROL FUNCTIONS ************/
+
     private void startRecording()
     {
         setDataRecordLength();
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000); //todo 1000 millisecond interval, debug setting.  Make configurable?
+        locationRequest.setInterval(gpsPollingInterval);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);
@@ -212,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             recordedVars.correctDataSetOrientation();
         }
     }
+
+    /************ USER INTERFACE FUNCTIONS ************/
 
     private void setDataRecordLength()
     {
