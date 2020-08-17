@@ -1,6 +1,5 @@
 package com.example.racinglumber;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -29,6 +28,20 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     private dataStorage recordedVars;
     private GoogleMap mMap;
 
+    private final float graphMinY = 0.05F;
+    private final int graphNumXSamplesDisplayed = 100;
+
+    /*Spinner menu items*/
+    private final int noSelection = 0;
+    private final int xAcceleration = 1;
+    private final int yAcceleration = 2;
+    private final int zAcceleration = 3;
+    private final int magAcceleration = 4;
+    private final int xRotation = 5;
+    private final int yRotation = 6;
+    private final int zRotation = 7;
+    private final int magRotation = 8;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -39,7 +52,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_graph_button);
 
-        //Array adapter and onclick listener for graph datatype selection spinner
+        /*Array adapter and onclick listener for graph datatype selection spinner*/
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.graphDatatypesArray, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -54,32 +67,22 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
 
         graph.getViewport().setYAxisBoundsManual(true);
 
-        graph.getViewport().setMinY(-0.05); //tiny default min max
-        graph.getViewport().setMaxY(0.05);
+        graph.getViewport().setMinY(-1* graphMinY); //tiny default min max
+        graph.getViewport().setMaxY(graphMinY);
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(100);
+        graph.getViewport().setMaxX(graphNumXSamplesDisplayed);
 
-        // enable scaling and scrolling
         graph.getViewport().setScalable(true);
         graph.getViewport().setScalableY(true);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        /*Start async map fragment*/
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -90,7 +93,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    //////////////////////////User Interface Functions//////////////////////////
+    /************ USER INTERFACE FUNCTIONS ************/
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -118,33 +121,33 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         parent.getItemAtPosition(position);
-        
+
         switch (position)
         {
-            case 0: //<item>Choose dataset to display</item>
+            case noSelection:
                 break; //do nothing
-            case 1: //<item>X Acceleration</item>
+            case xAcceleration:
                 addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
                 break;
-            case 2: //<item>Y Acceleration</item>
+            case yAcceleration:
                 addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.acceleration);
                 break;
-            case 3: //<item>Z Acceleration</item>
+            case zAcceleration:
                 addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
                 break;
-            case 4: //<item>Acceleration Magnitude</item>
+            case magAcceleration:
                 addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.acceleration);
                 break;
-            case 5: //<item>X Rotation</item>
+            case xRotation:
                 addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.rotation);
                 break;
-            case 6: //<item>Y Rotation</item>
+            case yRotation:
                 addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.rotation);
                 break;
-            case 7: //<item>Z Rotation</item>
+            case zRotation:
                 addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
                 break;
-            case 8: //<item>Rotation Magnitude</item>
+            case magRotation:
                 addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.rotation);
                 break;
 
@@ -158,7 +161,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
         //do nothing
     }
 
-    //////////////////////////Graphing Functions//////////////////////////
+    /************ GRAPHING FUNCTIONS ************/
 
     private void addGraphSeries(dataStorage.Axis axis, dataStorage.RecordType recordType)
     {
