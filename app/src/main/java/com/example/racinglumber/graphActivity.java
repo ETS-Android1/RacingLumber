@@ -43,7 +43,9 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     private final int zRotation = 7;
     private final int magRotation = 8;
 
-    private double MINXDEBUG = 0;
+    private double minXDisplayed = 0;
+    private double gpsDisplayedLatitude = -34; //australia
+    private double gpsDisplayedLongitude = 151; //australia
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -85,18 +87,15 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        ////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         graph.getViewport().setOnXAxisBoundsChangedListener(new Viewport.OnXAxisBoundsChangedListener() {
             @Override
             public void onXAxisBoundsChanged(double minX, double maxX, Reason reason) {
-                MINXDEBUG = minX;
+                minXDisplayed = minX;
+                minXDisplayed /= 10; //TODO DEBUG THIS IS BECAUSE ACCELEROMETER IS 1/100s AND GPS IS 1HZ, REPLACE with timestamp matching
+                gpsDisplayedLatitude = recordedVars.getGPSValue(true, (int)minXDisplayed);
+                gpsDisplayedLongitude = recordedVars.getGPSValue(false, (int)minXDisplayed);
             }
         });
-        ///////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
 
     /************ MAP FUNCTIONS ************/
@@ -106,7 +105,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
+        LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);//LatLng(-34, 151);/////todo this isn't updating
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }

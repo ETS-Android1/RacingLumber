@@ -5,10 +5,6 @@ import android.location.Location;
 import android.os.SystemClock;
 
 public class dataStorage {
-    // Used to load the 'native-lib' library on application startup.
-//    static {
-//        System.loadLibrary("native-lib");
-//    }
 
     enum Axis
     {
@@ -121,7 +117,7 @@ public class dataStorage {
 
     public double getGPSValue(boolean latOrLong, int index) {
         double returnVal;
-
+        //todo add bounds checking
         if (latOrLong)
         {
             returnVal = latitudeArray[index];
@@ -502,13 +498,4 @@ public class dataStorage {
 
         return maxValueFound;
     }
-
-        //stringFromJNI();
-        //long testVar = sumIntegers(1,2);
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-//    public native void stringFromJNI();
-//    private native long sumIntegers(int first, int second);
 }
