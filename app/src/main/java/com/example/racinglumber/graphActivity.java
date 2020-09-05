@@ -94,6 +94,15 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
                 minXDisplayed /= 10; //TODO DEBUG THIS IS BECAUSE ACCELEROMETER IS 1/100s AND GPS IS 1HZ, REPLACE with timestamp matching
                 gpsDisplayedLatitude = recordedVars.getGPSValue(true, (int)minXDisplayed);
                 gpsDisplayedLongitude = recordedVars.getGPSValue(false, (int)minXDisplayed);
+                //////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                //////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                //////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
+                mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             }
         });
     }
@@ -104,8 +113,8 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);//LatLng(-34, 151);/////todo this isn't updating
+        // Add a marker in Sydney and move the camera todo get current location
+        LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
