@@ -73,8 +73,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent resultData) {
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         Uri uri;
 
         /*The result data contains a URI for the document or directory that the user created*/

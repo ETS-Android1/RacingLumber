@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private dataStorage recordedVars;
     private FusedLocationProviderClient fusedLocationClient;
 
+    private final int defaultRecordingLength = 10;
     private final int gpsPollingInterval = 1000;
     private final int locationPermissionsRequestCode = 121;
     boolean dataIsRecording = false;
@@ -226,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int recordingSeconds;
         int numRecordedSamples;
 
+        final int secondsPerMinute = 60;
+
         EditText minuteInput = (EditText) findViewById(R.id.textMinuteInput);
         inputString = minuteInput.getText().toString();
 
@@ -247,11 +250,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else
         {
-            recordingSeconds = 10;
+            recordingSeconds = defaultRecordingLength;
         }
 
-        //todo add variable calcs for different accuracies here.  Assume SensorManager.SENSOR_DELAY_GAME (50 samples/second) for now
-        recordingSeconds += (60 * recordingMinutes);
+        recordingSeconds += (secondsPerMinute * recordingMinutes);
         numRecordedSamples = 50*recordingSeconds;
 
         recordedVars.setDataArrayLen(numRecordedSamples);

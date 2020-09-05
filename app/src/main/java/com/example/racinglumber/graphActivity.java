@@ -43,6 +43,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     private final int zRotation = 7;
     private final int magRotation = 8;
 
+    /*Google map vars*/
     private double minXDisplayed = 0;
     private double gpsDisplayedLatitude = -34; //australia
     private double gpsDisplayedLongitude = 151; //australia
@@ -113,9 +114,8 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera todo get current location
         LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));todo do we need this line?
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
@@ -223,7 +223,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
 
         graph.addSeries(newSeries);
 
-        /*Set series-specific graph elements*/
+        /*Set series-specific graph elements, colors from https://www.rapidtables.com/web/color/red-color.html*/
 
         switch (axis)
         {
@@ -232,7 +232,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
                 {
                     case acceleration:
                         newSeries.setTitle("X Acceleration");
-                        newSeries.setColor(0xFFFF4500); //orangered, https://www.rapidtables.com/web/color/red-color.html
+                        newSeries.setColor(0xFFFFFF00); //yellow
                         break;
                     case rotation:
                         newSeries.setTitle("X Rotation");
@@ -318,10 +318,4 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
             graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         }
     }
-
-
-
-
-
-
 }
