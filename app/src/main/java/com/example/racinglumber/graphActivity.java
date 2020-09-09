@@ -29,7 +29,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     private dataStorage recordedVars;
     private GoogleMap mMap;
 
-    private final float graphMinY = 0.05F;
+    private final float graphMinY = 0.05F; //start with very small minimum value, that is overwritten by first dataset
     private final int graphNumXSamplesDisplayed = 100;
 
     /*Spinner menu items*/
@@ -45,8 +45,8 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
 
     /*Google map vars*/
     private double minXDisplayed = 0;
-    private double gpsDisplayedLatitude = -34; //australia
-    private double gpsDisplayedLongitude = 151; //australia
+    private double gpsDisplayedLatitude = -34; //default value is Australia latitude
+    private double gpsDisplayedLongitude = 151; //default value is Australia longitude
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -73,7 +73,7 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
 
         graph.getViewport().setYAxisBoundsManual(true);
 
-        graph.getViewport().setMinY(-1* graphMinY); //tiny default min max
+        graph.getViewport().setMinY(-1* graphMinY);
         graph.getViewport().setMaxY(graphMinY);
 
         graph.getViewport().setXAxisBoundsManual(true);
@@ -95,15 +95,10 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
                 minXDisplayed /= 10; //TODO DEBUG THIS IS BECAUSE ACCELEROMETER IS 1/100s AND GPS IS 1HZ, REPLACE with timestamp matching
                 gpsDisplayedLatitude = recordedVars.getGPSValue(true, (int)minXDisplayed);
                 gpsDisplayedLongitude = recordedVars.getGPSValue(false, (int)minXDisplayed);
-                //////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                //////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                //////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
                 LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
                 mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-                //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                //////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             }
         });
     }

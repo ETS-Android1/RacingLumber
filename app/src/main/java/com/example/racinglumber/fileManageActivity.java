@@ -95,6 +95,9 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     DocumentFile openedDoc = DocumentFile.fromSingleUri(getApplicationContext(), uri);
                     openedDoc.delete();
                     break;
+
+                default:
+                    break;
             }
         }
     }
