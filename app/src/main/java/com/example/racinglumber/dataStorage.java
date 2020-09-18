@@ -115,6 +115,35 @@ public class dataStorage {
         return bufferFull;
     }
 
+    public double getGPSValueFromAccelDataIndex(boolean latOrLong, int accelIndex)
+    {
+        //todo add bounds checking
+        double returnVal;
+        long accelEventTimestamp;
+        int i;
+
+        accelEventTimestamp = accelEventTime[accelIndex];
+
+        for (i = 0; i < (dataArrayLen-1); i++)
+        {
+            if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
+            {
+                break; //matching timestamp found
+            }
+        }
+
+        if (latOrLong)
+        {
+            returnVal = latitudeArray[i];
+        }
+        else
+        {
+            returnVal = longitudeArray[i];
+        }
+
+        return returnVal;
+    }
+
     public double getGPSValue(boolean latOrLong, int index) {
         double returnVal;
         //todo add bounds checking

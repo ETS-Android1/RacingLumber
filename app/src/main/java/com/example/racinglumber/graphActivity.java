@@ -93,11 +93,14 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
             public void onXAxisBoundsChanged(double minX, double maxX, Reason reason) {
                 minXDisplayed = minX;
                 minXDisplayed /= 10; //TODO DEBUG THIS IS BECAUSE ACCELEROMETER IS 1/100s AND GPS IS 1HZ, REPLACE with timestamp matching
-                gpsDisplayedLatitude = recordedVars.getGPSValue(true, (int)minXDisplayed);
-                gpsDisplayedLongitude = recordedVars.getGPSValue(false, (int)minXDisplayed);
+                gpsDisplayedLatitude = recordedVars.getGPSValueFromAccelDataIndex(true, (int)minX);
+                //gpsDisplayedLatitude = recordedVars.getGPSValue(true, (int)minXDisplayed);
+                gpsDisplayedLongitude = recordedVars.getGPSValueFromAccelDataIndex(false, (int)minX);
+                //gpsDisplayedLongitude = recordedVars.getGPSValue(false, (int)minXDisplayed);
 
                 LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
-                mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(sydney).title("Current location"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
             }
         });
