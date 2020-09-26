@@ -44,9 +44,9 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     private final int magRotation = 8;
 
     /*Google map vars*/
-    private double minXDisplayed = 0;
     private double gpsDisplayedLatitude = -34; //default value is Australia latitude
     private double gpsDisplayedLongitude = 151; //default value is Australia longitude
+    private float gpsDefaultZoom = 20.0F;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -91,17 +91,13 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
         graph.getViewport().setOnXAxisBoundsChangedListener(new Viewport.OnXAxisBoundsChangedListener() {
             @Override
             public void onXAxisBoundsChanged(double minX, double maxX, Reason reason) {
-                minXDisplayed = minX;
-                minXDisplayed /= 10; //TODO DEBUG THIS IS BECAUSE ACCELEROMETER IS 1/100s AND GPS IS 1HZ, REPLACE with timestamp matching
                 gpsDisplayedLatitude = recordedVars.getGPSValueFromAccelDataIndex(true, (int)minX);
-                //gpsDisplayedLatitude = recordedVars.getGPSValue(true, (int)minXDisplayed);
                 gpsDisplayedLongitude = recordedVars.getGPSValueFromAccelDataIndex(false, (int)minX);
-                //gpsDisplayedLongitude = recordedVars.getGPSValue(false, (int)minXDisplayed);
 
-                LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
+                LatLng displayedLocation = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(sydney).title("Current location"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
             }
         });
     }
@@ -112,9 +108,10 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng sydney = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));todo do we need this line?
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng defaultMapLocation = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultMapLocation, gpsDefaultZoom));
     }
 
     /************ USER INTERFACE FUNCTIONS ************/
