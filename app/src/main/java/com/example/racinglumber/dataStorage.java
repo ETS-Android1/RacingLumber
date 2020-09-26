@@ -117,7 +117,7 @@ public class dataStorage {
 
     public double getGPSValueFromAccelDataIndex(boolean latOrLong, int accelIndex)
     {
-        //todo add bounds checking
+        //todo add bounds checking and check for no data
         double returnVal;
         long accelEventTimestamp;
         int i;
@@ -126,6 +126,7 @@ public class dataStorage {
 
         for (i = 0; i < (dataArrayLen-1); i++)
         {
+            //todo need check for first and last val
             if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
             {
                 break; //matching timestamp found

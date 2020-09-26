@@ -44,8 +44,6 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
     private final int magRotation = 8;
 
     /*Google map vars*/
-    private double gpsDisplayedLatitude = -34; //default value is Australia latitude
-    private double gpsDisplayedLongitude = 151; //default value is Australia longitude
     private float gpsDefaultZoom = 20.0F;
 
     @Override
@@ -91,10 +89,13 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
         graph.getViewport().setOnXAxisBoundsChangedListener(new Viewport.OnXAxisBoundsChangedListener() {
             @Override
             public void onXAxisBoundsChanged(double minX, double maxX, Reason reason) {
-                gpsDisplayedLatitude = recordedVars.getGPSValueFromAccelDataIndex(true, (int)minX);
-                gpsDisplayedLongitude = recordedVars.getGPSValueFromAccelDataIndex(false, (int)minX);
+                double displayedLat;
+                double displayedLong;
 
-                LatLng displayedLocation = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
+                displayedLat = recordedVars.getGPSValueFromAccelDataIndex(true, (int)minX);
+                displayedLong = recordedVars.getGPSValueFromAccelDataIndex(false, (int)minX);
+
+                LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
@@ -106,9 +107,15 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        double displayedLat;
+        double displayedLong;
+
         mMap = googleMap;
 
-        LatLng defaultMapLocation = new LatLng(gpsDisplayedLatitude, gpsDisplayedLongitude);
+        displayedLat = recordedVars.getGPSValueFromAccelDataIndex(true, 0);
+        displayedLong = recordedVars.getGPSValueFromAccelDataIndex(false, 0);
+
+        LatLng defaultMapLocation = new LatLng(displayedLat, displayedLong);
 
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultMapLocation, gpsDefaultZoom));
