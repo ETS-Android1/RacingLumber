@@ -127,38 +127,49 @@ public class dataStorage {
 
     public double getGPSValueFromAccelDataIndex(boolean latOrLong, int accelIndex)
     {
-        //todo add check for no data
         double returnVal;
         long accelEventTimestamp;
         int i;
 
-        accelEventTimestamp = accelEventTime[accelIndex];
-
-        /*Check if the timestamp searched for is before the first gps timeStamp*/
-        if (accelEventTimestamp < GPSEventTime[0])
+        /*Check for null arrays or out of bounds*/
+        if ((accelIndex > dataArrayLen)
+                || (accelEventTime == null)
+                || (GPSEventTime == null)
+                || (latitudeArray == null)
+                || (longitudeArray == null))
         {
-            i = 0;
+            returnVal = 0.0;
         }
         else
         {
-            for (i = 0; i < (dataArrayLen-1); i++)
+            accelEventTimestamp = accelEventTime[accelIndex];
+
+            /*Check if the timestamp searched for is before the first gps timeStamp*/
+            if (accelEventTimestamp < GPSEventTime[0])
             {
-                if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
+                i = 0;
+            }
+            else
+            {
+                for (i = 0; i < (dataArrayLen-1); i++)
                 {
-                    break; //matching timestamp found
+                    if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
+                    {
+                        break; //matching timestamp found
+                    }
                 }
+
+                //todo need check for last val, above only checks in between values
             }
 
-            //todo need check for last val, above only checks in between values
-        }
-
-        if (latOrLong)
-        {
-            returnVal = latitudeArray[i];
-        }
-        else
-        {
-            returnVal = longitudeArray[i];
+            if (latOrLong)
+            {
+                returnVal = latitudeArray[i];
+            }
+            else
+            {
+                returnVal = longitudeArray[i];
+            }
         }
 
         return returnVal;
@@ -377,87 +388,95 @@ public class dataStorage {
         float returnVal;
         double squaredMag;
 
-        switch (axis)
+        if (dataArrayLen > 0)
         {
-            case X:
-                switch (recordType)
-                {
-                    case acceleration:
-                        returnVal = xDataArray[index];
-                        break;
-                    case rotation:
-                        returnVal = xRotationArray[index];
-                        break;
-                    case gravity:
-                        returnVal = xGravityArray[index];
-                        break;
-                    default:
-                        returnVal = 0.0F;
-                        break;
-                }
-                break;
+            switch (axis)
+            {
+                case X:
+                    switch (recordType)
+                    {
+                        case acceleration:
+                            returnVal = xDataArray[index];
+                            break;
+                        case rotation:
+                            returnVal = xRotationArray[index];
+                            break;
+                        case gravity:
+                            returnVal = xGravityArray[index];
+                            break;
+                        default:
+                            returnVal = 0.0F;
+                            break;
+                    }
+                    break;
 
-            case Y:
-                switch (recordType)
-                {
-                    case acceleration:
-                        returnVal = yDataArray[index];
-                        break;
-                    case rotation:
-                        returnVal = yRotationArray[index];
-                        break;
-                    case gravity:
-                        returnVal = yGravityArray[index];
-                        break;
-                    default:
-                        returnVal = 0.0F;
-                        break;
-                }
-                break;
+                case Y:
+                    switch (recordType)
+                    {
+                        case acceleration:
+                            returnVal = yDataArray[index];
+                            break;
+                        case rotation:
+                            returnVal = yRotationArray[index];
+                            break;
+                        case gravity:
+                            returnVal = yGravityArray[index];
+                            break;
+                        default:
+                            returnVal = 0.0F;
+                            break;
+                    }
+                    break;
 
-            case Z:
-                switch (recordType)
-                {
-                    case acceleration:
-                        returnVal = zDataArray[index];
-                        break;
-                    case rotation:
-                        returnVal = zRotationArray[index];
-                        break;
-                    case gravity:
-                        returnVal = zGravityArray[index];
-                        break;
-                    default:
-                        returnVal = 0.0F;
-                        break;
-                }
-                break;
+                case Z:
+                    switch (recordType)
+                    {
+                        case acceleration:
+                            returnVal = zDataArray[index];
+                            break;
+                        case rotation:
+                            returnVal = zRotationArray[index];
+                            break;
+                        case gravity:
+                            returnVal = zGravityArray[index];
+                            break;
+                        default:
+                            returnVal = 0.0F;
+                            break;
+                    }
+                    break;
 
-            case Magnitude:
-                switch (recordType)
-                {
-                    case acceleration:
-                        squaredMag = Math.pow(xDataArray[index],2) + Math.pow(yDataArray[index],2) + Math.pow(zDataArray[index],2);
-                        returnVal = (float)(Math.sqrt(squaredMag));
-                        break;
-                    case rotation:
-                        squaredMag = Math.pow(xRotationArray[index],2) + Math.pow(yRotationArray[index],2) + Math.pow(zRotationArray[index],2);
-                        returnVal = (float)(Math.sqrt(squaredMag));
-                        break;
-                    case gravity:
-                        squaredMag = Math.pow(xGravityArray[index],2) + Math.pow(yGravityArray[index],2) + Math.pow(zGravityArray[index],2);
-                        returnVal = (float)(Math.sqrt(squaredMag));
-                        break;
-                    default:
-                        returnVal = 0.0F;
-                        break;
-                }
-                break;
+                case Magnitude:
+                    switch (recordType)
+                    {
+                        case acceleration:
+                            squaredMag = Math.pow(xDataArray[index],2) + Math.pow(yDataArray[index],2) + Math.pow(zDataArray[index],2);
+                            returnVal = (float)(Math.sqrt(squaredMag));
+                            break;
+                        case rotation:
+                            squaredMag = Math.pow(xRotationArray[index],2) + Math.pow(yRotationArray[index],2) + Math.pow(zRotationArray[index],2);
+                            returnVal = (float)(Math.sqrt(squaredMag));
+                            break;
+                        case gravity:
+                            squaredMag = Math.pow(xGravityArray[index],2) + Math.pow(yGravityArray[index],2) + Math.pow(zGravityArray[index],2);
+                            returnVal = (float)(Math.sqrt(squaredMag));
+                            break;
+                        default:
+                            returnVal = 0.0F;
+                            break;
+                    }
+                    break;
 
-            default:
-                returnVal = 0.0F;
-                break;
+                default:
+                    returnVal = 0.0F;
+                    break;
+            }
         }
+        else
+        {
+            returnVal = 0.0F;
+        }
+
         return returnVal;
     }
 
@@ -552,7 +571,7 @@ public class dataStorage {
         float maxValueFound = 0.0F;
         float newValueFound;
 
-        for (index = 0; index < xDataArray.length; index++)
+        for (index = 0; index < dataArrayLen; index++)
         {
             newValueFound = getSensorValue(axis, recordType, index);
 
