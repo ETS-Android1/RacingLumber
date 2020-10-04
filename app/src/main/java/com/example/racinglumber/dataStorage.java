@@ -21,7 +21,7 @@ public class dataStorage {
         gravity
     }
 
-    public static int dataArrayLen = 500; //default to 500
+    public static int dataArrayLen = 0; //default to 0, since no data is recorded
 
     private static float[] xDataArray;
     private static float[] yDataArray;
@@ -49,59 +49,69 @@ public class dataStorage {
     public void clearStorage()
     {
         xDataArray = null;
-        xDataArray = new float[dataArrayLen];
         yDataArray = null;
-        yDataArray = new float[dataArrayLen];
         zDataArray = null;
-        zDataArray = new float[dataArrayLen];
         accelEventTime = null;
-        accelEventTime = new long[dataArrayLen];
         accelIndex = 0;
 
         xRotationArray = null;
-        xRotationArray = new float[dataArrayLen];
         yRotationArray = null;
-        yRotationArray = new float[dataArrayLen];
         zRotationArray = null;
-        zRotationArray = new float[dataArrayLen];
         rotationEventTime = null;
-        rotationEventTime = new long[dataArrayLen];
         rotationIndex = 0;
 
         xGravityArray = null;
-        xGravityArray = new float[dataArrayLen];
         yGravityArray = null;
-        yGravityArray = new float[dataArrayLen];
         zGravityArray = null;
-        zGravityArray = new float[dataArrayLen];
         gravityEventTime = null;
-        gravityEventTime = new long[dataArrayLen];
         gravityIndex = 0;
 
         latitudeArray = null;
-        latitudeArray = new double[dataArrayLen];
         longitudeArray = null;
-        longitudeArray = new double[dataArrayLen];
         GPSEventTime = null;
-        GPSEventTime = new long[dataArrayLen];
         GPSIndex = 0;
+
+        /*If the data length is zero, leave all of the data arrays as null*/
+        if (dataArrayLen > 0)
+        {
+            xDataArray = new float[dataArrayLen];
+            yDataArray = new float[dataArrayLen];
+            zDataArray = new float[dataArrayLen];
+            accelEventTime = new long[dataArrayLen];
+
+            xRotationArray = new float[dataArrayLen];
+            yRotationArray = new float[dataArrayLen];
+            zRotationArray = new float[dataArrayLen];
+            rotationEventTime = new long[dataArrayLen];
+
+            xGravityArray = new float[dataArrayLen];
+            yGravityArray = new float[dataArrayLen];
+            zGravityArray = new float[dataArrayLen];
+            gravityEventTime = new long[dataArrayLen];
+
+            latitudeArray = new double[dataArrayLen];
+            longitudeArray = new double[dataArrayLen];
+            GPSEventTime = new long[dataArrayLen];
+        }
+
     }
 
     public void setDataArrayLen(int inputDataLen)
     {
         dataArrayLen = inputDataLen;
     }
-    public int getDataArrayLen()
-    {
-        return dataArrayLen;
-    }
+    public int getDataArrayLen() { return dataArrayLen; }
 
     public boolean writeGPSValToStorage(Location location)
     {
         boolean bufferFull = false;
 
-        if (GPSIndex >= dataArrayLen)
+        if ((GPSIndex >= dataArrayLen)
+                || (latitudeArray == null)
+                || (longitudeArray == null)
+                || (GPSEventTime == null))
         {
+            /*Out of range or buffer is full*/
             bufferFull = true;
         }
         else
@@ -156,14 +166,24 @@ public class dataStorage {
 
     public double getGPSValue(boolean latOrLong, int index) {
         double returnVal;
-        //todo add bounds checking
-        if (latOrLong)
+
+        if ((index > dataArrayLen)
+                || (latitudeArray == null)
+                || (longitudeArray == null))
         {
-            returnVal = latitudeArray[index];
+            /*Out of bounds, return zero*/
+            returnVal = 0.0;
         }
         else
         {
-            returnVal = longitudeArray[index];
+            if (latOrLong)
+            {
+                returnVal = latitudeArray[index];
+            }
+            else
+            {
+                returnVal = longitudeArray[index];
+            }
         }
 
         return returnVal;
@@ -175,7 +195,11 @@ public class dataStorage {
 
         if (sensorType == Sensor.TYPE_LINEAR_ACCELERATION)
         {
-            if (accelIndex >= dataArrayLen)
+            if ((accelIndex >= dataArrayLen)
+                    || (xDataArray == null)
+                    || (yDataArray == null)
+                    || (zDataArray == null)
+                    || (accelEventTime == null))
             {
                 bufferFull = true;
             }
@@ -190,7 +214,11 @@ public class dataStorage {
         }
         else if (sensorType == Sensor.TYPE_ROTATION_VECTOR)
         {
-            if (rotationIndex >= dataArrayLen)
+            if ((rotationIndex >= dataArrayLen)
+                    || (xRotationArray == null)
+                    || (yRotationArray == null)
+                    || (zRotationArray == null)
+                    || (rotationEventTime == null))
             {
                 bufferFull = true;
             }
@@ -205,7 +233,11 @@ public class dataStorage {
         }
         else if (sensorType == Sensor.TYPE_GRAVITY)
         {
-            if (gravityIndex >= dataArrayLen)
+            if ((gravityIndex >= dataArrayLen)
+                    || (xGravityArray == null)
+                    || (yGravityArray == null)
+                    || (zGravityArray == null)
+                    || (gravityEventTime == null))
             {
                 bufferFull = true;
             }
