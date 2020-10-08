@@ -271,8 +271,11 @@ public class dataStorage {
 
     public void correctDataSetOrientation()
     {
-        correctDataOrientation (xDataArray, yDataArray, zDataArray);
-        correctDataOrientation (xRotationArray, yRotationArray, zRotationArray);
+        if (dataArrayLen > 0)
+        {
+            correctDataOrientation (xDataArray, yDataArray, zDataArray);
+            correctDataOrientation (xRotationArray, yRotationArray, zRotationArray);
+        }
     }
 
     /* Math for correcting the orientation of collected data.
