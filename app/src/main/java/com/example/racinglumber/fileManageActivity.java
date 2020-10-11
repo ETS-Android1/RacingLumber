@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -107,18 +108,105 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     private void writeEncodedDataToFile(@NonNull Uri uri) {
         OutputStream outputStream;
+        dataStorage recordedVars;
+        int dataArrayLen;
+        float accelVal;
+        double GPSVal;
+        long timestamp;
+
+        String writtenString = "";
+        final char dataDelimiter = '\t';
+
         try {
             outputStream = getContentResolver().openOutputStream(uri);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
-            ///////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            long startTime = SystemClock.elapsedRealtime();
 
-            String text = getEncodedDataString();
-            bw.write(text);
+            recordedVars = new dataStorage();
+            dataArrayLen = recordedVars.getDataArrayLen();
+
+            /*1. Encode the number of data points on its own line*/
+
+            writtenString += "Length of Data Arrays";
+            writtenString += dataDelimiter;
+            writtenString += Integer.toString(dataArrayLen);
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            /*2. Encode Accelerometer/Rotation/Gravity Arrays. Split axis and recordType by line*/
+
+            dataStorage.Axis axisVals[] = dataStorage.Axis.values();
+            dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
+
+            for (dataStorage.RecordType recordType : recordTypeVals)
+            {
+                /*For loop below goes through x, y, z arrays*/
+                for (dataStorage.Axis axis : axisVals)
+                {
+                    /*Name of data*/
+                    writtenString = dataStorage.getName(axis, recordType)+dataDelimiter;
+
+                    /*Data*/
+                    for (int index = 0; index < dataArrayLen; index++)
+                    {
+                        accelVal = recordedVars.getSensorValue(axis, recordType, index);
+                        writtenString += Float.toString(accelVal);
+                        writtenString += dataDelimiter;
+                    }
+                    writtenString += '\n';
+                    bw.write(writtenString);
+                }
+
+                /*Data timestamps (same for x,y,z)*/
+                writtenString = "Timestamps"+dataDelimiter;
+
+                for (int index = 0; index < dataArrayLen; index++)
+                {
+                    timestamp = recordedVars.getTimestampValue(recordType, index);
+                    writtenString += Long.toString(timestamp);
+                    writtenString += dataDelimiter;
+                }
+                writtenString += '\n';
+                bw.write(writtenString);
+            }
+
+            /*2. Encode GPS Arrays. Split axis and recordType by line*/
+
+            writtenString = "LATITUDE"+dataDelimiter;
+
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                GPSVal = recordedVars.getGPSValue(true, index);
+                writtenString += Double.toString(GPSVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            writtenString = "LONGITUDE"+dataDelimiter;
+
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                GPSVal = recordedVars.getGPSValue(false, index);
+                writtenString += Double.toString(GPSVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            /*3. Encode GPS Timestamps*/
+
+            writtenString = "GPS Timestamps"+dataDelimiter;
+
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                timestamp = recordedVars.getGPSTimestampValue(index);
+                writtenString += Long.toString(timestamp);
+                writtenString += dataDelimiter;
+            }
+            bw.write(writtenString);
+
+            /*Flush the buffered write and close the file*/
             bw.flush();
-
-            long saveElapsedTime = SystemClock.elapsedRealtime() - startTime;
-            ////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
