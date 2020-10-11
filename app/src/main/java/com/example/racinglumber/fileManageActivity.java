@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -89,7 +90,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     break;
 
                 case fileSaveRequestCode:
-                    writeInFile(resultData.getData(), getEncodedDataString());
+                    writeEncodedDataToFile(resultData.getData());
                     break;
 
                 case fileDeleteRequestCode:
@@ -104,13 +105,20 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         }
     }
 
-    private void writeInFile(@NonNull Uri uri, @NonNull String text) {
+    private void writeEncodedDataToFile(@NonNull Uri uri) {
         OutputStream outputStream;
         try {
             outputStream = getContentResolver().openOutputStream(uri);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
+            ///////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            long startTime = SystemClock.elapsedRealtime();
+
+            String text = getEncodedDataString();
             bw.write(text);
             bw.flush();
+
+            long saveElapsedTime = SystemClock.elapsedRealtime() - startTime;
+            ////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,7 +127,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     }
 
     //////////////////////////File Encoding and Decoding Functions//////////////////////////
-//todo need to encode corresponding timestamps as well for all of above data
     private String getEncodedDataString()
     {
         final char dataDelimiter = '\t';
