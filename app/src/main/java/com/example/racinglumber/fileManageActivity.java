@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
+import static com.example.racinglumber.dataStorage.RecordType.acceleration;
+
 public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
     private static String returnString;
@@ -126,6 +128,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         int dataArrayLen;
         float accelVal;
         double GPSVal;
+        long timestamp;
 
         String returnString = "";
 
@@ -139,17 +142,20 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         returnString += Integer.toString(dataArrayLen);
         returnString += '\n';
 
-        /*2. Encode Accelerometer Arrays. Split axis and recordType by line*/
+        /*2. Encode Accelerometer/Rotation/Gravity Arrays. Split axis and recordType by line*/
 
         dataStorage.Axis axisVals[] = dataStorage.Axis.values();
         dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
 
         for (dataStorage.RecordType recordType : recordTypeVals)
         {
+            /*For loop below goes through x, y, z arrays*/
             for (dataStorage.Axis axis : axisVals)
             {
+                /*Name of data*/
                 returnString += dataStorage.getName(axis, recordType)+dataDelimiter;
 
+                /*Data*/
                 for (int index = 0; index < dataArrayLen; index++)
                 {
                     accelVal = recordedVars.getSensorValue(axis, recordType, index);
@@ -158,9 +164,20 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 }
                 returnString += '\n';
             }
+
+            /////todo add timestamp name string
+
+            /*Data timestamps (same for x,y,z)*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                timestamp = recordedVars.getTimestampValue(recordType, index);
+                returnString += Long.toString(timestamp);
+                returnString += dataDelimiter;
+            }
+            returnString += '\n';
         }
 
-        /*3. Encode GPS Arrays. Split axis and recordType by line*/
+        /*2. Encode GPS Arrays. Split axis and recordType by line*/
 
         returnString += "LATITUDE"+dataDelimiter;
 
@@ -181,6 +198,17 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             returnString += dataDelimiter;
         }
         returnString += '\n';
+
+        /*3. Encode GPS Timestamps*/
+
+        /////////todo add timestamp string
+
+        for (int index = 0; index < dataArrayLen; index++)
+        {
+            timestamp = recordedVars.getGPSTimestampValue(index);
+            returnString += Long.toString(timestamp);
+            returnString += dataDelimiter;
+        }
 
         return returnString;
     }

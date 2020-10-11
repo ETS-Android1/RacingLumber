@@ -391,7 +391,7 @@ public class dataStorage {
         float returnVal;
         double squaredMag;
 
-        if (dataArrayLen > 0)
+        if ((dataArrayLen > 0) && (index < dataArrayLen))
         {
             switch (axis)
             {
@@ -478,6 +478,38 @@ public class dataStorage {
         else
         {
             returnVal = 0.0F;
+        }
+
+        return returnVal;
+    }
+
+    public long getTimestampValue(RecordType recordType, int index)
+    {
+        long returnVal;
+
+        if ((dataArrayLen > 0) && (index < dataArrayLen))
+        {
+            switch(recordType)
+            {
+                case acceleration:
+                    returnVal = accelEventTime[index];
+                    break;
+
+                case rotation:
+                    returnVal = rotationEventTime[index];
+                    break;
+
+                case gravity:
+                    returnVal = gravityEventTime[index];
+                    break;
+
+                default:
+                    returnVal = 0;
+            }
+        }
+        else
+        {
+            returnVal = 0;
         }
 
         return returnVal;
@@ -590,5 +622,21 @@ public class dataStorage {
         }
 
         return maxValueFound;
+    }
+
+    public long getGPSTimestampValue(int index)
+    {
+        long returnVal;
+
+        if ((dataArrayLen > 0) && (index < dataArrayLen))
+        {
+            returnVal = GPSEventTime[index];
+        }
+        else
+        {
+            returnVal = 0;
+        }
+
+        return returnVal;
     }
 }
