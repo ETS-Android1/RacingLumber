@@ -165,9 +165,9 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 returnString += '\n';
             }
 
-            /////todo add timestamp name string
-
             /*Data timestamps (same for x,y,z)*/
+            returnString += "Timestamps"+dataDelimiter;
+
             for (int index = 0; index < dataArrayLen; index++)
             {
                 timestamp = recordedVars.getTimestampValue(recordType, index);
@@ -201,7 +201,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         /*3. Encode GPS Timestamps*/
 
-        /////////todo add timestamp string
+        returnString += "GPS Timestamps"+dataDelimiter;
 
         for (int index = 0; index < dataArrayLen; index++)
         {
