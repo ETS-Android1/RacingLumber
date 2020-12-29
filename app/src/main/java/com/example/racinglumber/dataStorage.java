@@ -132,7 +132,7 @@ public class dataStorage {
         int i;
 
         /*Check for null arrays or out of bounds*/
-        if ((accelIndex > dataArrayLen)
+        if ((accelIndex >= dataArrayLen)
                 || (accelEventTime == null)
                 || (GPSEventTime == null)
                 || (latitudeArray == null)
@@ -153,13 +153,20 @@ public class dataStorage {
             {
                 for (i = 0; i < (dataArrayLen-1); i++)
                 {
-                    if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
+                    if ((i >= GPSIndex) && (i != 0))
                     {
-                        break; //matching timestamp found
+                        /*Check if we are at the end of the GPS data array*/
+                        i = GPSIndex - 1;
+                        break;
+                    }
+                    else
+                    {
+                        if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
+                        {
+                            break; //matching timestamp found
+                        }
                     }
                 }
-
-                //todo need check for last val, above only checks in between values
             }
 
             if (latOrLong)
