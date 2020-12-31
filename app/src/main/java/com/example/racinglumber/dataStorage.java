@@ -145,7 +145,7 @@ public class dataStorage {
             accelEventTimestamp = accelEventTime[accelIndex];
 
             /*Check if the timestamp searched for is before the first gps timeStamp*/
-            if (accelEventTimestamp < GPSEventTime[0])
+            if ((accelEventTimestamp < GPSEventTime[0]) || (accelIndex == 0))
             {
                 i = 0;
             }
@@ -153,7 +153,7 @@ public class dataStorage {
             {
                 for (i = 0; i < (dataArrayLen-1); i++)
                 {
-                    if ((i >= GPSIndex) && (i != 0))
+                    if ((i >= GPSIndex) && (i > 0))
                     {
                         /*Check if we are at the end of the GPS data array*/
                         i = GPSIndex - 1;
