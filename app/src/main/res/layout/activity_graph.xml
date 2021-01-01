@@ -23,17 +23,26 @@
             android:layout_weight="0.5"
             android:id="@+id/graphDisplay" />
 
-
-
-
-        <Button
-            android:id="@+id/addMarker"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="ADD MARKER" />
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/addMarker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ADD MARKER" />
 
+            <Button
+                android:id="@+id/removeMarker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="REMOVE MARKER" />
+
+        </LinearLayout>
 
         <fragment
             android:layout_height="match_parent"
