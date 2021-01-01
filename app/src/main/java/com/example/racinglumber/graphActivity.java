@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class graphActivity extends FragmentActivity implements BottomNavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener , OnMapReadyCallback {
+public class graphActivity extends FragmentActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener , OnMapReadyCallback {
     private BottomNavigationView bottomNavigationView;
     private dataStorage recordedVars;
     private GoogleMap mMap;
@@ -55,6 +56,9 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_graph_button);
+
+        Button addMarkerButton = (Button) findViewById(R.id.addMarkerButton);
+        addMarkerButton.setOnClickListener(this);
 
         /*Array adapter and onclick listener for graph datatype selection spinner*/
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -101,6 +105,24 @@ public class graphActivity extends FragmentActivity implements BottomNavigationV
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
             }
         });
+    }
+
+    /************ BUTTON FUNCTIONS ************/
+
+    @Override
+    public void onClick(View v) {
+        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+
+        if (v.getId() == R.id.addMarkerButton)
+        {
+            /*TODO Add a marker to the graph*/
+
+        }
+        else
+        {
+            /*TODO Remove a marker to the graph*/
+
+        }
     }
 
     /************ MAP FUNCTIONS ************/
