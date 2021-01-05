@@ -9,6 +9,7 @@
     <string name="mainUIcorrectTileText">Correct tilt in recorded data</string>
     <string name="bottom_nav_record">Record</string>
     <string name="bottom_nav_graph">Graph</string>
+    <string name="bottom_nav_compare">Compare</string>
     <string name="bottom_nav_save">Save</string>
     <string-array name="graphDatatypesArray">
         <item>Choose dataset to display</item>
