@@ -41,6 +41,11 @@
         </activity>
 
         <activity
+            android:name=".compareActivity"
+            android:label="compareActivity">
+        </activity>
+
+        <activity
             android:name=".fileManageActivity"
             android:label="fileManageActivity">
         </activity>

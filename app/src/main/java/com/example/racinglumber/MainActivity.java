@@ -72,25 +72,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int itemID = item.getItemId();
         boolean returnVal = true;
 
-        switch (itemID)
+        if (!dataIsRecording)
         {
-            case R.id.bottom_nav_record_button:
-                break;
-            case R.id.bottom_nav_graph_button:
-                if (!dataIsRecording)
-                {
+            switch (itemID)
+            {
+                case R.id.bottom_nav_record_button:
+                    break;
+
+                case R.id.bottom_nav_graph_button:
                     startActivity(new Intent(MainActivity.this, graphActivity.class));
-                }
-                break;
-            case R.id.bottom_nav_save_button:
-                if (!dataIsRecording)
-                {
+                    break;
+
+                case R.id.bottom_nav_compare_button:
+                    startActivity(new Intent(MainActivity.this, compareActivity.class));
+                    break;
+
+                case R.id.bottom_nav_save_button:
                     startActivity(new Intent(MainActivity.this, fileManageActivity.class));
-                }
-                break;
-            default:
-                returnVal = false;
-                break;
+                    break;
+
+                default:
+                    returnVal = false;
+                    break;
+            }
         }
 
         return returnVal;
