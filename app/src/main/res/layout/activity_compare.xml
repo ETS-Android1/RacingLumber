@@ -7,6 +7,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".compareActivity">
 
+    <TextView
+        android:id="@+id/placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLACEHOLDER" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_id"
         android:layout_width="match_parent"
@@ -18,7 +24,6 @@
         app:menu="@menu/bottom_navigation"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="-303dp">
-
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </RelativeLayout>

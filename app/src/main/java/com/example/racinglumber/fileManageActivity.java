@@ -115,7 +115,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         long timestamp;
 
         String writtenString = "";
-        final char dataDelimiter = '\t';
+        final char dataDelimiter = '~';
 
         try {
             outputStream = getContentResolver().openOutputStream(uri);
