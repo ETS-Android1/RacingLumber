@@ -9,9 +9,12 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import static com.example.racinglumber.dataStorage.dataArrayLen;
+
 public class compareActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
     private BottomNavigationView bottomNavigationView;
+    private synthesizedData currentData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,8 @@ public class compareActivity extends Activity implements BottomNavigationView.On
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_compare_button);
+
+        currentData = new synthesizedData();
     }
 
     @Override

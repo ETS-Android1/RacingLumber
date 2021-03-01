@@ -125,6 +125,7 @@ public class dataStorage {
         return bufferFull;
     }
 
+    //true if latitude
     public double getGPSValueFromAccelDataIndex(boolean latOrLong, int accelIndex)
     {
         double returnVal;

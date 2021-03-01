@@ -88,6 +88,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 case fileLoadRequestCode:
                     uri = resultData.getData();
                     returnString = uri.toString();
+                    //todo take string and decode it into data
                     break;
 
                 case fileSaveRequestCode:
