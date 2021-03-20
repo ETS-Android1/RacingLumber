@@ -220,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             recordedVars.correctDataSetOrientation();
         }
+
+        recordedVars.buildSynthesizedData();
     }
 
     /************ USER INTERFACE FUNCTIONS ************/

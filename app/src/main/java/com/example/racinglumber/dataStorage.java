@@ -647,4 +647,10 @@ public class dataStorage {
 
         return returnVal;
     }
+
+    public void buildSynthesizedData()
+    {
+        synthesizedData currentData;//todo store in array
+        currentData = new synthesizedData();
+    }
 }
