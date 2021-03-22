@@ -47,6 +47,14 @@ public class dataStorage {
     private static int GPSIndex = 0; //index of GPS data
     private static long[] GPSEventTime;
 
+    ////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ////////////////THIS IS THE SPOT TO START ON NEXT TIME.Need to make end recording generate synthed data, structure that allows loading other datasets
+    ////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private static synthesizedData[] synthDataArray;
+    ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     public static void clearStorage()
     {
         xDataArray = null;

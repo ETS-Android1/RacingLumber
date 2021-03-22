@@ -14,12 +14,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     android:title="@string/bottom_nav_graph"
     app:showAsAction="ifRoom" />
 <item
-    android:id="@+id/bottom_nav_compare_button"
-    android:enabled="true"
-    android:icon="@drawable/ic_baseline_compare_24"
-    android:title="@string/bottom_nav_compare"
-    app:showAsAction="ifRoom" />
-<item
     android:id="@+id/bottom_nav_save_button"
     android:enabled="true"
     android:icon="@drawable/ic_file_download_black_24dp"

@@ -80,10 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(new Intent(MainActivity.this, graphActivity.class));
                     break;
 
-                case R.id.bottom_nav_compare_button:
-                    startActivity(new Intent(MainActivity.this, compareActivity.class));
-                    break;
-
                 case R.id.bottom_nav_save_button:
                     startActivity(new Intent(MainActivity.this, fileManageActivity.class));
                     break;

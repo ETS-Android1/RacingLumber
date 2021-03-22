@@ -156,10 +156,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             case R.id.bottom_nav_graph_button:
                 break;
 
-            case R.id.bottom_nav_compare_button:
-                startActivity(new Intent(graphActivity.this, compareActivity.class));
-                break;
-
             case R.id.bottom_nav_save_button:
                 startActivity(new Intent(graphActivity.this, fileManageActivity.class));
                 break;

@@ -344,12 +344,9 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 startActivity(new Intent(fileManageActivity.this, graphActivity.class));
                 break;
 
-            case R.id.bottom_nav_compare_button:
-                startActivity(new Intent(fileManageActivity.this, compareActivity.class));
-                break;
-
             case R.id.bottom_nav_save_button:
                 break;
+
             default:
                 returnVal = false;
                 break;
