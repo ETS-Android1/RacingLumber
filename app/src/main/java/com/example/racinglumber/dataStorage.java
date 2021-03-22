@@ -4,6 +4,7 @@ import android.hardware.Sensor;
 import android.location.Location;
 import android.os.SystemClock;
 
+//essentially a static class
 public class dataStorage {
 
     enum Axis
@@ -46,7 +47,7 @@ public class dataStorage {
     private static int GPSIndex = 0; //index of GPS data
     private static long[] GPSEventTime;
 
-    public void clearStorage()
+    public static void clearStorage()
     {
         xDataArray = null;
         yDataArray = null;
@@ -96,13 +97,13 @@ public class dataStorage {
 
     }
 
-    public void setDataArrayLen(int inputDataLen)
+    public static void setDataArrayLen(int inputDataLen)
     {
         dataArrayLen = inputDataLen;
     }
-    public int getDataArrayLen() { return dataArrayLen; }
+    public static int getDataArrayLen() { return dataArrayLen; }
 
-    public boolean writeGPSValToStorage(Location location)
+    public static boolean writeGPSValToStorage(Location location)
     {
         boolean bufferFull = false;
 
@@ -126,7 +127,7 @@ public class dataStorage {
     }
 
     //true if latitude
-    public double getGPSValueFromAccelDataIndex(boolean latOrLong, int accelIndex)
+    public static double getGPSValueFromAccelDataIndex(boolean latOrLong, int accelIndex)
     {
         double returnVal;
         long accelEventTimestamp;
@@ -183,7 +184,7 @@ public class dataStorage {
         return returnVal;
     }
 
-    public double getGPSValue(boolean latOrLong, int index) {
+    public static double getGPSValue(boolean latOrLong, int index) {
         double returnVal;
 
         if ((index > dataArrayLen)
@@ -208,7 +209,7 @@ public class dataStorage {
         return returnVal;
     }
 
-    public boolean writeSensorValToStorage(float xInput, float yInput, float zInput, int sensorType)
+    public static boolean writeSensorValToStorage(float xInput, float yInput, float zInput, int sensorType)
     {
         boolean bufferFull = false;
 
@@ -277,7 +278,7 @@ public class dataStorage {
         return bufferFull;
     }
 
-    public void correctDataSetOrientation()
+    public static void correctDataSetOrientation()
     {
         if (dataArrayLen > 0)
         {
@@ -308,7 +309,7 @@ public class dataStorage {
     * using quaternions.  This rotation would also make G and G' parallel, but we only need the output D'.
     * : Conjugate D by R: D' = RDR'
     * */
-    public void correctDataOrientation (float [] xInputArray, float [] yInputArray, float [] zInputArray) {
+    public static void correctDataOrientation (float [] xInputArray, float [] yInputArray, float [] zInputArray) {
         double absValGPRIMEcrossG;
         double absValG;
         double angleWinRadians;
@@ -394,7 +395,7 @@ public class dataStorage {
         }
     }
 
-    public float getSensorValue(Axis axis, RecordType recordType, int index)
+    public static float getSensorValue(Axis axis, RecordType recordType, int index)
     {
         float returnVal;
         double squaredMag;
@@ -491,7 +492,7 @@ public class dataStorage {
         return returnVal;
     }
 
-    public long getTimestampValue(RecordType recordType, int index)
+    public static long getTimestampValue(RecordType recordType, int index)
     {
         long returnVal;
 
@@ -608,7 +609,7 @@ public class dataStorage {
         return returnVal;
     }
 
-    public float getMaxOfAbsValue(Axis axis, RecordType recordType)
+    public static float getMaxOfAbsValue(Axis axis, RecordType recordType)
     {
         int index;
         float maxValueFound = 0.0F;
@@ -632,7 +633,7 @@ public class dataStorage {
         return maxValueFound;
     }
 
-    public long getGPSTimestampValue(int index)
+    public static long getGPSTimestampValue(int index)
     {
         long returnVal;
 
@@ -648,7 +649,7 @@ public class dataStorage {
         return returnVal;
     }
 
-    public void buildSynthesizedData()
+    public static void buildSynthesizedData()
     {
         synthesizedData currentData;//todo store in array
         currentData = new synthesizedData();

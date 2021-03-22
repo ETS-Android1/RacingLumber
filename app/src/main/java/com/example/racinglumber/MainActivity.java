@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senAccelerometer;
     private Sensor senRotation;
     private Sensor senGravity;
-    private dataStorage recordedVars;
     private FusedLocationProviderClient fusedLocationClient;
 
     private final int defaultRecordingLength = 10;
@@ -54,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_record_button);
-
-        recordedVars = new dataStorage();
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -148,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (dataIsRecording)
         {
-            bufferFull = recordedVars.writeSensorValToStorage(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2], mySensor.getType());
+            bufferFull = dataStorage.writeSensorValToStorage(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2], mySensor.getType());
             if (bufferFull)
             {
                 endRecording();
@@ -167,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (dataIsRecording && (location != null))
             {
-                bufferFull = recordedVars.writeGPSValToStorage(location);
+                bufferFull = dataStorage.writeGPSValToStorage(location);
                 if (bufferFull)
                 {
                     endRecording();
@@ -182,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         setDataRecordLength();
 
-        recordedVars.clearStorage();
+        dataStorage.clearStorage();
 
         Button backward_img = (Button) findViewById(R.id.recordButton);
         backward_img.setBackgroundColor(Color.RED);
@@ -218,10 +215,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (correctTiltSwitch.isChecked())
         {
-            recordedVars.correctDataSetOrientation();
+            dataStorage.correctDataSetOrientation();
         }
 
-        recordedVars.buildSynthesizedData();
+        dataStorage.buildSynthesizedData();
     }
 
     /************ USER INTERFACE FUNCTIONS ************/
@@ -262,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recordingSeconds += (secondsPerMinute * recordingMinutes);
         numRecordedSamples = 50*recordingSeconds;
 
-        recordedVars.setDataArrayLen(numRecordedSamples);
+        dataStorage.setDataArrayLen(numRecordedSamples);
     }
 
 }//end of mainActivity class

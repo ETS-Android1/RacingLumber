@@ -27,7 +27,6 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class graphActivity extends FragmentActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener , OnMapReadyCallback {
     private BottomNavigationView bottomNavigationView;
-    private dataStorage recordedVars;
     private GoogleMap mMap;
 
     private final float graphMinY = 0.05F; //start with very small minimum value, that is overwritten by first dataset
@@ -69,8 +68,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        recordedVars = new dataStorage();
-
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 
         graph.getViewport().setYAxisBoundsManual(true);
@@ -96,8 +93,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 double displayedLat;
                 double displayedLong;
 
-                displayedLat = recordedVars.getGPSValueFromAccelDataIndex(true, (int)minX);
-                displayedLong = recordedVars.getGPSValueFromAccelDataIndex(false, (int)minX);
+                displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, (int)minX);
+                displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, (int)minX);
 
                 LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
                 mMap.clear();
@@ -134,8 +131,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         mMap = googleMap;
 
-        displayedLat = recordedVars.getGPSValueFromAccelDataIndex(true, 0);
-        displayedLong = recordedVars.getGPSValueFromAccelDataIndex(false, 0);
+        displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, 0);
+        displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, 0);
 
         LatLng defaultMapLocation = new LatLng(displayedLat, displayedLong);
 
@@ -229,22 +226,22 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         float currentMaxGraphY;
         float maxAbsValue;
 
-        for (int counter = 0; counter < recordedVars.dataArrayLen; counter++)
+        for (int counter = 0; counter < dataStorage.dataArrayLen; counter++)
         {
-            if ((recordedVars.dataArrayLen - 1) < counter)
+            if ((dataStorage.dataArrayLen - 1) < counter)
             {
                 break;
             }
 
-            newVal = recordedVars.getSensorValue(axis, recordType, counter);
-            newSeries.appendData(new DataPoint(counter, newVal), false, recordedVars.dataArrayLen);
+            newVal = dataStorage.getSensorValue(axis, recordType, counter);
+            newSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
         }
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 
         /*Check if the new data has a maximum larger than existing data.  If so, update the maximum Y value displayed on the graph*/
         currentMaxGraphY = (float)(graph.getViewport().getMaxY(true));
-        maxAbsValue = recordedVars.getMaxOfAbsValue(axis, recordType);
+        maxAbsValue = dataStorage.getMaxOfAbsValue(axis, recordType);
 
         if (maxAbsValue > currentMaxGraphY)
         {

@@ -109,7 +109,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     private void writeEncodedDataToFile(@NonNull Uri uri) {
         OutputStream outputStream;
-        dataStorage recordedVars;
         int dataArrayLen;
         float accelVal;
         double GPSVal;
@@ -122,8 +121,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             outputStream = getContentResolver().openOutputStream(uri);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
 
-            recordedVars = new dataStorage();
-            dataArrayLen = recordedVars.getDataArrayLen();
+            dataArrayLen = dataStorage.getDataArrayLen();
 
             /*1. Encode the number of data points on its own line*/
 
@@ -149,7 +147,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     /*Data*/
                     for (int index = 0; index < dataArrayLen; index++)
                     {
-                        accelVal = recordedVars.getSensorValue(axis, recordType, index);
+                        accelVal = dataStorage.getSensorValue(axis, recordType, index);
                         writtenString += Float.toString(accelVal);
                         writtenString += dataDelimiter;
                     }
@@ -162,7 +160,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
                 for (int index = 0; index < dataArrayLen; index++)
                 {
-                    timestamp = recordedVars.getTimestampValue(recordType, index);
+                    timestamp = dataStorage.getTimestampValue(recordType, index);
                     writtenString += Long.toString(timestamp);
                     writtenString += dataDelimiter;
                 }
@@ -176,7 +174,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
             for (int index = 0; index < dataArrayLen; index++)
             {
-                GPSVal = recordedVars.getGPSValue(true, index);
+                GPSVal = dataStorage.getGPSValue(true, index);
                 writtenString += Double.toString(GPSVal);
                 writtenString += dataDelimiter;
             }
@@ -187,7 +185,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
             for (int index = 0; index < dataArrayLen; index++)
             {
-                GPSVal = recordedVars.getGPSValue(false, index);
+                GPSVal = dataStorage.getGPSValue(false, index);
                 writtenString += Double.toString(GPSVal);
                 writtenString += dataDelimiter;
             }
@@ -200,7 +198,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
             for (int index = 0; index < dataArrayLen; index++)
             {
-                timestamp = recordedVars.getGPSTimestampValue(index);
+                timestamp = dataStorage.getGPSTimestampValue(index);
                 writtenString += Long.toString(timestamp);
                 writtenString += dataDelimiter;
             }
@@ -220,7 +218,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     {
         final char dataDelimiter = '\t';
 
-        dataStorage recordedVars;
         int dataArrayLen;
         float accelVal;
         double GPSVal;
@@ -228,8 +225,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         String returnString = "";
 
-        recordedVars = new dataStorage();
-        dataArrayLen = recordedVars.getDataArrayLen();
+        dataArrayLen = dataStorage.getDataArrayLen();
 
         /*1. Encode the number of data points on its own line*/
 
@@ -254,7 +250,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 /*Data*/
                 for (int index = 0; index < dataArrayLen; index++)
                 {
-                    accelVal = recordedVars.getSensorValue(axis, recordType, index);
+                    accelVal = dataStorage.getSensorValue(axis, recordType, index);
                     returnString += Float.toString(accelVal);
                     returnString += dataDelimiter;
                 }
@@ -266,7 +262,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
             for (int index = 0; index < dataArrayLen; index++)
             {
-                timestamp = recordedVars.getTimestampValue(recordType, index);
+                timestamp = dataStorage.getTimestampValue(recordType, index);
                 returnString += Long.toString(timestamp);
                 returnString += dataDelimiter;
             }
@@ -279,7 +275,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         for (int index = 0; index < dataArrayLen; index++)
         {
-            GPSVal = recordedVars.getGPSValue(true, index);
+            GPSVal = dataStorage.getGPSValue(true, index);
             returnString += Double.toString(GPSVal);
             returnString += dataDelimiter;
         }
@@ -289,7 +285,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         for (int index = 0; index < dataArrayLen; index++)
         {
-            GPSVal = recordedVars.getGPSValue(false, index);
+            GPSVal = dataStorage.getGPSValue(false, index);
             returnString += Double.toString(GPSVal);
             returnString += dataDelimiter;
         }
@@ -301,7 +297,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
         for (int index = 0; index < dataArrayLen; index++)
         {
-            timestamp = recordedVars.getGPSTimestampValue(index);
+            timestamp = dataStorage.getGPSTimestampValue(index);
             returnString += Long.toString(timestamp);
             returnString += dataDelimiter;
         }

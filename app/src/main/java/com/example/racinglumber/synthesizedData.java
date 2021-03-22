@@ -3,11 +3,10 @@ package com.example.racinglumber;
 import static com.example.racinglumber.dataStorage.dataArrayLen;
 
 //This class contains a set of synthesized latitudal, longitudal, etc. data using sensor fusion
-//builds based on current data in recordedVars
+//builds based on current data in dataStorage
 public class synthesizedData {
     private static float[] lateralDataArray; //left (negative) right (positive) acceleration
     private static float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
-    private dataStorage recordedVars; //todo this should just be static?
     private float forwardVectorX;
     private float forwardVectorY;
 
@@ -15,7 +14,6 @@ public class synthesizedData {
     public synthesizedData()
     {
         lateralDataArray = new float[dataArrayLen];
-        recordedVars = new dataStorage();
         computeForwardVector();
         computeLateralLongitudalArrays();
     }
@@ -32,10 +30,10 @@ public class synthesizedData {
         //todo could make delay configurable
         for (int index = 300; index < 600; index++)//start at 300 to make it start at 3 seconds, 3* 100Hz
         {
-            if (index < recordedVars.getDataArrayLen())
+            if (index < dataStorage.getDataArrayLen())
             {
-                xArray += recordedVars.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
-                yArray += recordedVars.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
+                xArray += dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
+                yArray += dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
             }
         }
 
@@ -53,17 +51,17 @@ public class synthesizedData {
     {
         float xVal, yVal, xyMag, xyDotProduct, cosTheta, theta;
 
-        lateralDataArray = new float[recordedVars.getDataArrayLen()];
-        longitudalDataArray = new float[recordedVars.getDataArrayLen()];
+        lateralDataArray = new float[dataStorage.getDataArrayLen()];
+        longitudalDataArray = new float[dataStorage.getDataArrayLen()];
 
         //Instantiate lateral data array
-        for (int index = 0; index < recordedVars.getDataArrayLen(); index++)
+        for (int index = 0; index < dataStorage.getDataArrayLen(); index++)
         {
             //use dot product to get angle:
 
             //new vector, get magnitude
-            xVal = recordedVars.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
-            yVal = recordedVars.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
+            xVal = dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
+            yVal = dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
             xyMag = (float) Math.sqrt((xVal*xVal)+(yVal*yVal));
             //get dot product
             xyDotProduct = (xVal*forwardVectorX) + (yVal*forwardVectorX);
@@ -95,10 +93,10 @@ public class synthesizedData {
 //        for (i = 0; i < dataArrayLen-1; i++)
 //        {
 //            //find GPS vector using current and next points
-//            latitude = recordedVars.getGPSValueFromAccelDataIndex(true, i);
-//            latitudeNext = recordedVars.getGPSValueFromAccelDataIndex(true, i+1);
-//            longitude = recordedVars.getGPSValueFromAccelDataIndex(false, i);
-//            longitudeNext = recordedVars.getGPSValueFromAccelDataIndex(false, i+1);
+//            latitude = dataStorage.getGPSValueFromAccelDataIndex(true, i);
+//            latitudeNext = dataStorage.getGPSValueFromAccelDataIndex(true, i+1);
+//            longitude = dataStorage.getGPSValueFromAccelDataIndex(false, i);
+//            longitudeNext = dataStorage.getGPSValueFromAccelDataIndex(false, i+1);
 //
 //            latDelta = latitudeNext - latitude;
 //            longDelta = longitudeNext - longitude;
