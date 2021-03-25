@@ -50,7 +50,8 @@ public class dataStorage {
     ////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     ////////////////THIS IS THE SPOT TO START ON NEXT TIME.Need to make end recording generate synthed data, structure that allows loading other datasets
     ////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    private static synthesizedData[] synthDataArray;
+    public static synthesizedData[] synthDataArray = new synthesizedData[2];
+
     ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -655,11 +656,5 @@ public class dataStorage {
         }
 
         return returnVal;
-    }
-
-    public static void buildSynthesizedData()
-    {
-        synthesizedData currentData;//todo store in array
-        currentData = new synthesizedData();
     }
 }

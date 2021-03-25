@@ -5,20 +5,22 @@ import static com.example.racinglumber.dataStorage.dataArrayLen;
 //This class contains a set of synthesized latitudal, longitudal, etc. data using sensor fusion
 //builds based on current data in dataStorage
 public class synthesizedData {
-    private static float[] lateralDataArray; //left (negative) right (positive) acceleration
-    private static float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
-    private float forwardVectorX;
-    private float forwardVectorY;
+    public static float[] lateralDataArray; //left (negative) right (positive) acceleration
+    public static float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
+    public float forwardVectorX;
+    public float forwardVectorY;
 
-    //custom constructor
-    public synthesizedData()
+    public void generateSynthDataFromDataStorage()
     {
-        lateralDataArray = new float[dataArrayLen];
-        computeForwardVector();
-        computeLateralLongitudalArrays();
+        if (dataArrayLen > 0)
+        {
+            lateralDataArray = new float[dataArrayLen];
+            computeForwardVector();
+            computeLateralLongitudalArrays();
+        }
     }
 
-
+    //todo use a user selected point instead, this works for now though
     public void computeForwardVector()
     {
         /*Prototype is using 100Hz capture.  First 3 seconds is setup(putting in pocket), 3 seconds is averaging vector of kart going forward, then save*/
