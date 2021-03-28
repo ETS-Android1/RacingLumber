@@ -214,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dataStorage.correctDataSetOrientation();
         }
 
+        dataStorage.initSynthDataArrays();
         dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
     }
 

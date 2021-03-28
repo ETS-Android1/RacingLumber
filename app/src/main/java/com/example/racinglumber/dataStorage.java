@@ -4,6 +4,8 @@ import android.hardware.Sensor;
 import android.location.Location;
 import android.os.SystemClock;
 
+import static com.example.racinglumber.synthesizedData.lateralDataArray;
+
 //essentially a static class
 public class dataStorage {
 
@@ -12,7 +14,9 @@ public class dataStorage {
         X,
         Y,
         Z,
-        Magnitude
+        Magnitude,
+        Latitude,
+        Longitude
     }
 
     enum RecordType
@@ -47,14 +51,15 @@ public class dataStorage {
     private static int GPSIndex = 0; //index of GPS data
     private static long[] GPSEventTime;
 
-    ////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ////////////////THIS IS THE SPOT TO START ON NEXT TIME.Need to make end recording generate synthed data, structure that allows loading other datasets
-    ////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    public static synthesizedData[] synthDataArray = new synthesizedData[2];
+    public static synthesizedData[] synthDataArray;// = new synthesizedData[dataArrayLen];
 
-    ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    //This function creates the synth data objects
+    public static void initSynthDataArrays()
+    {
+            synthDataArray = new synthesizedData[dataArrayLen];
+            synthDataArray[0] = new synthesizedData();
+            synthDataArray[1] = new synthesizedData();
+    }
 
     public static void clearStorage()
     {
@@ -486,6 +491,15 @@ public class dataStorage {
                             returnVal = 0.0F;
                             break;
                     }
+                    break;
+
+                case Latitude:
+                    //todo look for set one and two
+                    returnVal = synthDataArray[0].lateralDataArray[index];
+                    break;
+                case Longitude:
+                    //todo look for set one and two
+                    returnVal = synthDataArray[0].longitudalDataArray[index];
                     break;
 
                 default:

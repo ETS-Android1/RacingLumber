@@ -10,6 +10,12 @@ public class synthesizedData {
     public float forwardVectorX;
     public float forwardVectorY;
 
+    public synthesizedData()
+    {
+        //constructor
+        forwardVectorX = 5.0f;
+    }
+
     public void generateSynthDataFromDataStorage()
     {
         if (dataArrayLen > 0)

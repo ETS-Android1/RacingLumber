@@ -13,8 +13,8 @@
     <string name="bottom_nav_save">Save</string>
     <string-array name="graphDatatypesArray">
         <item>Choose dataset to display</item>
-        <item>X Acceleration</item>
-        <item>Y Acceleration</item>
+        <item>Set 1: Lateral Accel</item>
+        <item>Set 1: Longitudal Accel</item>
         <item>Z Acceleration</item>
         <item>Acceleration Magnitude</item>
         <item>X Rotation</item>

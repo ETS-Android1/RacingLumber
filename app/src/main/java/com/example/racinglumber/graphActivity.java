@@ -34,8 +34,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     /*Spinner menu items*/
     private final int noSelection = 0;
-    private final int xAcceleration = 1;
-    private final int yAcceleration = 2;
+    private final int setOnelatAccel = 1;
+    private final int setOnelongAccel = 2;
     private final int zAcceleration = 3;
     private final int magAcceleration = 4;
     private final int xRotation = 5;
@@ -176,11 +176,11 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         {
             case noSelection:
                 break; //do nothing
-            case xAcceleration:
-                addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.acceleration);
+            case setOnelatAccel:
+                addGraphSeries(dataStorage.Axis.Latitude, dataStorage.RecordType.acceleration);
                 break;
-            case yAcceleration:
-                addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.acceleration);
+            case setOnelongAccel:
+                addGraphSeries(dataStorage.Axis.Longitude, dataStorage.RecordType.acceleration);
                 break;
             case zAcceleration:
                 addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
@@ -254,10 +254,10 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             case X:
                 switch (recordType)
                 {
-                    case acceleration:
-                        newSeries.setTitle("X Acceleration");
-                        newSeries.setColor(0xFFFFFF00); //yellow
-                        break;
+//                    case acceleration:
+//                        newSeries.setTitle("X Acceleration");
+//                        newSeries.setColor(0xFFFFFF00); //yellow
+//                        break;
                     case rotation:
                         newSeries.setTitle("X Rotation");
                         newSeries.setColor(0xFF4169E1); //royalblue
@@ -330,6 +330,18 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                         break;
                 }
                 break;
+            case Latitude:
+                //todo set one and set two titles
+                newSeries.setTitle("Lateral Acceleration");
+                newSeries.setColor(0xFFFFFF00); //yellow
+                break;
+
+            case Longitude:
+                //todo set one and set two titles
+                newSeries.setTitle("Longitudal Acceleration");
+                newSeries.setColor(0xFFFF6347); //tomato
+                break;
+
             default:
                 break;
         }
