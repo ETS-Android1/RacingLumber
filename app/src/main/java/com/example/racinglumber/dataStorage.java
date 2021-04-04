@@ -28,28 +28,28 @@ public class dataStorage {
 
     public static int dataArrayLen = 0; //default to 0, since no data is recorded
 
-    private static float[] xDataArray;
-    private static float[] yDataArray;
-    private static float[] zDataArray;
-    private static int accelIndex; //index of x/y/zDataArray
-    private static long[] accelEventTime;
+    public static float[] xDataArray;
+    public static float[] yDataArray;
+    public static float[] zDataArray;
+    public static int accelIndex; //index of x/y/zDataArray
+    public static long[] accelEventTime;
 
-    private static float[] xRotationArray;
-    private static float[] yRotationArray;
-    private static float[] zRotationArray;
-    private static int rotationIndex = 0; //index of x/y/zRotationArray
-    private static long[] rotationEventTime;
+    public static float[] xRotationArray;
+    public static float[] yRotationArray;
+    public static float[] zRotationArray;
+    public static int rotationIndex = 0; //index of x/y/zRotationArray
+    public static long[] rotationEventTime;
 
-    private static float[] xGravityArray;
-    private static float[] yGravityArray;
-    private static float[] zGravityArray;
-    private static int gravityIndex = 0; //index of x/y/zGravityArray
-    private static long[] gravityEventTime;
+    public static float[] xGravityArray;
+    public static float[] yGravityArray;
+    public static float[] zGravityArray;
+    public static int gravityIndex = 0; //index of x/y/zGravityArray
+    public static long[] gravityEventTime;
 
-    private static double[] latitudeArray;
-    private static double[] longitudeArray;
-    private static int GPSIndex = 0; //index of GPS data
-    private static long[] GPSEventTime;
+    public static double[] latitudeArray;
+    public static double[] longitudeArray;
+    public static int GPSIndex = 0; //index of GPS data
+    public static long[] GPSEventTime;
 
     public static synthesizedData[] synthDataArray;// = new synthesizedData[dataArrayLen];
 

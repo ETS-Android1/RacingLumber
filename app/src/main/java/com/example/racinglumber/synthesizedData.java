@@ -13,7 +13,7 @@ public class synthesizedData {
     public synthesizedData()
     {
         //constructor
-        forwardVectorX = 5.0f;
+        //TODO remove//forwardVectorX = 5.0f;
     }
 
     public void generateSynthDataFromDataStorage()

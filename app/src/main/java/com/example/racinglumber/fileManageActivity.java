@@ -25,6 +25,7 @@ import static com.example.racinglumber.dataStorage.RecordType.acceleration;
 public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
     private static String returnString;
+    final char dataDelimiter = '~';
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     uri = resultData.getData();
                     returnString = uri.toString();
                     //todo take string and decode it into data
+                    loadSaveToDataStorage();
                     break;
 
                 case fileSaveRequestCode:
@@ -107,6 +109,52 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         }
     }
 
+    /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ///////////TODO TODO TODO return string is android.something, so it's not the actual return string yet
+
+    private void loadSaveToDataStorage()
+    {
+        char tempChar;
+        int tempInt = 0;
+        int i = 0;
+        int dataArrLenCalc = 0;
+
+        //todo for loop through each element
+
+        //Find first delimiter.  After this is dataArrayLen
+        do {
+            tempChar = returnString.charAt(i);
+            i++;
+        } while (tempChar != dataDelimiter);
+
+        for (int j = 0; j < (returnString.length()-(i+j)); j++)
+        {
+            tempChar = returnString.charAt(i);
+            tempInt = tempChar - '0';
+
+            if ((tempInt > 10) || (tempInt < 0))
+            {
+                break;//out of range, so we are done calculating the int
+            }
+            else
+            {
+                dataArrLenCalc *= 10;
+                dataArrLenCalc += tempInt;
+            }
+        }
+
+        dataStorage.dataArrayLen = tempInt;//todo parse string
+        //dataStorage.clearStorage();todo do this at the end, not beginning
+
+
+        //dataStorage.xDataArray[0] = 1.0f;
+    }
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     private void writeEncodedDataToFile(@NonNull Uri uri) {
         OutputStream outputStream;
         int dataArrayLen;
@@ -115,7 +163,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         long timestamp;
 
         String writtenString = "";
-        final char dataDelimiter = '~';
 
         try {
             outputStream = getContentResolver().openOutputStream(uri);
@@ -214,96 +261,98 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     }
 
     //////////////////////////File Encoding and Decoding Functions//////////////////////////
-    private String getEncodedDataString()
-    {
-        final char dataDelimiter = '\t';
 
-        int dataArrayLen;
-        float accelVal;
-        double GPSVal;
-        long timestamp;
-
-        String returnString = "";
-
-        dataArrayLen = dataStorage.getDataArrayLen();
-
-        /*1. Encode the number of data points on its own line*/
-
-        returnString += "Length of Data Arrays";
-        returnString += dataDelimiter;
-        returnString += Integer.toString(dataArrayLen);
-        returnString += '\n';
-
-        /*2. Encode Accelerometer/Rotation/Gravity Arrays. Split axis and recordType by line*/
-
-        dataStorage.Axis axisVals[] = dataStorage.Axis.values();
-        dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
-
-        for (dataStorage.RecordType recordType : recordTypeVals)
-        {
-            /*For loop below goes through x, y, z arrays*/
-            for (dataStorage.Axis axis : axisVals)
-            {
-                /*Name of data*/
-                returnString += dataStorage.getName(axis, recordType)+dataDelimiter;
-
-                /*Data*/
-                for (int index = 0; index < dataArrayLen; index++)
-                {
-                    accelVal = dataStorage.getSensorValue(axis, recordType, index);
-                    returnString += Float.toString(accelVal);
-                    returnString += dataDelimiter;
-                }
-                returnString += '\n';
-            }
-
-            /*Data timestamps (same for x,y,z)*/
-            returnString += "Timestamps"+dataDelimiter;
-
-            for (int index = 0; index < dataArrayLen; index++)
-            {
-                timestamp = dataStorage.getTimestampValue(recordType, index);
-                returnString += Long.toString(timestamp);
-                returnString += dataDelimiter;
-            }
-            returnString += '\n';
-        }
-
-        /*2. Encode GPS Arrays. Split axis and recordType by line*/
-
-        returnString += "LATITUDE"+dataDelimiter;
-
-        for (int index = 0; index < dataArrayLen; index++)
-        {
-            GPSVal = dataStorage.getGPSValue(true, index);
-            returnString += Double.toString(GPSVal);
-            returnString += dataDelimiter;
-        }
-        returnString += '\n';
-
-        returnString += "LONGITUDE"+dataDelimiter;
-
-        for (int index = 0; index < dataArrayLen; index++)
-        {
-            GPSVal = dataStorage.getGPSValue(false, index);
-            returnString += Double.toString(GPSVal);
-            returnString += dataDelimiter;
-        }
-        returnString += '\n';
-
-        /*3. Encode GPS Timestamps*/
-
-        returnString += "GPS Timestamps"+dataDelimiter;
-
-        for (int index = 0; index < dataArrayLen; index++)
-        {
-            timestamp = dataStorage.getGPSTimestampValue(index);
-            returnString += Long.toString(timestamp);
-            returnString += dataDelimiter;
-        }
-
-        return returnString;
-    }
+    //todo this function isn't used
+//    private String getEncodedDataString()
+//    {
+//        final char dataDelimiter = '\t';
+//
+//        int dataArrayLen;
+//        float accelVal;
+//        double GPSVal;
+//        long timestamp;
+//
+//        String returnString = "";
+//
+//        dataArrayLen = dataStorage.getDataArrayLen();
+//
+//        /*1. Encode the number of data points on its own line*/
+//
+//        returnString += "Length of Data Arrays";
+//        returnString += dataDelimiter;
+//        returnString += Integer.toString(dataArrayLen);
+//        returnString += '\n';
+//
+//        /*2. Encode Accelerometer/Rotation/Gravity Arrays. Split axis and recordType by line*/
+//
+//        dataStorage.Axis axisVals[] = dataStorage.Axis.values();
+//        dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
+//
+//        for (dataStorage.RecordType recordType : recordTypeVals)
+//        {
+//            /*For loop below goes through x, y, z arrays*/
+//            for (dataStorage.Axis axis : axisVals)
+//            {
+//                /*Name of data*/
+//                returnString += dataStorage.getName(axis, recordType)+dataDelimiter;
+//
+//                /*Data*/
+//                for (int index = 0; index < dataArrayLen; index++)
+//                {
+//                    accelVal = dataStorage.getSensorValue(axis, recordType, index);
+//                    returnString += Float.toString(accelVal);
+//                    returnString += dataDelimiter;
+//                }
+//                returnString += '\n';
+//            }
+//
+//            /*Data timestamps (same for x,y,z)*/
+//            returnString += "Timestamps"+dataDelimiter;
+//
+//            for (int index = 0; index < dataArrayLen; index++)
+//            {
+//                timestamp = dataStorage.getTimestampValue(recordType, index);
+//                returnString += Long.toString(timestamp);
+//                returnString += dataDelimiter;
+//            }
+//            returnString += '\n';
+//        }
+//
+//        /*2. Encode GPS Arrays. Split axis and recordType by line*/
+//
+//        returnString += "LATITUDE"+dataDelimiter;
+//
+//        for (int index = 0; index < dataArrayLen; index++)
+//        {
+//            GPSVal = dataStorage.getGPSValue(true, index);
+//            returnString += Double.toString(GPSVal);
+//            returnString += dataDelimiter;
+//        }
+//        returnString += '\n';
+//
+//        returnString += "LONGITUDE"+dataDelimiter;
+//
+//        for (int index = 0; index < dataArrayLen; index++)
+//        {
+//            GPSVal = dataStorage.getGPSValue(false, index);
+//            returnString += Double.toString(GPSVal);
+//            returnString += dataDelimiter;
+//        }
+//        returnString += '\n';
+//
+//        /*3. Encode GPS Timestamps*/
+//
+//        returnString += "GPS Timestamps"+dataDelimiter;
+//
+//        for (int index = 0; index < dataArrayLen; index++)
+//        {
+//            timestamp = dataStorage.getGPSTimestampValue(index);
+//            returnString += Long.toString(timestamp);
+//            returnString += dataDelimiter;
+//        }
+//
+//        return returnString;
+//    }
 
     //////////////////////////User Interface Functions//////////////////////////
 
