@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
@@ -24,7 +25,6 @@ import static com.example.racinglumber.dataStorage.RecordType.acceleration;
 
 public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
-    private static String returnString;
     final char dataDelimiter = '~';
 
     @Override
@@ -87,10 +87,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             switch (requestCode)
             {
                 case fileLoadRequestCode:
-                    uri = resultData.getData();
-                    returnString = uri.toString();
                     //todo take string and decode it into data
-                    loadSaveToDataStorage();
+                    loadSaveToDataStorage(resultData.getData());
                     break;
 
                 case fileSaveRequestCode:
@@ -114,41 +112,71 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     ///////////TODO TODO TODO return string is android.something, so it's not the actual return string yet
 
-    private void loadSaveToDataStorage()
+    private void loadSaveToDataStorage(@NonNull Uri uri)
     {
+        InputStream inStream;
         char tempChar;
+        //DataArrayLen calculation vars
         int tempInt = 0;
-        int i = 0;
         int dataArrLenCalc = 0;
 
-        //todo for loop through each element
+        //Data array variables
+        String valString = "";
+        float valFlt;
 
-        //Find first delimiter.  After this is dataArrayLen
-        do {
-            tempChar = returnString.charAt(i);
-            i++;
-        } while (tempChar != dataDelimiter);
-
-        for (int j = 0; j < (returnString.length()-(i+j)); j++)
+        try
         {
-            tempChar = returnString.charAt(i);
-            tempInt = tempChar - '0';
+            //Get the string to parse
+            inStream = getContentResolver().openInputStream(uri);
 
-            if ((tempInt > 10) || (tempInt < 0))
+            //Find first delimiter.  After this is dataArrayLen
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Parse dataArrayLen
+            while (inStream.available() > 0)
             {
-                break;//out of range, so we are done calculating the int
+                tempChar = (char)inStream.read();
+                tempInt = tempChar - '0';
+
+                if ((tempInt > 10) || (tempInt < 0))
+                {
+                    break;//out of range, so we are done calculating the int
+                }
+                else
+                {
+                    dataArrLenCalc *= 10;
+                    dataArrLenCalc += tempInt;
+                }
             }
-            else
-            {
-                dataArrLenCalc *= 10;
-                dataArrLenCalc += tempInt;
-            }
+
+            dataStorage.dataArrayLen = dataArrLenCalc;//todo parse string
+
+            //Find second delimiter.  After this is Acceleration vector 1
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            ////////////>>>>>>>>>>>>>>Start of reading accelerations loop
+
+            //Read an array of bytes into a string
+            tempChar = (char)inStream.read();//take first char right away since it'll be valid
+            do {
+                valString += tempChar;
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            valFlt = Float.parseFloat(valString);
+            //==========<<<<<<<<<<<<<<<<<<<<<<<<<end of read accel loop todo add loop
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        dataStorage.dataArrayLen = tempInt;//todo parse string
-        //dataStorage.clearStorage();todo do this at the end, not beginning
 
 
+        //todo for loop through each element
         //dataStorage.xDataArray[0] = 1.0f;
     }
     ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -259,100 +287,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         }
 
     }
-
-    //////////////////////////File Encoding and Decoding Functions//////////////////////////
-
-    //todo this function isn't used
-//    private String getEncodedDataString()
-//    {
-//        final char dataDelimiter = '\t';
-//
-//        int dataArrayLen;
-//        float accelVal;
-//        double GPSVal;
-//        long timestamp;
-//
-//        String returnString = "";
-//
-//        dataArrayLen = dataStorage.getDataArrayLen();
-//
-//        /*1. Encode the number of data points on its own line*/
-//
-//        returnString += "Length of Data Arrays";
-//        returnString += dataDelimiter;
-//        returnString += Integer.toString(dataArrayLen);
-//        returnString += '\n';
-//
-//        /*2. Encode Accelerometer/Rotation/Gravity Arrays. Split axis and recordType by line*/
-//
-//        dataStorage.Axis axisVals[] = dataStorage.Axis.values();
-//        dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
-//
-//        for (dataStorage.RecordType recordType : recordTypeVals)
-//        {
-//            /*For loop below goes through x, y, z arrays*/
-//            for (dataStorage.Axis axis : axisVals)
-//            {
-//                /*Name of data*/
-//                returnString += dataStorage.getName(axis, recordType)+dataDelimiter;
-//
-//                /*Data*/
-//                for (int index = 0; index < dataArrayLen; index++)
-//                {
-//                    accelVal = dataStorage.getSensorValue(axis, recordType, index);
-//                    returnString += Float.toString(accelVal);
-//                    returnString += dataDelimiter;
-//                }
-//                returnString += '\n';
-//            }
-//
-//            /*Data timestamps (same for x,y,z)*/
-//            returnString += "Timestamps"+dataDelimiter;
-//
-//            for (int index = 0; index < dataArrayLen; index++)
-//            {
-//                timestamp = dataStorage.getTimestampValue(recordType, index);
-//                returnString += Long.toString(timestamp);
-//                returnString += dataDelimiter;
-//            }
-//            returnString += '\n';
-//        }
-//
-//        /*2. Encode GPS Arrays. Split axis and recordType by line*/
-//
-//        returnString += "LATITUDE"+dataDelimiter;
-//
-//        for (int index = 0; index < dataArrayLen; index++)
-//        {
-//            GPSVal = dataStorage.getGPSValue(true, index);
-//            returnString += Double.toString(GPSVal);
-//            returnString += dataDelimiter;
-//        }
-//        returnString += '\n';
-//
-//        returnString += "LONGITUDE"+dataDelimiter;
-//
-//        for (int index = 0; index < dataArrayLen; index++)
-//        {
-//            GPSVal = dataStorage.getGPSValue(false, index);
-//            returnString += Double.toString(GPSVal);
-//            returnString += dataDelimiter;
-//        }
-//        returnString += '\n';
-//
-//        /*3. Encode GPS Timestamps*/
-//
-//        returnString += "GPS Timestamps"+dataDelimiter;
-//
-//        for (int index = 0; index < dataArrayLen; index++)
-//        {
-//            timestamp = dataStorage.getGPSTimestampValue(index);
-//            returnString += Long.toString(timestamp);
-//            returnString += dataDelimiter;
-//        }
-//
-//        return returnString;
-//    }
 
     //////////////////////////User Interface Functions//////////////////////////
 
