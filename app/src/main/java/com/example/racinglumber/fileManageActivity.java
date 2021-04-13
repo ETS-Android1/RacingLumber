@@ -153,22 +153,67 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
             dataStorage.dataArrayLen = dataArrLenCalc;//todo parse string
 
-            //Find second delimiter.  After this is Acceleration vector 1
+            //Find second delimiter.  After this is Acceleration vector x
             do {
                 tempChar = (char)inStream.read();
             } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-            ////////////>>>>>>>>>>>>>>Start of reading accelerations loop
+            //Loop through x acceleration array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-            //Read an array of bytes into a string
-            tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                valFlt = Float.parseFloat(valString);
+                dataStorage.xDataArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is Acceleration vector y
             do {
-                valString += tempChar;
                 tempChar = (char)inStream.read();
             } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-            valFlt = Float.parseFloat(valString);
-            //==========<<<<<<<<<<<<<<<<<<<<<<<<<end of read accel loop todo add loop
+            //Loop through y acceleration array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.yDataArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is Acceleration vector z
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through z acceleration array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.zDataArray[i] = valFlt;
+                valString = "";
+            }
+
+            //./////////////////TODO REST OF THE DATA ARRAYS, BUT LOOK INTO ISSUE ON SAVE FIRST...////////////////////////
 
         } catch (IOException e) {
             e.printStackTrace();
