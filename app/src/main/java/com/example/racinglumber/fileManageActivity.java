@@ -213,21 +213,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 valString = "";
             }
 
-            //Skip acceleration magnitude
-            do {
-                tempChar = (char)inStream.read();
-            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
-
-            //Loop through acceleration magnitude
-            for (int i = 0; i < dataArrLenCalc; i++)
-            {
-                //Read an array of bytes into a string
-                tempChar = (char)inStream.read();//take first char right away since it'll be valid
-                do {
-                    tempChar = (char)inStream.read();
-                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
-            }
-
 
             //./////////////////TODO REST OF THE DATA ARRAYS, BUT LOOK INTO ISSUE ON SAVE FIRST...////////////////////////
 
@@ -272,37 +257,61 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             dataStorage.Axis axisVals[] = dataStorage.Axis.values();
             dataStorage.RecordType recordTypeVals[] = dataStorage.RecordType.values();
 
-            for (dataStorage.RecordType recordType : recordTypeVals)
+            //////////////////x acceleration//////////////////
+                /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.X, dataStorage.RecordType.acceleration)+dataDelimiter;
+
+                /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
             {
-                /*For loop below goes through x, y, z arrays*/
-                for (dataStorage.Axis axis : axisVals)
-                {
-                    /*Name of data*/
-                    writtenString = dataStorage.getName(axis, recordType)+dataDelimiter;
-
-                    /*Data*/
-                    for (int index = 0; index < dataArrayLen; index++)
-                    {
-                        accelVal = dataStorage.getSensorValue(axis, recordType, index);
-                        writtenString += Float.toString(accelVal);
-                        writtenString += dataDelimiter;
-                    }
-                    writtenString += '\n';
-                    bw.write(writtenString);
-                }
-
-                /*Data timestamps (same for x,y,z)*/
-                writtenString = "Timestamps"+dataDelimiter;
-
-                for (int index = 0; index < dataArrayLen; index++)
-                {
-                    timestamp = dataStorage.getTimestampValue(recordType, index);
-                    writtenString += Long.toString(timestamp);
-                    writtenString += dataDelimiter;
-                }
-                writtenString += '\n';
-                bw.write(writtenString);
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
             }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////y acceleration//////////////////
+                /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.Y, dataStorage.RecordType.acceleration)+dataDelimiter;
+
+                /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////z acceleration//////////////////
+                /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.Z, dataStorage.RecordType.acceleration)+dataDelimiter;
+
+                /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.Z, dataStorage.RecordType.acceleration, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+
+
+            /*Data timestamps (same for x,y,z)*/
+            writtenString = "Timestamps"+dataDelimiter;
+
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                timestamp = dataStorage.getTimestampValue(acceleration, index);
+                writtenString += Long.toString(timestamp);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
 
             /*2. Encode GPS Arrays. Split axis and recordType by line*/
 
