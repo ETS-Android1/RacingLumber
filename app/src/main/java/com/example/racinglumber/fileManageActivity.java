@@ -213,6 +213,22 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 valString = "";
             }
 
+            //Skip acceleration magnitude
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through acceleration magnitude
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+            }
+
+
             //./////////////////TODO REST OF THE DATA ARRAYS, BUT LOOK INTO ISSUE ON SAVE FIRST...////////////////////////
 
         } catch (IOException e) {
