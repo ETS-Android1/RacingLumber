@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import static com.example.racinglumber.dataStorage.RecordType.acceleration;
+import static com.example.racinglumber.dataStorage.RecordType.rotation;
 
 public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
@@ -123,6 +124,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         //Data array variables
         String valString = "";
         float valFlt;
+        int valInt;
 
         try
         {
@@ -213,21 +215,239 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 valString = "";
             }
 
+            //Find delimiter.  After this is acceleration timestamps
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-            //./////////////////TODO REST OF THE DATA ARRAYS, BUT LOOK INTO ISSUE ON SAVE FIRST...////////////////////////
+            //Loop through acceleration timestamps
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
+                valInt = Integer.parseInt(valString);
+                dataStorage.accelEventTime[i] = valInt;
+                valString = "";
+            }
+
+            //Loop through x rotation array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.xRotationArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is Rotation vector y
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through y rotation array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.yRotationArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is Rotation vector z
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through z Rotation array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.zRotationArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is rotation timestamps
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through rotation timestamps
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valInt = Integer.parseInt(valString);
+                dataStorage.rotationEventTime[i] = valInt;
+                valString = "";
+            }
+
+            //Loop through x gravity array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.xGravityArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is Gravity vector y
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through y gravity array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.yGravityArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is Gravity vector z
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through z Gravity array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.zGravityArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is gravity timestamps
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through gravity timestamps
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valInt = Integer.parseInt(valString);
+                dataStorage.gravityEventTime[i] = valInt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is GPS latitude array
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through latitude array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char) inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char) inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.latitudeArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is GPS longitude array
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through longitude array
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char) inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char) inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valFlt = Float.parseFloat(valString);
+                dataStorage.longitudeArray[i] = valFlt;
+                valString = "";
+            }
+
+            //Find delimiter.  After this is GPS timestamps
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Loop through gravity timestamps
+            for (int i = 0; i < dataArrLenCalc; i++)
+            {
+                //Read an array of bytes into a string
+                tempChar = (char)inStream.read();//take first char right away since it'll be valid
+                do {
+                    valString += tempChar;
+                    tempChar = (char)inStream.read();
+                } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+                valInt = Integer.parseInt(valString);
+                dataStorage.GPSEventTime[i] = valInt;
+                valString = "";
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-        //todo for loop through each element
-        //dataStorage.xDataArray[0] = 1.0f;
     }
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     private void writeEncodedDataToFile(@NonNull Uri uri) {
         OutputStream outputStream;
@@ -299,14 +519,120 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             writtenString += '\n';
             bw.write(writtenString);
 
-
-
             /*Data timestamps (same for x,y,z)*/
-            writtenString = "Timestamps"+dataDelimiter;
+            writtenString = "Acceleration Timestamps"+dataDelimiter;
 
             for (int index = 0; index < dataArrayLen; index++)
             {
                 timestamp = dataStorage.getTimestampValue(acceleration, index);
+                writtenString += Long.toString(timestamp);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////x rotation//////////////////
+            /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.X, rotation)+dataDelimiter;
+
+            /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.X, rotation, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////y rotation//////////////////
+            /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.Y, rotation)+dataDelimiter;
+
+            /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.Y, rotation, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////z rotation//////////////////
+            /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.Z, rotation)+dataDelimiter;
+
+            /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.Z, rotation, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            /*Rotation timestamps (same for x,y,z)*/
+            writtenString = "Rotation Timestamps"+dataDelimiter;
+
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                timestamp = dataStorage.getTimestampValue(rotation, index);
+                writtenString += Long.toString(timestamp);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////x gravity//////////////////
+            /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.X, dataStorage.RecordType.gravity)+dataDelimiter;
+
+            /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.gravity, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////y gravity//////////////////
+            /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.Y, dataStorage.RecordType.gravity)+dataDelimiter;
+
+            /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.gravity, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            //////////////////z gravity//////////////////
+            /*Name of data*/
+            writtenString = dataStorage.getName(dataStorage.Axis.Z, dataStorage.RecordType.gravity)+dataDelimiter;
+
+            /*Data*/
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                accelVal = dataStorage.getSensorValue(dataStorage.Axis.Z, dataStorage.RecordType.gravity, index);
+                writtenString += Float.toString(accelVal);
+                writtenString += dataDelimiter;
+            }
+            writtenString += '\n';
+            bw.write(writtenString);
+
+            /*Gravity timestamps (same for x,y,z)*/
+            writtenString = "Gravity Timestamps"+dataDelimiter;
+
+            for (int index = 0; index < dataArrayLen; index++)
+            {
+                timestamp = dataStorage.getTimestampValue(dataStorage.RecordType.gravity, index);
                 writtenString += Long.toString(timestamp);
                 writtenString += dataDelimiter;
             }
