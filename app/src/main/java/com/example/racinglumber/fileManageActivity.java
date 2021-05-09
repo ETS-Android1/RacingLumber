@@ -88,8 +88,11 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             switch (requestCode)
             {
                 case fileLoadRequestCode:
-                    //todo take string and decode it into data
                     loadSaveToDataStorage(resultData.getData());
+                    //////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                    //////TODO ADD TWO BUTTONS: ONE FOR LOG ONE, THE OTHER TO LOAD TO LOG TWO
+                    dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
+                    ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     break;
 
                 case fileSaveRequestCode:
