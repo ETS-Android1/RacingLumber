@@ -108,11 +108,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         }
     }
 
-    /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ///////////TODO TODO TODO return string is android.something, so it's not the actual return string yet
-
     private void loadSaveToDataStorage(@NonNull Uri uri)
     {
         InputStream inStream;
@@ -235,6 +230,11 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 valString = "";
             }
 
+            //Find delimiter.  After this is rotation vector x
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
             //Loop through x rotation array
             for (int i = 0; i < dataArrLenCalc; i++)
             {
@@ -309,6 +309,11 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 dataStorage.rotationEventTime[i] = valInt;
                 valString = "";
             }
+
+            //Find delimiter.  After this is Gravity vector x
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
             //Loop through x gravity array
             for (int i = 0; i < dataArrLenCalc; i++)
