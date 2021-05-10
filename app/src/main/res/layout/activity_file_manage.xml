@@ -19,10 +19,16 @@
             android:text="Save to External" />
 
         <Button
-            android:id="@+id/loadButton"
+            android:id="@+id/loadButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Load from External" />
+            android:text="Load to dataset 1" />
+
+        <Button
+            android:id="@+id/loadButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Load to dataset 2" />
 
         <Button
             android:id="@+id/deleteButton"

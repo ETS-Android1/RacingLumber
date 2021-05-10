@@ -36,8 +36,11 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
 
-        Button loadButton = (Button) findViewById(R.id.loadButton);
-        loadButton.setOnClickListener(this);
+        Button loadButton1 = (Button) findViewById(R.id.loadButton1);
+        loadButton1.setOnClickListener(this);
+
+        Button loadButton2 = (Button) findViewById(R.id.loadButton2);
+        loadButton2.setOnClickListener(this);
 
         Button deleteButton = (Button) findViewById(R.id.deleteButton);
         deleteButton.setOnClickListener(this);
@@ -50,8 +53,9 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     //////////////////////////File Access Functions//////////////////////////
 
     private static final int fileSaveRequestCode = 1;
-    private static final int fileLoadRequestCode = 2;
-    private static final int fileDeleteRequestCode = 3;
+    private static final int fileLoadRequestCode1 = 2;
+    private static final int fileLoadRequestCode2 = 3;
+    private static final int fileDeleteRequestCode = 4;
 
     private void createFile() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -62,12 +66,19 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         startActivityForResult(intent, fileSaveRequestCode);
     }
 
-    private void openFile() {
+    private void openFile(int dataset) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
 
-        startActivityForResult(intent, fileLoadRequestCode);
+        if (dataset == 1)
+        {
+            startActivityForResult(intent, fileLoadRequestCode1);
+        }
+        else
+        {
+            startActivityForResult(intent, fileLoadRequestCode2);
+        }
     }
 
     private void deleteFile() {
@@ -87,12 +98,18 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         {
             switch (requestCode)
             {
-                case fileLoadRequestCode:
+                case fileLoadRequestCode1:
+                case fileLoadRequestCode2:
                     loadSaveToDataStorage(resultData.getData());
-                    //////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                    //////TODO ADD TWO BUTTONS: ONE FOR LOG ONE, THE OTHER TO LOAD TO LOG TWO
-                    dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
-                    ///////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+                    if (requestCode == fileLoadRequestCode1)
+                    {
+                        dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
+                    }
+                    else
+                    {
+                        dataStorage.synthDataArray[1].generateSynthDataFromDataStorage();
+                    }
                     break;
 
                 case fileSaveRequestCode:
@@ -703,8 +720,12 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 this.createFile(); //Save button clicked
                 break;
 
-            case R.id.loadButton:
-                this.openFile(); //Load button clicked
+            case R.id.loadButton1:
+                this.openFile(1); //Load button clicked
+                break;
+
+            case R.id.loadButton2:
+                this.openFile(2); //Load button clicked
                 break;
 
             case R.id.deleteButton:
