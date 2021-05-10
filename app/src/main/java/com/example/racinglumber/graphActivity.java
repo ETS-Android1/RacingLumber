@@ -34,10 +34,10 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     /*Spinner menu items*/
     private final int noSelection = 0;
-    private final int setOnelatAccel = 1;
-    private final int setOnelongAccel = 2;
-    private final int zAcceleration = 3;
-    private final int magAcceleration = 4;
+    private final int setOneLatAccel = 1;
+    private final int setOneLongAccel = 2;
+    private final int setTwoLatAccel = 3;
+    private final int setTwoLongAccel = 4;
     private final int xRotation = 5;
     private final int yRotation = 6;
     private final int zRotation = 7;
@@ -112,7 +112,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         if (v.getId() == R.id.addMarkerButton)
         {
-            /*TODO Add a marker to the graph*/
+            /*TODO Add a marker to the graph TODO no longer supported, remove this and below*/
 
         }
         else
@@ -176,30 +176,30 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         {
             case noSelection:
                 break; //do nothing
-            case setOnelatAccel:
-                addGraphSeries(dataStorage.Axis.Latitude, dataStorage.RecordType.acceleration);
+            case setOneLatAccel:
+                addGraphSeries(dataStorage.Axis.LatSetOne, dataStorage.RecordType.acceleration);
                 break;
-            case setOnelongAccel:
-                addGraphSeries(dataStorage.Axis.Longitude, dataStorage.RecordType.acceleration);
+            case setOneLongAccel:
+                addGraphSeries(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration);
                 break;
-            case zAcceleration:
-                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.acceleration);
+            case setTwoLatAccel:
+                addGraphSeries(dataStorage.Axis.LatSetTwo, dataStorage.RecordType.acceleration);
                 break;
-            case magAcceleration:
-                addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.acceleration);
+            case setTwoLongAccel:
+                addGraphSeries(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration);
                 break;
-            case xRotation:
-                addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.rotation);
-                break;
-            case yRotation:
-                addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.rotation);
-                break;
-            case zRotation:
-                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
-                break;
-            case magRotation:
-                addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.rotation);
-                break;
+//            case xRotation:
+//                addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.rotation);
+//                break;
+//            case yRotation:
+//                addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.rotation);
+//                break;
+//            case zRotation:
+//                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
+//                break;
+//            case magRotation:
+//                addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.rotation);
+//                break;
 
             default:
                 break; //do nothing
@@ -254,10 +254,10 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             case X:
                 switch (recordType)
                 {
-//                    case acceleration:
-//                        newSeries.setTitle("X Acceleration");
-//                        newSeries.setColor(0xFFFFFF00); //yellow
-//                        break;
+                    case acceleration:
+                        newSeries.setTitle("X Acceleration");
+                        newSeries.setColor(0xFFFFFF00); //yellow
+                        break;
                     case rotation:
                         newSeries.setTitle("X Rotation");
                         newSeries.setColor(0xFF4169E1); //royalblue
@@ -330,16 +330,25 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                         break;
                 }
                 break;
-            case Latitude:
-                //todo set one and set two titles
-                newSeries.setTitle("Lateral Acceleration");
-                newSeries.setColor(0xFFFFFF00); //yellow
+
+            case LatSetOne:
+                newSeries.setTitle("Lateral Acceleration Set 1");
+                newSeries.setColor(0xFFFF0000); //red
                 break;
 
-            case Longitude:
-                //todo set one and set two titles
-                newSeries.setTitle("Longitudal Acceleration");
+            case LongSetOne:
+                newSeries.setTitle("Longitudal Acceleration Set 1");
                 newSeries.setColor(0xFFFF6347); //tomato
+                break;
+
+            case LatSetTwo:
+                newSeries.setTitle("Lateral Acceleration Set 2");
+                newSeries.setColor(0xFF4169E1); //royalblue
+                break;
+
+            case LongSetTwo:
+                newSeries.setTitle("Longitudal Acceleration Set 2");
+                newSeries.setColor(0xFF6495ED); //cornflowerblue
                 break;
 
             default:

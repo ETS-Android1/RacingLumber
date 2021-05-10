@@ -16,7 +16,11 @@ public class dataStorage {
         Z,
         Magnitude,
         Latitude,
-        Longitude
+        Longitude,
+        LatSetOne,
+        LatSetTwo,
+        LongSetOne,
+        LongSetTwo
     }
 
     enum RecordType
@@ -493,13 +497,20 @@ public class dataStorage {
                     }
                     break;
 
-                case Latitude:
-                    //todo look for set one and two
+                case LatSetOne:
                     returnVal = synthDataArray[0].lateralDataArray[index];
                     break;
-                case Longitude:
-                    //todo look for set one and two
+
+                case LongSetOne:
                     returnVal = synthDataArray[0].longitudalDataArray[index];
+                    break;
+
+                case LatSetTwo:
+                    returnVal = synthDataArray[1].lateralDataArray[index];
+                    break;
+
+                case LongSetTwo:
+                    returnVal = synthDataArray[1].longitudalDataArray[index];
                     break;
 
                 default:

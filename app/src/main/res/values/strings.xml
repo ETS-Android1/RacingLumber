@@ -15,8 +15,8 @@
         <item>Choose dataset to display</item>
         <item>Set 1: Lateral Accel</item>
         <item>Set 1: Longitudal Accel</item>
-        <item>Z Acceleration</item>
-        <item>Acceleration Magnitude</item>
+        <item>Set 2: Lateral Accel</item>
+        <item>Set 2: Longitudal Accel</item>
         <item>X Rotation</item>
         <item>Y Rotation</item>
         <item>Z Rotation</item>
