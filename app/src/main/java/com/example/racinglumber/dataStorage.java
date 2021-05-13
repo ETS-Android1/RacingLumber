@@ -4,8 +4,6 @@ import android.hardware.Sensor;
 import android.location.Location;
 import android.os.SystemClock;
 
-import static com.example.racinglumber.synthesizedData.lateralDataArray;
-
 //essentially a static class
 public class dataStorage {
 

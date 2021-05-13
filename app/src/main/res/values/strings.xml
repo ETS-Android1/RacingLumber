@@ -17,10 +17,6 @@
         <item>Set 1: Longitudal Accel</item>
         <item>Set 2: Lateral Accel</item>
         <item>Set 2: Longitudal Accel</item>
-        <item>X Rotation</item>
-        <item>Y Rotation</item>
-        <item>Z Rotation</item>
-        <item>Rotation Magnitude</item>
     </string-array>
 
 </resources>

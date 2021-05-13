@@ -5,8 +5,9 @@ import static com.example.racinglumber.dataStorage.dataArrayLen;
 //This class contains a set of synthesized latitudal, longitudal, etc. data using sensor fusion
 //builds based on current data in dataStorage
 public class synthesizedData {
-    public static float[] lateralDataArray; //left (negative) right (positive) acceleration
-    public static float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
+
+    public float[] lateralDataArray; //left (negative) right (positive) acceleration
+    public float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
     public float forwardVectorX;
     public float forwardVectorY;
 

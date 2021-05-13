@@ -38,10 +38,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
     private final int setOneLongAccel = 2;
     private final int setTwoLatAccel = 3;
     private final int setTwoLongAccel = 4;
-    private final int xRotation = 5;
-    private final int yRotation = 6;
-    private final int zRotation = 7;
-    private final int magRotation = 8;
 
     /*Google map vars*/
     private float gpsDefaultZoom = 20.0F;
@@ -188,18 +184,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             case setTwoLongAccel:
                 addGraphSeries(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration);
                 break;
-//            case xRotation:
-//                addGraphSeries(dataStorage.Axis.X, dataStorage.RecordType.rotation);
-//                break;
-//            case yRotation:
-//                addGraphSeries(dataStorage.Axis.Y, dataStorage.RecordType.rotation);
-//                break;
-//            case zRotation:
-//                addGraphSeries(dataStorage.Axis.Z, dataStorage.RecordType.rotation);
-//                break;
-//            case magRotation:
-//                addGraphSeries(dataStorage.Axis.Magnitude, dataStorage.RecordType.rotation);
-//                break;
 
             default:
                 break; //do nothing
