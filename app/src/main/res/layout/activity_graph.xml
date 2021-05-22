@@ -29,20 +29,28 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/addMarkerButton"
+                android:id="@+id/setOneButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-                android:text="ADD MARKER" />
+                android:text="Set One" />
 
             <Button
-                android:id="@+id/removeMarkerButton"
+                android:id="@+id/setTwoButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-                android:text="REMOVE MARKER" />
+                android:text="Set Two" />
+
+            <Button
+                android:id="@+id/bothSetsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="Both Sets" />
 
         </LinearLayout>
 

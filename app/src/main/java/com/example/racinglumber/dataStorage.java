@@ -48,8 +48,8 @@ public class dataStorage {
     public static int gravityIndex = 0; //index of x/y/zGravityArray
     public static long[] gravityEventTime;
 
-    public static double[] latitudeArray;
-    public static double[] longitudeArray;
+    public static double[] latitudeArray;/////////////////////////TODO remove this unused array and references
+    public static double[] longitudeArray;/////////////////////////TODO remove this unused array and references
     public static int GPSIndex = 0; //index of GPS data
     public static long[] GPSEventTime;
 
