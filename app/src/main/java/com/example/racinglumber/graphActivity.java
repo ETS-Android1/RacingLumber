@@ -52,6 +52,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_graph_button);
 
+        /*Set up selected set buttons and selected set*/
         Button setOneButton = (Button) findViewById(R.id.setOneButton);
         setOneButton.setOnClickListener(this);
 
@@ -60,6 +61,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         Button bothSetsButton = (Button) findViewById(R.id.bothSetsButton);
         bothSetsButton.setOnClickListener(this);
+
+        dataStorage.selectedSet = dataStorage.SelectedSet.setOne;
 
         /*Array adapter and onclick listener for graph datatype selection spinner*/
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -110,20 +113,17 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
-
         if (v.getId() == R.id.setOneButton)
         {
-            /*TODO scroll set one, change gps display, set var*/
+            dataStorage.selectedSet = dataStorage.SelectedSet.setOne;
         }
         else if (v.getId() == R.id.setTwoButton)
         {
-            /*TODO Remove a marker to the graph*/
-
+            dataStorage.selectedSet = dataStorage.SelectedSet.setTwo;
         }
         else //R.id.bothSetsButton
         {
-
+            dataStorage.selectedSet = dataStorage.SelectedSet.setOneTwo;
         }
     }
 

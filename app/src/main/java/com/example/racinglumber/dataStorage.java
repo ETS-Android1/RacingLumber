@@ -28,6 +28,13 @@ public class dataStorage {
         gravity
     }
 
+    enum SelectedSet
+    {
+        setOne,
+        setTwo,
+        setOneTwo
+    }
+
     public static int dataArrayLen = 0; //default to 0, since no data is recorded
 
     public static float[] xDataArray;
@@ -48,8 +55,9 @@ public class dataStorage {
     public static int gravityIndex = 0; //index of x/y/zGravityArray
     public static long[] gravityEventTime;
 
-    public static double[] latitudeArray;/////////////////////////TODO remove this unused array and references
-    public static double[] longitudeArray;/////////////////////////TODO remove this unused array and references
+    public static SelectedSet selectedSet;
+    public static double[] latitudeArray;
+    public static double[] longitudeArray;
     public static int GPSIndex = 0; //index of GPS data
     public static long[] GPSEventTime;
 
@@ -124,8 +132,8 @@ public class dataStorage {
         boolean bufferFull = false;
 
         if ((GPSIndex >= dataArrayLen)
-                || (latitudeArray == null)
-                || (longitudeArray == null)
+                || (synthDataArray == null)
+                || (synthDataArray[0] == null)
                 || (GPSEventTime == null))
         {
             /*Out of range or buffer is full*/
@@ -135,6 +143,7 @@ public class dataStorage {
         {
             latitudeArray[GPSIndex] = location.getLatitude();
             longitudeArray[GPSIndex] = location.getLongitude();
+
             GPSEventTime[GPSIndex] = SystemClock.elapsedRealtime();
             GPSIndex = GPSIndex + 1;
         }
@@ -149,6 +158,20 @@ public class dataStorage {
         long accelEventTimestamp;
         int i;
 
+        ////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        ////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        ////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        if ((selectedSet == SelectedSet.setOne) || (selectedSet == SelectedSet.setOneTwo))
+        {
+            //synthDataArray[0].latitudeArray;////////////////////////////////////////longitudeArray
+        }
+        else
+        {
+
+        }
+        /////////////////================================================================
+        /////////////////================================================================
+        /////////////////================================================================
         /*Check for null arrays or out of bounds*/
         if ((accelIndex >= dataArrayLen)
                 || (accelEventTime == null)

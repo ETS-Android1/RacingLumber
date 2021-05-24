@@ -8,6 +8,9 @@ public class synthesizedData {
 
     public float[] lateralDataArray; //left (negative) right (positive) acceleration
     public float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
+    public double[] latitudeArray;
+    public double[] longitudeArray;
+    public long[] GPSEventTime;
     public float forwardVectorX;
     public float forwardVectorY;
 
@@ -24,6 +27,14 @@ public class synthesizedData {
             lateralDataArray = new float[dataArrayLen];
             computeForwardVector();
             computeLateralLongitudalArrays();
+
+            /*Copy latitude and longitude array*/
+            for (int index = 0; index < dataStorage.getDataArrayLen(); index++)
+            {
+                latitudeArray[index] = dataStorage.latitudeArray[index];
+                longitudeArray[index] = dataStorage.longitudeArray[index];
+                GPSEventTime[index] = dataStorage.GPSEventTime[index];
+            }
         }
     }
 
