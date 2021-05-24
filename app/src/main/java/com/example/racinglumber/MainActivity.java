@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor senGravity;
     private FusedLocationProviderClient fusedLocationClient;
 
-    private final int defaultRecordingLength = 10;
+    private final int defaultRecordingLength = 6;
     private final int gpsPollingInterval = 1000;
     private final int locationPermissionsRequestCode = 121;
     boolean dataIsRecording = false;

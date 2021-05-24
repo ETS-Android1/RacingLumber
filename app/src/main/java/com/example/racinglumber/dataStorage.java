@@ -164,61 +164,158 @@ public class dataStorage {
         if ((selectedSet == SelectedSet.setOne) || (selectedSet == SelectedSet.setOneTwo))
         {
             //synthDataArray[0].latitudeArray;////////////////////////////////////////longitudeArray
-        }
-        else
-        {
-
-        }
-        /////////////////================================================================
-        /////////////////================================================================
-        /////////////////================================================================
-        /*Check for null arrays or out of bounds*/
-        if ((accelIndex >= dataArrayLen)
-                || (accelEventTime == null)
-                || (GPSEventTime == null)
-                || (latitudeArray == null)
-                || (longitudeArray == null))
-        {
-            returnVal = 0.0;
-        }
-        else
-        {
-            accelEventTimestamp = accelEventTime[accelIndex];
-
-            /*Check if the timestamp searched for is before the first gps timeStamp*/
-            if ((accelEventTimestamp < GPSEventTime[0]) || (accelIndex == 0))
+            /*Check for null arrays or out of bounds*/
+            if ((accelIndex >= dataArrayLen)
+                    || (accelEventTime == null)
+                    || (synthDataArray[0].GPSEventTime == null)
+                    || (synthDataArray[0].latitudeArray == null)
+                    || (synthDataArray[0].longitudeArray == null))
             {
-                i = 0;
+                returnVal = 0.0;
             }
             else
             {
-                for (i = 0; i < (dataArrayLen-1); i++)
+                accelEventTimestamp = accelEventTime[accelIndex];//todo use this value?
+
+                /*Check if the timestamp searched for is before the first gps timeStamp*/
+                if ((accelEventTimestamp < synthDataArray[0].GPSEventTime[0]) || (accelIndex == 0))
                 {
-                    if ((i >= GPSIndex) && (i > 0))
+                    i = 0;
+                }
+                else
+                {
+                    for (i = 0; i < (dataArrayLen-1); i++)//todo dataArrayLen should be specific to synth data array
                     {
-                        /*Check if we are at the end of the GPS data array*/
-                        i = GPSIndex - 1;
-                        break;
-                    }
-                    else
-                    {
-                        if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
+                        if ((i >= synthDataArray[0].GPSIndex) && (i > 0))
                         {
-                            break; //matching timestamp found
+                            /*Check if we are at the end of the GPS data array*/
+                            i = synthDataArray[0].GPSIndex - 1;
+                            break;
+                        }
+                        else
+                        {
+                            if ((synthDataArray[0].GPSEventTime[i] < accelEventTimestamp) && (synthDataArray[0].GPSEventTime[i+1] >= accelEventTimestamp))
+                            {
+                                break; //matching timestamp found
+                            }
                         }
                     }
                 }
-            }
 
-            if (latOrLong)
+                if (latOrLong)
+                {
+                    returnVal = synthDataArray[0].latitudeArray[i];
+                }
+                else
+                {
+                    returnVal = synthDataArray[0].longitudeArray[i];
+                }
+            }
+        }
+        else
+        {
+        //todo set two case
+            ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>88888888888888888888888888888888888888888888888
+            //synthDataArray[0].latitudeArray;////////////////////////////////////////longitudeArray
+            /*Check for null arrays or out of bounds*/
+            if ((accelIndex >= dataArrayLen)
+                    || (accelEventTime == null)
+                    || (synthDataArray[1].GPSEventTime == null)
+                    || (synthDataArray[1].latitudeArray == null)
+                    || (synthDataArray[1].longitudeArray == null))
             {
-                returnVal = latitudeArray[i];
+                returnVal = 0.0;
             }
             else
             {
-                returnVal = longitudeArray[i];
+                accelEventTimestamp = accelEventTime[accelIndex];//todo use this value?
+
+                /*Check if the timestamp searched for is before the first gps timeStamp*/
+                if ((accelEventTimestamp < synthDataArray[1].GPSEventTime[0]) || (accelIndex == 0))
+                {
+                    i = 0;
+                }
+                else
+                {
+                    for (i = 0; i < (dataArrayLen-1); i++)//todo dataArrayLen should be specific to synth data array
+                    {
+                        if ((i >= synthDataArray[1].GPSIndex) && (i > 0))
+                        {
+                            /*Check if we are at the end of the GPS data array*/
+                            i = synthDataArray[1].GPSIndex - 1;
+                            break;
+                        }
+                        else
+                        {
+                            if ((synthDataArray[1].GPSEventTime[i] < accelEventTimestamp) && (synthDataArray[1].GPSEventTime[i+1] >= accelEventTimestamp))
+                            {
+                                break; //matching timestamp found
+                            }
+                        }
+                    }
+                }
+
+                if (latOrLong)
+                {
+                    returnVal = synthDataArray[1].latitudeArray[i];
+                }
+                else
+                {
+                    returnVal = synthDataArray[1].longitudeArray[i];
+                }
             }
+            /////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<8888888888888888888888888888888888888888888888
         }
+        /////////////////================================================================
+        /////////////////================================================================
+        /////////////////================================================================
+//        /*Check for null arrays or out of bounds*/
+//        if ((accelIndex >= dataArrayLen)
+//                || (accelEventTime == null)
+//                || (GPSEventTime == null)
+//                || (latitudeArray == null)
+//                || (longitudeArray == null))
+//        {
+//            returnVal = 0.0;
+//        }
+//        else
+//        {
+//            accelEventTimestamp = accelEventTime[accelIndex];
+//
+//            /*Check if the timestamp searched for is before the first gps timeStamp*/
+//            if ((accelEventTimestamp < GPSEventTime[0]) || (accelIndex == 0))
+//            {
+//                i = 0;
+//            }
+//            else
+//            {
+//                for (i = 0; i < (dataArrayLen-1); i++)
+//                {
+//                    if ((i >= GPSIndex) && (i > 0))
+//                    {
+//                        /*Check if we are at the end of the GPS data array*/
+//                        i = GPSIndex - 1;
+//                        break;
+//                    }
+//                    else
+//                    {
+//                        if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
+//                        {
+//                            break; //matching timestamp found
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if (latOrLong)
+//            {
+//                returnVal = latitudeArray[i];
+//            }
+//            else
+//            {
+//                returnVal = longitudeArray[i];
+//            }
+//        }
 
         return returnVal;
     }

@@ -11,6 +11,8 @@ public class synthesizedData {
     public double[] latitudeArray;
     public double[] longitudeArray;
     public long[] GPSEventTime;
+    public static int GPSIndex; //index of GPS data
+
     public float forwardVectorX;
     public float forwardVectorY;
 
@@ -28,12 +30,18 @@ public class synthesizedData {
             computeForwardVector();
             computeLateralLongitudalArrays();
 
+            /*Instantiate gps arrays*/
+            latitudeArray = new double[dataStorage.getDataArrayLen()];
+            longitudeArray = new double[dataStorage.getDataArrayLen()];
+            GPSEventTime = new long[dataArrayLen];
+
             /*Copy latitude and longitude array*/
             for (int index = 0; index < dataStorage.getDataArrayLen(); index++)
             {
                 latitudeArray[index] = dataStorage.latitudeArray[index];
                 longitudeArray[index] = dataStorage.longitudeArray[index];
                 GPSEventTime[index] = dataStorage.GPSEventTime[index];
+                GPSIndex = dataStorage.GPSIndex;
             }
         }
     }
