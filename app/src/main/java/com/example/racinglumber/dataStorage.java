@@ -178,7 +178,7 @@ public class dataStorage {
                 accelEventTimestamp = accelEventTime[accelIndex];//todo use this value?
 
                 /*Check if the timestamp searched for is before the first gps timeStamp*/
-                if ((accelEventTimestamp < synthDataArray[0].GPSEventTime[0]) || (accelIndex == 0))
+                if ((accelEventTimestamp < synthDataArray[0].GPSEventTime[0]) || (accelIndex == 0) || (synthDataArray[0].GPSIndex == 0))
                 {
                     i = 0;
                 }

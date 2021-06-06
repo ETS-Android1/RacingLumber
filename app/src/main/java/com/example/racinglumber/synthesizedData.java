@@ -56,7 +56,7 @@ public class synthesizedData {
         float magnitude;
 
         //todo could make delay configurable
-        for (int index = 300; index < 600; index++)//start at 300 to make it start at 3 seconds, 3* 100Hz
+        for (int index = 150; index < 300; index++)//start at 300 to make it start at 3 seconds, 3* 50Hz
         {
             if (index < dataStorage.getDataArrayLen())
             {
@@ -66,8 +66,9 @@ public class synthesizedData {
         }
 
         //todo could use moving average algorithm to be more accurate
-        xAvg = xArray/300.0f;
-        yAvg = yArray/300.0f;
+        //todo don't need average, since magnitude is cancelled out later anyways
+        xAvg = xArray/150.0f;
+        yAvg = yArray/150.0f;
         magnitude = (float) Math.sqrt((xAvg*xAvg)+(yAvg*yAvg));
 
         //normalize vector
