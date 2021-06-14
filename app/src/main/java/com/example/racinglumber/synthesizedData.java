@@ -6,6 +6,7 @@ import static com.example.racinglumber.dataStorage.dataArrayLen;
 //builds based on current data in dataStorage
 public class synthesizedData {
 
+    public int dataLen = 0;
     public float[] lateralDataArray; //left (negative) right (positive) acceleration
     public float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
     public double[] latitudeArray;
@@ -31,6 +32,7 @@ public class synthesizedData {
             computeLateralLongitudalArrays();
 
             /*Instantiate gps arrays*/
+            dataLen = dataStorage.getDataArrayLen();
             latitudeArray = new double[dataStorage.getDataArrayLen()];
             longitudeArray = new double[dataStorage.getDataArrayLen()];
             GPSEventTime = new long[dataArrayLen];

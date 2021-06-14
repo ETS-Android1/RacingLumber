@@ -157,165 +157,64 @@ public class dataStorage {
         double returnVal;
         long accelEventTimestamp;
         int i;
+        int synthIndex;
 
-        ////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         if ((selectedSet == SelectedSet.setOne) || (selectedSet == SelectedSet.setOneTwo))
         {
-            //synthDataArray[0].latitudeArray;////////////////////////////////////////longitudeArray
-            /*Check for null arrays or out of bounds*/
-            if ((accelIndex >= dataArrayLen)
-                    || (accelEventTime == null)
-                    || (synthDataArray[0].GPSEventTime == null)
-                    || (synthDataArray[0].latitudeArray == null)
-                    || (synthDataArray[0].longitudeArray == null))
-            {
-                returnVal = 0.0;
-            }
-            else
-            {
-                accelEventTimestamp = accelEventTime[accelIndex];//todo use this value?
-
-                /*Check if the timestamp searched for is before the first gps timeStamp*/
-                if ((accelEventTimestamp < synthDataArray[0].GPSEventTime[0]) || (accelIndex == 0) || (synthDataArray[0].GPSIndex == 0))
-                {
-                    i = 0;
-                }
-                else
-                {
-                    for (i = 0; i < (dataArrayLen-1); i++)//todo dataArrayLen should be specific to synth data array
-                    {
-                        if ((i >= synthDataArray[0].GPSIndex) && (i > 0))
-                        {
-                            /*Check if we are at the end of the GPS data array*/
-                            i = synthDataArray[0].GPSIndex - 1;
-                            break;
-                        }
-                        else
-                        {
-                            if ((synthDataArray[0].GPSEventTime[i] < accelEventTimestamp) && (synthDataArray[0].GPSEventTime[i+1] >= accelEventTimestamp))
-                            {
-                                break; //matching timestamp found
-                            }
-                        }
-                    }
-                }
-
-                if (latOrLong)
-                {
-                    returnVal = synthDataArray[0].latitudeArray[i];
-                }
-                else
-                {
-                    returnVal = synthDataArray[0].longitudeArray[i];
-                }
-            }
+            synthIndex = 0;
         }
         else
         {
-        //todo set two case
-            ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>88888888888888888888888888888888888888888888888
-            //synthDataArray[0].latitudeArray;////////////////////////////////////////longitudeArray
-            /*Check for null arrays or out of bounds*/
-            if ((accelIndex >= dataArrayLen)
-                    || (accelEventTime == null)
-                    || (synthDataArray[1].GPSEventTime == null)
-                    || (synthDataArray[1].latitudeArray == null)
-                    || (synthDataArray[1].longitudeArray == null))
+            synthIndex = 1;
+        }
+
+        /*Check for null arrays or out of bounds*/
+        if ((accelIndex >= dataArrayLen)
+                || (accelEventTime == null)
+                || (synthDataArray[synthIndex].GPSEventTime == null)
+                || (synthDataArray[synthIndex].latitudeArray == null)
+                || (synthDataArray[synthIndex].longitudeArray == null))
+        {
+            returnVal = 0.0;
+        }
+        else
+        {
+            accelEventTimestamp = accelEventTime[accelIndex];//todo use this value?
+
+            /*Check if the timestamp searched for is before the first gps timeStamp*/
+            if ((accelEventTimestamp < synthDataArray[synthIndex].GPSEventTime[0]) || (accelIndex == 0) || (synthDataArray[synthIndex].GPSIndex == 0))
             {
-                returnVal = 0.0;
+                i = 0;
             }
             else
             {
-                accelEventTimestamp = accelEventTime[accelIndex];//todo use this value?
-
-                /*Check if the timestamp searched for is before the first gps timeStamp*/
-                if ((accelEventTimestamp < synthDataArray[1].GPSEventTime[0]) || (accelIndex == 0))
+                for (i = 0; i < (synthDataArray[synthIndex].dataLen-1); i++)
                 {
-                    i = 0;
-                }
-                else
-                {
-                    for (i = 0; i < (dataArrayLen-1); i++)//todo dataArrayLen should be specific to synth data array
+                    if ((i >= synthDataArray[synthIndex].GPSIndex) && (i > 0))
                     {
-                        if ((i >= synthDataArray[1].GPSIndex) && (i > 0))
+                        /*Check if we are at the end of the GPS data array*/
+                        i = synthDataArray[synthIndex].GPSIndex - 1;
+                        break;
+                    }
+                    else
+                    {
+                        if ((synthDataArray[synthIndex].GPSEventTime[i] < accelEventTimestamp) && (synthDataArray[synthIndex].GPSEventTime[i+1] >= accelEventTimestamp))
                         {
-                            /*Check if we are at the end of the GPS data array*/
-                            i = synthDataArray[1].GPSIndex - 1;
-                            break;
-                        }
-                        else
-                        {
-                            if ((synthDataArray[1].GPSEventTime[i] < accelEventTimestamp) && (synthDataArray[1].GPSEventTime[i+1] >= accelEventTimestamp))
-                            {
-                                break; //matching timestamp found
-                            }
+                            break; //matching timestamp found
                         }
                     }
                 }
-
-                if (latOrLong)
-                {
-                    returnVal = synthDataArray[1].latitudeArray[i];
-                }
-                else
-                {
-                    returnVal = synthDataArray[1].longitudeArray[i];
-                }
             }
-            /////////////////////////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<8888888888888888888888888888888888888888888888
+
+            if (latOrLong)
+            {
+                returnVal = synthDataArray[synthIndex].latitudeArray[i];
+            }
+            else
+            {
+                returnVal = synthDataArray[synthIndex].longitudeArray[i];
+            }
         }
-        /////////////////================================================================
-        /////////////////================================================================
-        /////////////////================================================================
-//        /*Check for null arrays or out of bounds*/
-//        if ((accelIndex >= dataArrayLen)
-//                || (accelEventTime == null)
-//                || (GPSEventTime == null)
-//                || (latitudeArray == null)
-//                || (longitudeArray == null))
-//        {
-//            returnVal = 0.0;
-//        }
-//        else
-//        {
-//            accelEventTimestamp = accelEventTime[accelIndex];
-//
-//            /*Check if the timestamp searched for is before the first gps timeStamp*/
-//            if ((accelEventTimestamp < GPSEventTime[0]) || (accelIndex == 0))
-//            {
-//                i = 0;
-//            }
-//            else
-//            {
-//                for (i = 0; i < (dataArrayLen-1); i++)
-//                {
-//                    if ((i >= GPSIndex) && (i > 0))
-//                    {
-//                        /*Check if we are at the end of the GPS data array*/
-//                        i = GPSIndex - 1;
-//                        break;
-//                    }
-//                    else
-//                    {
-//                        if ((GPSEventTime[i] < accelEventTimestamp) && (GPSEventTime[i+1] >= accelEventTimestamp))
-//                        {
-//                            break; //matching timestamp found
-//                        }
-//                    }
-//                }
-//            }
-//
-//            if (latOrLong)
-//            {
-//                returnVal = latitudeArray[i];
-//            }
-//            else
-//            {
-//                returnVal = longitudeArray[i];
-//            }
-//        }
 
         return returnVal;
     }
@@ -459,6 +358,8 @@ public class dataStorage {
         double dPrimeYcompX; double dPrimeYcompY; double dPrimeYcompZ;
         double dPrimeZcompX; double dPrimeZcompY; double dPrimeZcompZ;
 
+        //https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
+
         for (int index = 0; index < xInputArray.length; index++)
         {
             inputX = xInputArray[index];
@@ -506,7 +407,7 @@ public class dataStorage {
             /*Parameters for quaternion rotation are now calculated, use on inputX, inputY, and inputZ*/
 
             //x component of x output value of rotation
-            dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);//todo remove https://www.weizmann.ac.il/sci-tea/benari/sites/sci-tea.benari/files/uploads/softwareAndLearningMaterials/quaternion-tutorial-2-0-1.pdf
+            dPrimeXcompX = Math.pow(q0,2) + Math.pow(q1, 2) - Math.pow(q2, 2);
             dPrimeXcompX *= inputX;
             //y component of x output value of rotation
             dPrimeXcompY = (q1*q2);
