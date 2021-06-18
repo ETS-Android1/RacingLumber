@@ -140,6 +140,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         String valString = "";
         float valFlt;
         int valInt;
+        long valLong;
 
         try
         {
@@ -245,8 +246,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     tempChar = (char)inStream.read();
                 } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-                valInt = Integer.parseInt(valString);
-                dataStorage.accelEventTime[i] = valInt;
+                valLong = Long.parseLong(valString);
+                dataStorage.accelEventTime[i] = valLong;
                 valString = "";
             }
 
@@ -325,8 +326,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     tempChar = (char)inStream.read();
                 } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-                valInt = Integer.parseInt(valString);
-                dataStorage.rotationEventTime[i] = valInt;
+                valLong = Long.parseLong(valString);
+                dataStorage.rotationEventTime[i] = valLong;
                 valString = "";
             }
 
@@ -405,8 +406,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     tempChar = (char)inStream.read();
                 } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-                valInt = Integer.parseInt(valString);
-                dataStorage.gravityEventTime[i] = valInt;
+                valLong = Long.parseLong(valString);
+                dataStorage.gravityEventTime[i] = valLong;
                 valString = "";
             }
 
@@ -465,8 +466,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                     tempChar = (char)inStream.read();
                 } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
 
-                valInt = Integer.parseInt(valString);
-                dataStorage.GPSEventTime[i] = valInt;
+                valLong = Long.parseLong(valString);
+                dataStorage.GPSEventTime[i] = valLong;
                 valString = "";
             }
         } catch (IOException e) {
