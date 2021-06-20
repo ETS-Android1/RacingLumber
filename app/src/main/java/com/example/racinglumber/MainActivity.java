@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void endRecording()
     {
         Button backward_img = (Button) findViewById(R.id.recordButton);
-        backward_img.setBackgroundColor(Color.WHITE);
+        backward_img.setBackgroundColor(Color.LTGRAY);
         dataIsRecording = false;
 
         fusedLocationClient.removeLocationUpdates(locationCallback); //this ends gps data polling

@@ -1,6 +1,7 @@
 package com.example.racinglumber;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +65,15 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         dataStorage.selectedSet = dataStorage.SelectedSet.setOne;
 
+        /*Set up data scrolling button listeners*/
+        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         /*Array adapter and onclick listener for graph datatype selection spinner*/
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.graphDatatypesArray, android.R.layout.simple_spinner_item);
@@ -113,17 +123,33 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Button setOne       = (Button) findViewById(R.id.setOneButton);
+        Button setTwo       = (Button) findViewById(R.id.setTwoButton);
+        Button setOneTwo    = (Button) findViewById(R.id.bothSetsButton);
+
         if (v.getId() == R.id.setOneButton)
         {
             dataStorage.selectedSet = dataStorage.SelectedSet.setOne;
+            /*Color selected button and clear other buttons*/
+            setOne.setBackgroundColor(Color.GREEN);
+            setTwo.setBackgroundColor(Color.LTGRAY);
+            setOneTwo.setBackgroundColor(Color.LTGRAY);
         }
         else if (v.getId() == R.id.setTwoButton)
         {
             dataStorage.selectedSet = dataStorage.SelectedSet.setTwo;
+            /*Color selected button and clear other buttons*/
+            setOne.setBackgroundColor(Color.LTGRAY);
+            setTwo.setBackgroundColor(Color.GREEN);
+            setOneTwo.setBackgroundColor(Color.LTGRAY);
         }
         else //R.id.bothSetsButton
         {
             dataStorage.selectedSet = dataStorage.SelectedSet.setOneTwo;
+            /*Color selected button and clear other buttons*/
+            setOne.setBackgroundColor(Color.LTGRAY);
+            setTwo.setBackgroundColor(Color.LTGRAY);
+            setOneTwo.setBackgroundColor(Color.GREEN);
         }
     }
 
