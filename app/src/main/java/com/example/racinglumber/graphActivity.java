@@ -66,13 +66,18 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         dataStorage.selectedSet = dataStorage.SelectedSet.setOne;
 
         /*Set up data scrolling button listeners*/
-        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        Button left3Button = (Button) findViewById(R.id.left3Button);
+        left3Button.setOnClickListener(this);
+        Button left2Button = (Button) findViewById(R.id.left2Button);
+        left2Button.setOnClickListener(this);
+        Button left1Button = (Button) findViewById(R.id.left1Button);
+        left1Button.setOnClickListener(this);
+        Button right1Button = (Button) findViewById(R.id.right1Button);
+        right1Button.setOnClickListener(this);
+        Button right2Button = (Button) findViewById(R.id.right2Button);
+        right2Button.setOnClickListener(this);
+        Button right3Button = (Button) findViewById(R.id.right3Button);
+        right3Button.setOnClickListener(this);
 
         /*Array adapter and onclick listener for graph datatype selection spinner*/
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -127,6 +132,13 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         Button setTwo       = (Button) findViewById(R.id.setTwoButton);
         Button setOneTwo    = (Button) findViewById(R.id.bothSetsButton);
 
+        Button left3 = (Button) findViewById(R.id.left3Button);
+        Button left2 = (Button) findViewById(R.id.left2Button);
+        Button left1 = (Button) findViewById(R.id.left1Button);
+        Button right1 = (Button) findViewById(R.id.right1Button);
+        Button right2 = (Button) findViewById(R.id.right2Button);
+        Button right3 = (Button) findViewById(R.id.right3Button);
+
         if (v.getId() == R.id.setOneButton)
         {
             dataStorage.selectedSet = dataStorage.SelectedSet.setOne;
@@ -143,13 +155,74 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             setTwo.setBackgroundColor(Color.GREEN);
             setOneTwo.setBackgroundColor(Color.LTGRAY);
         }
-        else //R.id.bothSetsButton
+        else if (v.getId() == R.id.bothSetsButton)
         {
             dataStorage.selectedSet = dataStorage.SelectedSet.setOneTwo;
             /*Color selected button and clear other buttons*/
             setOne.setBackgroundColor(Color.LTGRAY);
             setTwo.setBackgroundColor(Color.LTGRAY);
             setOneTwo.setBackgroundColor(Color.GREEN);
+        }
+        /*Below buttons are mutually exclusive from above buttons and have no direct interaction*/
+        else if (v.getId() == R.id.left3Button)
+        {
+            /*Color selected button and clear other buttons*/
+            left3.setBackgroundColor(Color.GREEN);
+            left2.setBackgroundColor(Color.LTGRAY);
+            left1.setBackgroundColor(Color.LTGRAY);
+            right1.setBackgroundColor(Color.LTGRAY);
+            right2.setBackgroundColor(Color.LTGRAY);
+            right3.setBackgroundColor(Color.LTGRAY);
+        }
+        else if (v.getId() == R.id.left2Button)
+        {
+            /*Color selected button and clear other buttons*/
+            left3.setBackgroundColor(Color.LTGRAY);
+            left2.setBackgroundColor(Color.GREEN);
+            left1.setBackgroundColor(Color.LTGRAY);
+            right1.setBackgroundColor(Color.LTGRAY);
+            right2.setBackgroundColor(Color.LTGRAY);
+            right3.setBackgroundColor(Color.LTGRAY);
+        }
+        else if (v.getId() == R.id.left1Button)
+        {
+            /*Color selected button and clear other buttons*/
+            left3.setBackgroundColor(Color.LTGRAY);
+            left2.setBackgroundColor(Color.LTGRAY);
+            left1.setBackgroundColor(Color.GREEN);
+            right1.setBackgroundColor(Color.LTGRAY);
+            right2.setBackgroundColor(Color.LTGRAY);
+            right3.setBackgroundColor(Color.LTGRAY);
+        }
+        else if (v.getId() == R.id.right1Button)
+        {
+            /*Color selected button and clear other buttons*/
+            left3.setBackgroundColor(Color.LTGRAY);
+            left2.setBackgroundColor(Color.LTGRAY);
+            left1.setBackgroundColor(Color.LTGRAY);
+            right1.setBackgroundColor(Color.GREEN);
+            right2.setBackgroundColor(Color.LTGRAY);
+            right3.setBackgroundColor(Color.LTGRAY);
+        }
+        else if (v.getId() ==  R.id.right2Button)
+        {
+            /*Color selected button and clear other buttons*/
+            left3.setBackgroundColor(Color.LTGRAY);
+            left2.setBackgroundColor(Color.LTGRAY);
+            left1.setBackgroundColor(Color.LTGRAY);
+            right1.setBackgroundColor(Color.LTGRAY);
+            right2.setBackgroundColor(Color.GREEN);
+            right3.setBackgroundColor(Color.LTGRAY);
+        }
+        else// v.getId() == R.id.right3Button
+        {
+            /*Color selected button and clear other buttons*/
+            left3.setBackgroundColor(Color.LTGRAY);
+            left2.setBackgroundColor(Color.LTGRAY);
+            left1.setBackgroundColor(Color.LTGRAY);
+            right1.setBackgroundColor(Color.LTGRAY);
+            right2.setBackgroundColor(Color.LTGRAY);
+            right3.setBackgroundColor(Color.GREEN);
         }
     }
 
