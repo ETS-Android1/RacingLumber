@@ -43,6 +43,12 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
     /*Google map vars*/
     private float gpsDefaultZoom = 20.0F;
 
+    /*graph lists*/
+    private LineGraphSeries<DataPoint> latOneSeries = new LineGraphSeries();
+    private LineGraphSeries<DataPoint> longOneSeries = new LineGraphSeries();
+    private LineGraphSeries<DataPoint> latTwoSeries = new LineGraphSeries();
+    private LineGraphSeries<DataPoint> longTwoSeries = new LineGraphSeries();
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -173,6 +179,15 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             right1.setBackgroundColor(Color.LTGRAY);
             right2.setBackgroundColor(Color.LTGRAY);
             right3.setBackgroundColor(Color.LTGRAY);
+            //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+            //graph.computeScroll();
+            //graph.
+            //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         }
         else if (v.getId() == R.id.left2Button)
         {
@@ -314,6 +329,34 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         float currentMaxGraphY;
         float maxAbsValue;
 
+        /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        switch (axis)
+        {
+            case LatSetOne:
+                latOneSeries = new LineGraphSeries();
+                break;
+
+            case LongSetOne:
+                longOneSeries = new LineGraphSeries();
+                break;
+
+            case LatSetTwo:
+                latTwoSeries = new LineGraphSeries();
+                break;
+
+            case LongSetTwo:
+                longTwoSeries = new LineGraphSeries();
+                break;
+
+            default:
+                break;
+        }
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         for (int counter = 0; counter < dataStorage.dataArrayLen; counter++)
         {
             if ((dataStorage.dataArrayLen - 1) < counter)
@@ -322,7 +365,34 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             }
 
             newVal = dataStorage.getSensorValue(axis, recordType, counter);
-            newSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+            /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            switch (axis)
+            {
+                case LatSetOne:
+                    latOneSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    break;
+
+                case LongSetOne:
+                    longOneSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    break;
+
+                case LatSetTwo:
+                    latTwoSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    break;
+
+                case LongSetTwo:
+                    longTwoSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    break;
+
+                default:
+                    break;
+            }
+            ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //newSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
         }
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
@@ -337,117 +407,59 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             graph.getViewport().setMaxY(maxAbsValue);
         }
 
-        graph.addSeries(newSeries);
-
-        /*Set series-specific graph elements, colors from https://www.rapidtables.com/web/color/red-color.html*/
-
         switch (axis)
         {
-            case X:
-                switch (recordType)
-                {
-                    case acceleration:
-                        newSeries.setTitle("X Acceleration");
-                        newSeries.setColor(0xFFFFFF00); //yellow
-                        break;
-                    case rotation:
-                        newSeries.setTitle("X Rotation");
-                        newSeries.setColor(0xFF4169E1); //royalblue
-                        break;
-                    case gravity:
-                        newSeries.setTitle("X Gravity");
-                        newSeries.setColor(0xFF7CFC00); //lawngreen
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            case Y:
-                switch (recordType)
-                {
-                    case acceleration:
-                        newSeries.setTitle("Y Acceleration");
-                        newSeries.setColor(0xFFFF6347); //tomato
-                        break;
-                    case rotation:
-                        newSeries.setTitle("Y Rotation");
-                        newSeries.setColor(0xFF6495ED); //cornflowerblue
-                        break;
-                    case gravity:
-                        newSeries.setTitle("Y Gravity");
-                        newSeries.setColor(0xFF90EE90); //lightgreen
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            case Z:
-                switch (recordType)
-                {
-                    case acceleration:
-                        newSeries.setTitle("Z Acceleration");
-                        newSeries.setColor(0xFFDC143C); //crimson
-                        break;
-                    case rotation:
-                        newSeries.setTitle("Z Rotation");
-                        newSeries.setColor(0xFF00008B); //darkblue
-                        break;
-                    case gravity:
-                        newSeries.setTitle("Z Gravity");
-                        newSeries.setColor(0xFF008000); //green
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            case Magnitude:
-                switch (recordType)
-                {
-                    case acceleration:
-                        newSeries.setTitle("Acceleration Magnitude");
-                        newSeries.setColor(0xFFFF0000); //red
-                        break;
-                    case rotation:
-                        newSeries.setTitle("Rotation Magnitude");
-                        newSeries.setColor(0xFF0000FF); //blue
-                        break;
-                    case gravity:
-                        newSeries.setTitle("Gravity Magnitude");
-                        newSeries.setColor(0xFF00FF00); //lime
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
             case LatSetOne:
-                newSeries.setTitle("Lateral Acceleration Set 1");
-                newSeries.setColor(0xFFFF0000); //red
+                graph.addSeries(latOneSeries);
                 break;
 
             case LongSetOne:
-                newSeries.setTitle("Longitudal Acceleration Set 1");
-                newSeries.setColor(0xFFFF6347); //tomato
+                graph.addSeries(longOneSeries);
                 break;
 
             case LatSetTwo:
-                newSeries.setTitle("Lateral Acceleration Set 2");
-                newSeries.setColor(0xFF4169E1); //royalblue
+                graph.addSeries(latTwoSeries);
                 break;
 
             case LongSetTwo:
-                newSeries.setTitle("Longitudal Acceleration Set 2");
-                newSeries.setColor(0xFF6495ED); //cornflowerblue
+                graph.addSeries(longTwoSeries);
                 break;
 
             default:
                 break;
         }
 
-        newSeries.setThickness(graphLineThickness);
+        /*Set series-specific graph elements, colors from https://www.rapidtables.com/web/color/red-color.html*/
+
+        switch (axis)
+        {
+            case LatSetOne:
+                latOneSeries.setTitle("Lateral Acceleration Set 1");
+                latOneSeries.setColor(0xFFFF0000); //red
+                latOneSeries.setThickness(graphLineThickness);
+                break;
+
+            case LongSetOne:
+                longOneSeries.setTitle("Longitudal Acceleration Set 1");
+                longOneSeries.setColor(0xFFFF6347); //tomato
+                longOneSeries.setThickness(graphLineThickness);
+                break;
+
+            case LatSetTwo:
+                latTwoSeries.setTitle("Lateral Acceleration Set 2");
+                latTwoSeries.setColor(0xFF4169E1); //royalblue
+                latTwoSeries.setThickness(graphLineThickness);
+                break;
+
+            case LongSetTwo:
+                longTwoSeries.setTitle("Longitudal Acceleration Set 2");
+                longTwoSeries.setColor(0xFF6495ED); //cornflowerblue
+                longTwoSeries.setThickness(graphLineThickness);
+                break;
+
+            default:
+                break;
+        }
 
         if (!graph.getLegendRenderer().isVisible())
         {
