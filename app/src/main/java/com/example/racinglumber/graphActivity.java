@@ -175,13 +175,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         /*Below buttons are mutually exclusive from above buttons and have no direct interaction*/
         else if (v.getId() == R.id.left3Button)
         {
-            /*Color selected button and clear other buttons*/
-            left3.setBackgroundColor(Color.GREEN);
-            left2.setBackgroundColor(Color.LTGRAY);
-            left1.setBackgroundColor(Color.LTGRAY);
-            right1.setBackgroundColor(Color.LTGRAY);
-            right2.setBackgroundColor(Color.LTGRAY);
-            right3.setBackgroundColor(Color.LTGRAY);
+            updateColor(R.id.left3Button);
             //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -212,53 +206,68 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         }
         else if (v.getId() == R.id.left2Button)
         {
-            /*Color selected button and clear other buttons*/
-            left3.setBackgroundColor(Color.LTGRAY);
-            left2.setBackgroundColor(Color.GREEN);
-            left1.setBackgroundColor(Color.LTGRAY);
-            right1.setBackgroundColor(Color.LTGRAY);
-            right2.setBackgroundColor(Color.LTGRAY);
-            right3.setBackgroundColor(Color.LTGRAY);
+            updateColor(R.id.left2Button);
         }
         else if (v.getId() == R.id.left1Button)
         {
-            /*Color selected button and clear other buttons*/
-            left3.setBackgroundColor(Color.LTGRAY);
-            left2.setBackgroundColor(Color.LTGRAY);
-            left1.setBackgroundColor(Color.GREEN);
-            right1.setBackgroundColor(Color.LTGRAY);
-            right2.setBackgroundColor(Color.LTGRAY);
-            right3.setBackgroundColor(Color.LTGRAY);
+            updateColor(R.id.left1Button);
         }
         else if (v.getId() == R.id.right1Button)
         {
-            /*Color selected button and clear other buttons*/
-            left3.setBackgroundColor(Color.LTGRAY);
-            left2.setBackgroundColor(Color.LTGRAY);
-            left1.setBackgroundColor(Color.LTGRAY);
-            right1.setBackgroundColor(Color.GREEN);
-            right2.setBackgroundColor(Color.LTGRAY);
-            right3.setBackgroundColor(Color.LTGRAY);
+            updateColor(R.id.right1Button);
         }
         else if (v.getId() ==  R.id.right2Button)
         {
-            /*Color selected button and clear other buttons*/
-            left3.setBackgroundColor(Color.LTGRAY);
-            left2.setBackgroundColor(Color.LTGRAY);
-            left1.setBackgroundColor(Color.LTGRAY);
-            right1.setBackgroundColor(Color.LTGRAY);
-            right2.setBackgroundColor(Color.GREEN);
-            right3.setBackgroundColor(Color.LTGRAY);
+            updateColor(R.id.right2Button);
         }
         else// v.getId() == R.id.right3Button
         {
-            /*Color selected button and clear other buttons*/
-            left3.setBackgroundColor(Color.LTGRAY);
-            left2.setBackgroundColor(Color.LTGRAY);
-            left1.setBackgroundColor(Color.LTGRAY);
-            right1.setBackgroundColor(Color.LTGRAY);
-            right2.setBackgroundColor(Color.LTGRAY);
-            right3.setBackgroundColor(Color.GREEN);
+            updateColor(R.id.right3Button);
+        }
+    }
+
+    private void updateColor(int buttonID)
+    {
+        /*Color selected button and clear other buttons*/
+        Button left3 = (Button) findViewById(R.id.left3Button);
+        Button left2 = (Button) findViewById(R.id.left2Button);
+        Button left1 = (Button) findViewById(R.id.left1Button);
+        Button right1 = (Button) findViewById(R.id.right1Button);
+        Button right2 = (Button) findViewById(R.id.right2Button);
+        Button right3 = (Button) findViewById(R.id.right3Button);
+
+        left3.setBackgroundColor(Color.LTGRAY);
+        left2.setBackgroundColor(Color.LTGRAY);
+        left1.setBackgroundColor(Color.LTGRAY);
+        right1.setBackgroundColor(Color.LTGRAY);
+        right2.setBackgroundColor(Color.LTGRAY);
+        right3.setBackgroundColor(Color.LTGRAY);
+
+        switch (buttonID)
+        {
+            case R.id.left3Button:
+                left3.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.left2Button:
+                left2.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.left1Button:
+                left1.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.right1Button:
+                right1.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.right2Button:
+                right2.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.right3Button:
+                right3.setBackgroundColor(Color.GREEN);
+                break;
         }
     }
 
