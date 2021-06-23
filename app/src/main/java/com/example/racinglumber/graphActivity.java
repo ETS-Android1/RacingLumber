@@ -32,6 +32,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     private final float graphMinY = 0.05F; //start with very small minimum value, that is overwritten by first dataset
     private final int graphNumXSamplesDisplayed = 100;
+    private final int graphLineThickness = 10;
 
     /*Spinner menu items*/
     private final int noSelection = 0;
@@ -145,6 +146,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         Button right2 = (Button) findViewById(R.id.right2Button);
         Button right3 = (Button) findViewById(R.id.right3Button);
 
+        float newVal;
+
         if (v.getId() == R.id.setOneButton)
         {
             dataStorage.selectedSet = dataStorage.SelectedSet.setOne;
@@ -182,9 +185,27 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //Todo this is a proof of concept of scrolling data
+
             GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
-            //graph.computeScroll();
-            //graph.
+            graph.getSeries().remove(longOneSeries);//todo this works, so I just have to update the seriess
+
+            longOneSeries = new LineGraphSeries();
+            for (int counter = 50; counter < dataStorage.dataArrayLen; counter++)
+            {
+                if ((dataStorage.dataArrayLen - 1) < counter)
+                {
+                    break;
+                }
+
+                newVal = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
+                longOneSeries.appendData(new DataPoint((counter-50), newVal), false, dataStorage.dataArrayLen);
+            }
+            graph.addSeries(longOneSeries);
+
+            longOneSeries.setTitle("Longitudal Acceleration Set 1");
+            longOneSeries.setColor(0xFFFF6347); //tomato
+            longOneSeries.setThickness(graphLineThickness);
             //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -322,8 +343,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     private void addGraphSeries(dataStorage.Axis axis, dataStorage.RecordType recordType)
     {
-        final int graphLineThickness = 10;
-
         LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
         float newVal;
         float currentMaxGraphY;
