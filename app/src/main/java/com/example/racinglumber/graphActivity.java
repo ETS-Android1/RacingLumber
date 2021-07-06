@@ -47,8 +47,11 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
     /*graph lists*/
     private LineGraphSeries<DataPoint> latOneSeries = new LineGraphSeries();
     private LineGraphSeries<DataPoint> longOneSeries = new LineGraphSeries();
+    private int setOneGraphOffset = 0;
+
     private LineGraphSeries<DataPoint> latTwoSeries = new LineGraphSeries();
     private LineGraphSeries<DataPoint> longTwoSeries = new LineGraphSeries();
+    private int setTwoGraphOffset = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -139,14 +142,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         Button setTwo       = (Button) findViewById(R.id.setTwoButton);
         Button setOneTwo    = (Button) findViewById(R.id.bothSetsButton);
 
-        Button left3 = (Button) findViewById(R.id.left3Button);
-        Button left2 = (Button) findViewById(R.id.left2Button);
-        Button left1 = (Button) findViewById(R.id.left1Button);
-        Button right1 = (Button) findViewById(R.id.right1Button);
-        Button right2 = (Button) findViewById(R.id.right2Button);
-        Button right3 = (Button) findViewById(R.id.right3Button);
 
-        float newVal;
 
         if (v.getId() == R.id.setOneButton)
         {
@@ -176,53 +172,32 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         else if (v.getId() == R.id.left3Button)
         {
             updateColor(R.id.left3Button);
-            //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //Todo this is a proof of concept of scrolling data
-
-            GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
-            graph.getSeries().remove(longOneSeries);//todo this works, so I just have to update the seriess
-
-            longOneSeries = new LineGraphSeries();
-            for (int counter = 50; counter < dataStorage.dataArrayLen; counter++)
-            {
-                if ((dataStorage.dataArrayLen - 1) < counter)
-                {
-                    break;
-                }
-
-                newVal = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
-                longOneSeries.appendData(new DataPoint((counter-50), newVal), false, dataStorage.dataArrayLen);
-            }
-            graph.addSeries(longOneSeries);
-
-            longOneSeries.setTitle("Longitudal Acceleration Set 1");
-            longOneSeries.setColor(0xFFFF6347); //tomato
-            longOneSeries.setThickness(graphLineThickness);
-            //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            scrollSeries(-50);
         }
         else if (v.getId() == R.id.left2Button)
         {
             updateColor(R.id.left2Button);
+            scrollSeries(-10);
         }
         else if (v.getId() == R.id.left1Button)
         {
             updateColor(R.id.left1Button);
+            scrollSeries(-1);
         }
         else if (v.getId() == R.id.right1Button)
         {
             updateColor(R.id.right1Button);
+            scrollSeries(1);
         }
         else if (v.getId() ==  R.id.right2Button)
         {
             updateColor(R.id.right2Button);
+            scrollSeries(10);
         }
         else// v.getId() == R.id.right3Button
         {
             updateColor(R.id.right3Button);
+            scrollSeries(50);
         }
     }
 
@@ -270,6 +245,102 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 break;
         }
     }
+    ////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private void scrollSeries(int offset){
+        boolean updateSetOne = false;
+        boolean updateSetTwo = false;
+        float newVal;
+
+        if ((dataStorage.selectedSet == dataStorage.SelectedSet.setOne) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
+        {
+            setOneGraphOffset += offset;
+            updateSetOne = true;
+        }
+
+        if ((dataStorage.selectedSet == dataStorage.SelectedSet.setOne) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
+        {
+            setTwoGraphOffset += offset;
+            updateSetTwo = true;
+        }
+
+        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //Todo this assumes both lat and long are already displayed
+
+        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+
+        if (updateSetOne)
+        {
+            graph.getSeries().remove(latOneSeries);
+            graph.getSeries().remove(longOneSeries);
+
+            latOneSeries = new LineGraphSeries();
+            longOneSeries = new LineGraphSeries();
+
+            for (int counter = setOneGraphOffset; counter < dataStorage.dataArrayLen; counter++)
+            {
+                if ((dataStorage.dataArrayLen - 1) < counter)
+                {
+                    break;
+                }
+
+                if (counter >= 0)
+                {
+                    newVal = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
+                }
+                else
+                {
+                    newVal =0.0f;
+                }
+
+                longOneSeries.appendData(new DataPoint((counter-setOneGraphOffset), newVal), false, dataStorage.dataArrayLen);
+            }
+        }
+
+        if (updateSetTwo) {
+            graph.getSeries().remove(latTwoSeries);
+            graph.getSeries().remove(longTwoSeries);
+
+            latTwoSeries = new LineGraphSeries();
+            longTwoSeries = new LineGraphSeries();
+
+            for (int counter = setTwoGraphOffset; counter < dataStorage.dataArrayLen; counter++)
+            {
+                if ((dataStorage.dataArrayLen - 1) < counter)
+                {
+                    break;
+                }
+
+                if (counter >= 0)
+                {
+                    newVal = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
+                }
+                else
+                {
+                    newVal =0.0f;
+                }
+
+                longOneSeries.appendData(new DataPoint((counter-setTwoGraphOffset), newVal), false, dataStorage.dataArrayLen);
+            }
+        }
+
+
+        graph.addSeries(longOneSeries);
+
+        //todo update this for above
+        longOneSeries.setTitle("Longitudal Acceleration Set 1");
+        longOneSeries.setColor(0xFFFF6347); //tomato
+        longOneSeries.setThickness(graphLineThickness);
+        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    }
+    ///////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    ///////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /************ MAP FUNCTIONS ************/
 
