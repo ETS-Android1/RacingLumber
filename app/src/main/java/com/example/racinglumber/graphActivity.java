@@ -259,7 +259,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             updateSetOne = true;
         }
 
-        if ((dataStorage.selectedSet == dataStorage.SelectedSet.setOne) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
+        if ((dataStorage.selectedSet == dataStorage.SelectedSet.setTwo) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
         {
             setTwoGraphOffset += offset;
             updateSetTwo = true;
