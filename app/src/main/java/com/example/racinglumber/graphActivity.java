@@ -351,8 +351,75 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             }
         }
 
-        /////TODO NEXT fix bugs for above then make update set two work
-        //if (updateSetTwo) {}
+        if (updateSetTwo)
+        {
+            if (latTwoOnGraph)
+            {
+                graph.getSeries().remove(latTwoSeries);
+                latTwoSeries = new LineGraphSeries();
+            }
+            else
+            {
+                latTwoSeriesNull = true;
+            }
+
+            if (longTwoOnGraph)
+            {
+                graph.getSeries().remove(longTwoSeries);
+                longTwoSeries = new LineGraphSeries();
+            }
+            else
+            {
+                longTwoSeriesNull = true;
+            }
+
+            for (int counter = setTwoGraphOffset; counter < dataStorage.dataArrayLen; counter++)
+            {
+                if ((dataStorage.dataArrayLen - 1) < counter)
+                {
+                    break;
+                }
+
+                if (counter >= 0)
+                {
+                    newValLat = dataStorage.getSensorValue(dataStorage.Axis.LatSetTwo, dataStorage.RecordType.acceleration, counter);
+                    newValLong = dataStorage.getSensorValue(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration, counter);
+                }
+                else
+                {
+                    newValLat = 0.0f;
+                    newValLong = 0.0f;
+                }
+
+                if (!latTwoSeriesNull)
+                {
+                    latTwoSeries.appendData(new DataPoint((counter-setTwoGraphOffset), newValLat), false, dataStorage.dataArrayLen);
+                }
+
+                if (!longTwoSeriesNull)
+                {
+                    longTwoSeries.appendData(new DataPoint((counter-setTwoGraphOffset), newValLong), false, dataStorage.dataArrayLen);
+                }
+            }
+
+            if (!latTwoSeriesNull)
+            {
+                graph.addSeries(latTwoSeries);
+
+                latTwoSeries.setTitle("Lateral Acceleration Set 2");
+                latTwoSeries.setColor(0xFF4169E1); //royalblue
+                latTwoSeries.setThickness(graphLineThickness);
+            }
+
+            if (!longTwoSeriesNull)
+            {
+                graph.addSeries(longTwoSeries);
+
+                longTwoSeries.setTitle("Longitudal Acceleration Set 2");
+                longTwoSeries.setColor(0xFF6495ED); //cornflowerblue
+                longTwoSeries.setThickness(graphLineThickness);
+            }
+        }
         //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -478,6 +545,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        ///////TODO next need to use the same logic as the scroll to add the new dataset at the same point as a scrolled dataset
+        //////TODO next add a button to reset scroll or if both datasets clear, reset scroll
 
         for (int counter = 0; counter < dataStorage.dataArrayLen; counter++)
         {
