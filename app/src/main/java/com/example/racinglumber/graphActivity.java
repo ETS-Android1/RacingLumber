@@ -46,11 +46,15 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     /*graph lists*/
     private LineGraphSeries<DataPoint> latOneSeries = new LineGraphSeries();
+    private boolean latOneOnGraph = false;
     private LineGraphSeries<DataPoint> longOneSeries = new LineGraphSeries();
+    private boolean longOneOnGraph = false;
     private int setOneGraphOffset = 0;
 
     private LineGraphSeries<DataPoint> latTwoSeries = new LineGraphSeries();
+    private boolean latTwoOnGraph = false;
     private LineGraphSeries<DataPoint> longTwoSeries = new LineGraphSeries();
+    private boolean longTwoOnGraph = false;
     private int setTwoGraphOffset = 0;
 
     @Override
@@ -141,8 +145,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         Button setOne       = (Button) findViewById(R.id.setOneButton);
         Button setTwo       = (Button) findViewById(R.id.setTwoButton);
         Button setOneTwo    = (Button) findViewById(R.id.bothSetsButton);
-
-
 
         if (v.getId() == R.id.setOneButton)
         {
@@ -251,7 +253,14 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
     private void scrollSeries(int offset){
         boolean updateSetOne = false;
         boolean updateSetTwo = false;
-        float newVal;
+
+        boolean latOneSeriesNull = false;
+        boolean longOneSeriesNull = false;
+        boolean latTwoSeriesNull = false;
+        boolean longTwoSeriesNull = false;
+
+        float newValLat;
+        float newValLong;
 
         if ((dataStorage.selectedSet == dataStorage.SelectedSet.setOne) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
         {
@@ -274,11 +283,25 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         if (updateSetOne)
         {
-            graph.getSeries().remove(latOneSeries);
-            graph.getSeries().remove(longOneSeries);
+            if (latOneOnGraph)
+            {
+                graph.getSeries().remove(latOneSeries);
+                latOneSeries = new LineGraphSeries();
+            }
+            else
+            {
+                latOneSeriesNull = true;
+            }
 
-            latOneSeries = new LineGraphSeries();
-            longOneSeries = new LineGraphSeries();
+            if (longOneOnGraph)
+            {
+                graph.getSeries().remove(longOneSeries);
+                longOneSeries = new LineGraphSeries();
+            }
+            else
+            {
+                longOneSeriesNull = true;
+            }
 
             for (int counter = setOneGraphOffset; counter < dataStorage.dataArrayLen; counter++)
             {
@@ -289,51 +312,47 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
                 if (counter >= 0)
                 {
-                    newVal = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
+                    newValLat = dataStorage.getSensorValue(dataStorage.Axis.LatSetOne, dataStorage.RecordType.acceleration, counter);
+                    newValLong = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
                 }
                 else
                 {
-                    newVal =0.0f;
+                    newValLat = 0.0f;
+                    newValLong = 0.0f;
                 }
 
-                longOneSeries.appendData(new DataPoint((counter-setOneGraphOffset), newVal), false, dataStorage.dataArrayLen);
+                if (!latOneSeriesNull)
+                {
+                    latOneSeries.appendData(new DataPoint((counter-setOneGraphOffset), newValLat), false, dataStorage.dataArrayLen);
+                }
+
+                if (!longOneSeriesNull)
+                {
+                    longOneSeries.appendData(new DataPoint((counter-setOneGraphOffset), newValLong), false, dataStorage.dataArrayLen);
+                }
             }
-        }
 
-        if (updateSetTwo) {
-            graph.getSeries().remove(latTwoSeries);
-            graph.getSeries().remove(longTwoSeries);
-
-            latTwoSeries = new LineGraphSeries();
-            longTwoSeries = new LineGraphSeries();
-
-            for (int counter = setTwoGraphOffset; counter < dataStorage.dataArrayLen; counter++)
+            if (!latOneSeriesNull)
             {
-                if ((dataStorage.dataArrayLen - 1) < counter)
-                {
-                    break;
-                }
+                graph.addSeries(latOneSeries);
 
-                if (counter >= 0)
-                {
-                    newVal = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
-                }
-                else
-                {
-                    newVal =0.0f;
-                }
+                latOneSeries.setTitle("Lateral Acceleration Set 1");
+                latOneSeries.setColor(0xFFFF0000); //red
+                latOneSeries.setThickness(graphLineThickness);
+            }
 
-                longOneSeries.appendData(new DataPoint((counter-setTwoGraphOffset), newVal), false, dataStorage.dataArrayLen);
+            if (!longOneSeriesNull)
+            {
+                graph.addSeries(longOneSeries);
+
+                longOneSeries.setTitle("Longitudal Acceleration Set 1");
+                longOneSeries.setColor(0xFFFF6347); //tomato
+                longOneSeries.setThickness(graphLineThickness);
             }
         }
 
-
-        graph.addSeries(longOneSeries);
-
-        //todo update this for above
-        longOneSeries.setTitle("Longitudal Acceleration Set 1");
-        longOneSeries.setColor(0xFFFF6347); //tomato
-        longOneSeries.setThickness(graphLineThickness);
+        /////TODO NEXT fix bugs for above then make update set two work
+        //if (updateSetTwo) {}
         //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -398,15 +417,19 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 break; //do nothing
             case setOneLatAccel:
                 addGraphSeries(dataStorage.Axis.LatSetOne, dataStorage.RecordType.acceleration);
+                latOneOnGraph = true;//todo make this a toggle for both this boolean and the series
                 break;
             case setOneLongAccel:
                 addGraphSeries(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration);
+                longOneOnGraph = true;//todo make this a toggle for both this boolean and the series
                 break;
             case setTwoLatAccel:
                 addGraphSeries(dataStorage.Axis.LatSetTwo, dataStorage.RecordType.acceleration);
+                latTwoOnGraph = true;//todo make this a toggle for both this boolean and the series
                 break;
             case setTwoLongAccel:
                 addGraphSeries(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration);
+                longTwoOnGraph = true;//todo make this a toggle for both this boolean and the series
                 break;
 
             default:
