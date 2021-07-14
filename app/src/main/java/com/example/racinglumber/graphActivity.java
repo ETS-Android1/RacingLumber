@@ -478,30 +478,70 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         parent.getItemAtPosition(position);
 
+        GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
+
         switch (position)
         {
             case noSelection:
                 break; //do nothing
+
             case setOneLatAccel:
-                addGraphSeries(dataStorage.Axis.LatSetOne, dataStorage.RecordType.acceleration);
-                latOneOnGraph = true;//todo make this a toggle for both this boolean and the series
+                if (latOneOnGraph)
+                {
+                    graph.getSeries().remove(latOneSeries);
+                    latOneOnGraph = false;
+                }
+                else
+                {
+                    addGraphSeries(dataStorage.Axis.LatSetOne, dataStorage.RecordType.acceleration);
+                    latOneOnGraph = true;
+                }
                 break;
+
             case setOneLongAccel:
-                addGraphSeries(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration);
-                longOneOnGraph = true;//todo make this a toggle for both this boolean and the series
+                if (longOneOnGraph)
+                {
+                    graph.getSeries().remove(longOneSeries);
+                    longOneOnGraph = false;
+                }
+                else
+                {
+                    addGraphSeries(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration);
+                    longOneOnGraph = true;
+                }
                 break;
+
             case setTwoLatAccel:
-                addGraphSeries(dataStorage.Axis.LatSetTwo, dataStorage.RecordType.acceleration);
-                latTwoOnGraph = true;//todo make this a toggle for both this boolean and the series
+                if (latTwoOnGraph)
+                {
+                    graph.getSeries().remove(latTwoSeries);
+                    latTwoOnGraph = false;
+                }
+                else
+                {
+                    addGraphSeries(dataStorage.Axis.LatSetTwo, dataStorage.RecordType.acceleration);
+                    latTwoOnGraph = true;
+                }
                 break;
+
             case setTwoLongAccel:
-                addGraphSeries(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration);
-                longTwoOnGraph = true;//todo make this a toggle for both this boolean and the series
+                if (longTwoOnGraph)
+                {
+                    graph.getSeries().remove(longTwoSeries);
+                }
+                else
+                {
+                    addGraphSeries(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration);
+                    longTwoOnGraph = true;
+                }
                 break;
 
             default:
                 break; //do nothing
         }
+
+        parent.setSelection(0);
+        graph.onDataChanged(false, true);
     }
 
     @Override
