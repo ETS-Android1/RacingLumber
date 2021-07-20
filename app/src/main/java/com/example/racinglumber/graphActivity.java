@@ -26,6 +26,9 @@ import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import static com.example.racinglumber.dataStorage.Axis.LatSetOne;
+import static com.example.racinglumber.dataStorage.Axis.LongSetOne;
+
 public class graphActivity extends FragmentActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener , OnMapReadyCallback {
     private BottomNavigationView bottomNavigationView;
     private GoogleMap mMap;
@@ -247,9 +250,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 break;
         }
     }
-    ////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ////////////.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     private void scrollSeries(int offset){
         boolean updateSetOne = false;
         boolean updateSetTwo = false;
@@ -274,9 +275,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             updateSetTwo = true;
         }
 
-        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //Todo this assumes both lat and long are already displayed
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
@@ -312,7 +310,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
                 if (counter >= 0)
                 {
-                    newValLat = dataStorage.getSensorValue(dataStorage.Axis.LatSetOne, dataStorage.RecordType.acceleration, counter);
+                    newValLat = dataStorage.getSensorValue(LatSetOne, dataStorage.RecordType.acceleration, counter);
                     newValLong = dataStorage.getSensorValue(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration, counter);
                 }
                 else
@@ -420,13 +418,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 longTwoSeries.setThickness(graphLineThickness);
             }
         }
-        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
-    ///////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ///////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /************ MAP FUNCTIONS ************/
 
@@ -493,7 +485,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 }
                 else
                 {
-                    addGraphSeries(dataStorage.Axis.LatSetOne, dataStorage.RecordType.acceleration);
+                    addGraphSeries(LatSetOne, dataStorage.RecordType.acceleration);
                     latOneOnGraph = true;
                 }
                 break;
@@ -542,6 +534,16 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         parent.setSelection(0);
         graph.onDataChanged(false, true);
+
+        if ((!latOneOnGraph) && (!longOneOnGraph))
+        {
+            setOneGraphOffset = 0;
+        }
+
+        if ((!latTwoOnGraph) && (!longTwoOnGraph))
+        {
+            setTwoGraphOffset = 0;
+        }
     }
 
     @Override
@@ -557,10 +559,9 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         float newVal;
         float currentMaxGraphY;
         float maxAbsValue;
+        int counter;
+        int offset;
 
-        /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         switch (axis)
         {
             case LatSetOne:
@@ -582,48 +583,55 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             default:
                 break;
         }
-        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        ///////TODO next need to use the same logic as the scroll to add the new dataset at the same point as a scrolled dataset
-        //////TODO next add a button to reset scroll or if both datasets clear, reset scroll
 
-        for (int counter = 0; counter < dataStorage.dataArrayLen; counter++)
+        if ((axis == LatSetOne) || (axis == LongSetOne))
+        {
+            offset = setOneGraphOffset;
+        }
+        else
+        {
+            offset = setTwoGraphOffset;
+        }
+
+        counter = offset;
+
+        for (; counter < dataStorage.dataArrayLen; counter++)
         {
             if ((dataStorage.dataArrayLen - 1) < counter)
             {
                 break;
             }
 
-            newVal = dataStorage.getSensorValue(axis, recordType, counter);
-            /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            /////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            if (counter < 0)
+            {
+                newVal = 0.0f;
+            }
+            else
+            {
+                newVal = dataStorage.getSensorValue(axis, recordType, counter);
+            }
+
             switch (axis)
             {
                 case LatSetOne:
-                    latOneSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    latOneSeries.appendData(new DataPoint((counter-offset), newVal), false, dataStorage.dataArrayLen);
                     break;
 
                 case LongSetOne:
-                    longOneSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    longOneSeries.appendData(new DataPoint((counter-offset), newVal), false, dataStorage.dataArrayLen);
                     break;
 
                 case LatSetTwo:
-                    latTwoSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    latTwoSeries.appendData(new DataPoint((counter-offset), newVal), false, dataStorage.dataArrayLen);
                     break;
 
                 case LongSetTwo:
-                    longTwoSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
+                    longTwoSeries.appendData(new DataPoint((counter-offset), newVal), false, dataStorage.dataArrayLen);
                     break;
 
                 default:
                     break;
             }
-            ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            ///////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            //newSeries.appendData(new DataPoint(counter, newVal), false, dataStorage.dataArrayLen);
         }
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
