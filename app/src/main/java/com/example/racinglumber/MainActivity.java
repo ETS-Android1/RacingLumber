@@ -3,6 +3,7 @@ package com.example.racinglumber;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
@@ -27,9 +28,16 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback{
+//public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback{
+public class MainActivity extends FragmentActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback, OnMapReadyCallback {
+    //public class graphActivity extends   AdapterView.OnItemSelectedListener  {
     private BottomNavigationView bottomNavigationView;
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
@@ -41,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int gpsPollingInterval = 1000;
     private final int locationPermissionsRequestCode = 121;
     boolean dataIsRecording = false;
+
+    /*Google map vars*/
+    private GoogleMap mMap;
+    private float gpsDefaultZoom = 20.0F;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +66,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_record_button);
 
+        /*Set up data scrolling button listeners*/
+        Button left3Button = (Button) findViewById(R.id.left3ButtonMain);
+        left3Button.setOnClickListener(this);
+        Button left2Button = (Button) findViewById(R.id.left2ButtonMain);
+        left2Button.setOnClickListener(this);
+        Button left1Button = (Button) findViewById(R.id.left1ButtonMain);
+        left1Button.setOnClickListener(this);
+        Button right1Button = (Button) findViewById(R.id.right1ButtonMain);
+        right1Button.setOnClickListener(this);
+        Button right2Button = (Button) findViewById(R.id.right2ButtonMain);
+        right2Button.setOnClickListener(this);
+        Button right3Button = (Button) findViewById(R.id.right3ButtonMain);
+        right3Button.setOnClickListener(this);
+
+        /////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /*Start async map fragment*/
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mainMap);
+        mapFragment.getMapAsync(this);
+/////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         senRotation = senSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    }
+
+    /************ MAP FUNCTIONS ************/
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        double displayedLat;
+        double displayedLong;
+
+        mMap = googleMap;
+
+        displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, 0);
+        displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, 0);
+
+        LatLng defaultMapLocation = new LatLng(displayedLat, displayedLong);
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultMapLocation, gpsDefaultZoom));
     }
 
     /************ BUTTON FUNCTIONS ************/

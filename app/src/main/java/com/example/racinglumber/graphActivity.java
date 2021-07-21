@@ -177,32 +177,32 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         else if (v.getId() == R.id.left3Button)
         {
             updateColor(R.id.left3Button);
-            scrollSeries(-50);
+            scrollSeries(50);
         }
         else if (v.getId() == R.id.left2Button)
         {
             updateColor(R.id.left2Button);
-            scrollSeries(-10);
+            scrollSeries(10);
         }
         else if (v.getId() == R.id.left1Button)
         {
             updateColor(R.id.left1Button);
-            scrollSeries(-1);
+            scrollSeries(1);
         }
         else if (v.getId() == R.id.right1Button)
         {
             updateColor(R.id.right1Button);
-            scrollSeries(1);
+            scrollSeries(-1);
         }
         else if (v.getId() ==  R.id.right2Button)
         {
             updateColor(R.id.right2Button);
-            scrollSeries(10);
+            scrollSeries(-10);
         }
         else// v.getId() == R.id.right3Button
         {
             updateColor(R.id.right3Button);
-            scrollSeries(50);
+            scrollSeries(-50);
         }
     }
 
@@ -274,8 +274,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             setTwoGraphOffset += offset;
             updateSetTwo = true;
         }
-
-        //Todo this assumes both lat and long are already displayed
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 

@@ -93,6 +93,71 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="RECORD" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/left3ButtonMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="&lt;&lt;&lt;" />
+
+            <Button
+                android:id="@+id/left2ButtonMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="&lt;&lt;" />
+
+            <Button
+                android:id="@+id/left1ButtonMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="&lt;" />
+
+            <Button
+                android:id="@+id/right1ButtonMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="&gt;" />
+
+            <Button
+                android:id="@+id/right2ButtonMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="&gt;&gt;" />
+
+            <Button
+                android:id="@+id/right3ButtonMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="&gt;&gt;&gt;" />
+
+        </LinearLayout>
+
+        <fragment
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:id="@+id/mainMap"
+            tools:context=".MainActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            tools:layout="@layout/activity_graph" />
+
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
