@@ -33,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BottomNavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback{
@@ -53,6 +54,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     /*Google map vars*/
     private GoogleMap mMap;
     private float gpsDefaultZoom = 20.0F;
+    private int gpsDataIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,21 +149,148 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onClick(View v)
     {
-        if (v.getId() == R.id.recordButton)
-        {
-            /*Start/end recording data*/
-            dataIsRecording = !dataIsRecording;
+        double displayedLat;
+        double displayedLong;
 
-            if (dataIsRecording)
-            {
-                startRecording();
-            }
-            else
-            {
-                endRecording();
-            }
+        switch(v.getId())
+        {
+            case R.id.recordButton:
+                /*Start/end recording data*/
+                dataIsRecording = !dataIsRecording;
+
+                if (dataIsRecording)
+                {
+                    startRecording();
+                }
+                else
+                {
+                    endRecording();
+                }
+                break;
+
+            case R.id.left3ButtonMain:
+                updateColor(R.id.left3ButtonMain);
+
+                if (gpsDataIndex < 50)
+                {
+                    gpsDataIndex = 0;
+                }
+                else
+                {
+                    gpsDataIndex -= 50;
+                }
+                break;
+
+            case R.id.left2ButtonMain:
+                updateColor(R.id.left2ButtonMain);
+
+                if (gpsDataIndex < 10)
+                {
+                    gpsDataIndex = 0;
+                }
+                else
+                {
+                    gpsDataIndex -= 10;
+                }
+                break;
+            case R.id.left1ButtonMain:
+                updateColor(R.id.left1ButtonMain);
+                if (gpsDataIndex < 1)
+                {
+                    gpsDataIndex = 0;
+                }
+                else
+                {
+                    gpsDataIndex -= 1;
+                }
+                break;
+            case R.id.right1ButtonMain:
+                updateColor(R.id.right1ButtonMain);
+                gpsDataIndex += 1;
+                break;
+            case R.id.right2ButtonMain:
+                updateColor(R.id.right2ButtonMain);
+                gpsDataIndex += 10;
+                break;
+            case R.id.right3ButtonMain:
+                updateColor(R.id.right3ButtonMain);
+                gpsDataIndex += 50;
+                break;
+
+            default:
+                break;
+        }
+
+        //todo this should only update if not clicked on record button, and should not crash if there is no GPS value
+        displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, gpsDataIndex);
+        displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, gpsDataIndex);
+
+        LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
+
+//        if (v.getId() == R.id.recordButton)
+//        {
+//            /*Start/end recording data*/
+//            dataIsRecording = !dataIsRecording;
+//
+//            if (dataIsRecording)
+//            {
+//                startRecording();
+//            }
+//            else
+//            {
+//                endRecording();
+//            }
+//        }
+    }
+
+    private void updateColor(int buttonID)
+    {
+        /*Color selected button and clear other buttons*/
+        Button left3 = (Button) findViewById(R.id.left3ButtonMain);
+        Button left2 = (Button) findViewById(R.id.left2ButtonMain);
+        Button left1 = (Button) findViewById(R.id.left1ButtonMain);
+        Button right1 = (Button) findViewById(R.id.right1ButtonMain);
+        Button right2 = (Button) findViewById(R.id.right2ButtonMain);
+        Button right3 = (Button) findViewById(R.id.right3ButtonMain);
+
+        left3.setBackgroundColor(Color.LTGRAY);
+        left2.setBackgroundColor(Color.LTGRAY);
+        left1.setBackgroundColor(Color.LTGRAY);
+        right1.setBackgroundColor(Color.LTGRAY);
+        right2.setBackgroundColor(Color.LTGRAY);
+        right3.setBackgroundColor(Color.LTGRAY);
+
+        switch (buttonID)
+        {
+            case R.id.left3ButtonMain:
+                left3.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.left2ButtonMain:
+                left2.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.left1ButtonMain:
+                left1.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.right1ButtonMain:
+                right1.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.right2ButtonMain:
+                right2.setBackgroundColor(Color.GREEN);
+                break;
+
+            case R.id.right3ButtonMain:
+                right3.setBackgroundColor(Color.GREEN);
+                break;
         }
     }
+
 
     /************ ACCELEROMETER FUNCTIONS ************/
 

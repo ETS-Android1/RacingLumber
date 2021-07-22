@@ -130,6 +130,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 double displayedLat;
                 double displayedLong;
 
+                /////////////todo this should be different based on set one or two
                 displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, (int)minX);
                 displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, (int)minX);
 
@@ -416,6 +417,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 longTwoSeries.setThickness(graphLineThickness);
             }
         }
+
+        ////////////todo does the map scroll along with the data????
     }
 
     /************ MAP FUNCTIONS ************/
