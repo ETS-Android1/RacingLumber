@@ -82,12 +82,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         Button right3Button = (Button) findViewById(R.id.right3ButtonMain);
         right3Button.setOnClickListener(this);
 
-        /////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /*Start async map fragment*/
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mainMap);
         mapFragment.getMapAsync(this);
-/////////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -151,6 +149,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     {
         double displayedLat;
         double displayedLong;
+        boolean startRecording = false;
 
         switch(v.getId())
         {
@@ -161,6 +160,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 if (dataIsRecording)
                 {
                     startRecording();
+                    startRecording = true;
                 }
                 else
                 {
@@ -221,29 +221,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
         }
 
-        //todo this should only update if not clicked on record button, and should not crash if there is no GPS value
-        displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, gpsDataIndex);
-        displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, gpsDataIndex);
+        if (!startRecording)
+        {
+            displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, gpsDataIndex);
+            displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, gpsDataIndex);
 
-        LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
-
-//        if (v.getId() == R.id.recordButton)
-//        {
-//            /*Start/end recording data*/
-//            dataIsRecording = !dataIsRecording;
-//
-//            if (dataIsRecording)
-//            {
-//                startRecording();
-//            }
-//            else
-//            {
-//                endRecording();
-//            }
-//        }
+            LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
+        }
     }
 
     private void updateColor(int buttonID)
