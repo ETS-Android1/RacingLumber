@@ -55,7 +55,7 @@ public class dataStorage {
     public static int gravityIndex = 0; //index of x/y/zGravityArray
     public static long[] gravityEventTime;
 
-    public static SelectedSet selectedSet;
+    public static SelectedSet selectedSet = SelectedSet.setOneTwo;
     public static double[] latitudeArray;
     public static double[] longitudeArray;
     public static int GPSIndex = 0; //index of GPS data
@@ -131,10 +131,7 @@ public class dataStorage {
     {
         boolean bufferFull = false;
 
-        if ((GPSIndex >= dataArrayLen)
-                || (synthDataArray == null)
-                || (synthDataArray[0] == null)
-                || (GPSEventTime == null))
+        if ((GPSIndex >= dataArrayLen) || (GPSEventTime == null))
         {
             /*Out of range or buffer is full*/
             bufferFull = true;
@@ -149,6 +146,27 @@ public class dataStorage {
         }
 
         return bufferFull;
+    }
+
+    public static double getFirstGPSValueFromLastRecording(boolean latOrLong)
+    {
+        double returnVal;
+
+        /*Check for null arrays or out of bounds*/
+        if ((latitudeArray == null) && (latOrLong))
+        {
+            returnVal = latitudeArray[0];
+        }
+        else if ((longitudeArray == null) && (!latOrLong))
+        {
+            returnVal = longitudeArray[0];
+        }
+        else
+        {
+            returnVal = 0.0;
+        }
+
+        return returnVal;
     }
 
     //true if latitude

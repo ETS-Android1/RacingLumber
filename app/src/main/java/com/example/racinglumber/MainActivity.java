@@ -46,7 +46,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Sensor senGravity;
     private FusedLocationProviderClient fusedLocationClient;
 
-    private final int defaultRecordingLength = 6;
+    private final int defaultRecordingLength = 10;
     private final int gpsPollingInterval = 1000;
     private final int locationPermissionsRequestCode = 121;
     boolean dataIsRecording = false;
@@ -366,6 +366,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void endRecording()
     {
+        double displayedLat;
+        double displayedLong;
+
         Button backward_img = (Button) findViewById(R.id.recordButton);
         backward_img.setBackgroundColor(Color.LTGRAY);
         dataIsRecording = false;
@@ -380,6 +383,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         {
             dataStorage.correctDataSetOrientation();
         }
+
+        /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        displayedLat = dataStorage.getFirstGPSValueFromLastRecording(true);
+        displayedLong = dataStorage.getFirstGPSValueFromLastRecording(false);
+
+        LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
+        //////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         dataStorage.initSynthDataArrays();
         dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
