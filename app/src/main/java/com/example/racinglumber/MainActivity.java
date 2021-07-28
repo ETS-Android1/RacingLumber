@@ -61,14 +61,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button recordButton = (Button) findViewById(R.id.recordButton);
-        recordButton.setOnClickListener(this);
+
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_record_button);
 
-        /*Set up data scrolling button listeners*/
+        /*Set up button listeners*/
+        Button recordButton = (Button) findViewById(R.id.recordButton);
+        recordButton.setOnClickListener(this);
         Button left3Button = (Button) findViewById(R.id.left3ButtonMain);
         left3Button.setOnClickListener(this);
         Button left2Button = (Button) findViewById(R.id.left2ButtonMain);
@@ -81,6 +82,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         right2Button.setOnClickListener(this);
         Button right3Button = (Button) findViewById(R.id.right3ButtonMain);
         right3Button.setOnClickListener(this);
+        Button setForwardVector = (Button) findViewById(R.id.setForwardVector);
+        setForwardVector.setOnClickListener(this);
 
         /*Start async map fragment*/
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -215,6 +218,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.right3ButtonMain:
                 updateColor(R.id.right3ButtonMain);
                 gpsDataIndex += 50;
+                break;
+
+            case R.id.setForwardVector:
+                dataStorage.initSynthDataArrays();
+                dataStorage.computeForwardVector(gpsDataIndex);
+                dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
                 break;
 
             default:

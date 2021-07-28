@@ -63,6 +63,9 @@ public class dataStorage {
 
     public static synthesizedData[] synthDataArray;// = new synthesizedData[dataArrayLen];
 
+    public static float forwardVectorX;
+    public static float forwardVectorY;
+
     //This function creates the synth data objects
     public static void initSynthDataArrays()
     {
@@ -70,6 +73,39 @@ public class dataStorage {
             synthDataArray[0] = new synthesizedData();
             synthDataArray[1] = new synthesizedData();
     }
+    //////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //todo use a user selected point instead, this works for now though
+
+    //This sets the forward vector in data storage, to be used by generateSynthDataFromDataStorage()
+    public static void computeForwardVector(int gpsDataIndex)
+    {
+        /*Prototype is using 100Hz capture.  First 3 seconds is setup(putting in pocket), 3 seconds is averaging vector of kart going forward, then save*/
+        float xArray = 0.0f;
+        float yArray = 0.0f;
+        float xAvg, yAvg;
+        float magnitude;
+
+        //todo could make delay configurable
+        for (int index = 150; index < 200; index++)//start at 300 to make it start at 3 seconds, 3* 50Hz
+        {
+            if (index < dataStorage.getDataArrayLen())
+            {
+                xArray += dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
+                yArray += dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
+            }
+        }
+
+        //todo could use moving average algorithm to be more accurate
+        //todo don't need average, since magnitude is cancelled out later anyways
+        xAvg = xArray/50.0f;
+        yAvg = yArray/50.0f;
+        magnitude = (float) Math.sqrt((xAvg*xAvg)+(yAvg*yAvg));
+
+        //normalize vector
+        forwardVectorX = xAvg/magnitude;
+        forwardVectorY = yAvg/magnitude;
+    }
+    /////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     public static void clearStorage()
     {
