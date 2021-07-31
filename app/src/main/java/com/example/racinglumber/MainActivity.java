@@ -61,8 +61,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_record_button);

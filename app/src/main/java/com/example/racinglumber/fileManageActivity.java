@@ -472,6 +472,41 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 dataStorage.GPSEventTime[i] = valLong;
                 valString = "";
             }
+
+            ///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            ///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            ///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+            //Find delimiter.  After this is forward vectors
+            do {
+                tempChar = (char)inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            //Decode forward vectors
+            //Read an array of bytes into a string
+            tempChar = (char) inStream.read();//take first char right away since it'll be valid
+            do {
+                valString += tempChar;
+                tempChar = (char) inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            valFlt = Float.parseFloat(valString);
+            dataStorage.forwardVectorX = valFlt;
+            valString = "";
+
+            //Read an array of bytes into a string
+            tempChar = (char) inStream.read();//take first char right away since it'll be valid
+            do {
+                valString += tempChar;
+                tempChar = (char) inStream.read();
+            } while ((tempChar != dataDelimiter) && (inStream.available() > 0));
+
+            valFlt = Float.parseFloat(valString);
+            dataStorage.forwardVectorY = valFlt;
+            valString = "";
+            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -701,7 +736,22 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 writtenString += Long.toString(timestamp);
                 writtenString += dataDelimiter;
             }
+            writtenString += '\n';
             bw.write(writtenString);
+
+            ////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            ////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            ////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            /*4. Encode forward vector*/
+
+            writtenString = "Forward vector"+dataDelimiter;
+            writtenString += Float.toString(dataStorage.forwardVectorX);
+            writtenString += dataDelimiter;
+            bw.write(writtenString);
+
+            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
             /*Flush the buffered write and close the file*/
             bw.flush();
