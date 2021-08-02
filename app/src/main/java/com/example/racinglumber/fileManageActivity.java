@@ -473,10 +473,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 valString = "";
             }
 
-            ///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            ///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            ///////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
             //Find delimiter.  After this is forward vectors
             do {
                 tempChar = (char)inStream.read();
@@ -503,10 +499,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
             valFlt = Float.parseFloat(valString);
             dataStorage.forwardVectorY = valFlt;
-            valString = "";
-            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -739,19 +732,14 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             writtenString += '\n';
             bw.write(writtenString);
 
-            ////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            ////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            ////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             /*4. Encode forward vector*/
 
-            writtenString = "Forward vector"+dataDelimiter;
+            writtenString = "Forward vector(x then y)"+dataDelimiter;
             writtenString += Float.toString(dataStorage.forwardVectorX);
             writtenString += dataDelimiter;
+            writtenString += Float.toString(dataStorage.forwardVectorY);
+            writtenString += dataDelimiter;
             bw.write(writtenString);
-
-            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            ////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
             /*Flush the buffered write and close the file*/
             bw.flush();
