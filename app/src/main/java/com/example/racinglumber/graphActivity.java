@@ -278,7 +278,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 
-        if ((updateSetOne) && (latOneSeries != null) && (longOneSeries != null))
+        if (updateSetOne)
         {
             if (latOneOnGraph)
             {
@@ -348,7 +348,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             }
         }
 
-        if (updateSetTwo && (latTwoSeries != null) && (longTwoSeries != null))
+        if (updateSetTwo)
         {
             if (latTwoOnGraph)
             {

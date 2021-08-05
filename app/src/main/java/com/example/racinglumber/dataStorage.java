@@ -69,9 +69,16 @@ public class dataStorage {
     //This function creates the synth data objects
     public static void initSynthDataArrays()
     {
+        if (dataArrayLen > 0)
+        {
             synthDataArray = new synthesizedData[dataArrayLen];
             synthDataArray[0] = new synthesizedData();
             synthDataArray[1] = new synthesizedData();
+        }
+        else
+        {
+            synthDataArray = null;
+        }
     }
     //////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //todo use a user selected point instead, this works for now though

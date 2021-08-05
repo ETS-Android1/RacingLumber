@@ -220,8 +220,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             case R.id.setForwardVector:
                 dataStorage.initSynthDataArrays();
-                dataStorage.computeForwardVector(gpsDataIndex);
-                dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
+
+                if (dataStorage.synthDataArray != null)
+                {
+                    dataStorage.computeForwardVector(gpsDataIndex);
+                    dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
+                }
                 break;
 
             default:
