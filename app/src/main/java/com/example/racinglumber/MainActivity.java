@@ -100,18 +100,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        double displayedLat;
-        double displayedLong;
-
         mMap = googleMap;
-
-        displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, 0);
-        displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, 0);
-
-        LatLng defaultMapLocation = new LatLng(displayedLat, displayedLong);
-
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultMapLocation, gpsDefaultZoom));
+
+        LatLng displayedLocation = new LatLng(73.5280, 45.5016);
+
+        mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(displayedLocation, gpsDefaultZoom));
     }
 
     /************ BUTTON FUNCTIONS ************/
