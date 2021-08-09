@@ -130,7 +130,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 double displayedLat;
                 double displayedLong;
 
-                /////////////todo this should be different based on set one or two
                 displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, (int)minX);
                 displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, (int)minX);
 
@@ -418,7 +417,26 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             }
         }
 
-        ////////////todo does the map scroll along with the data????
+        ////////////todo does the map scroll along with the data???? Test that this code works
+        /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        double displayedLat;
+        double displayedLong;
+        double minX;
+
+        minX = graph.getViewport().getMinX(false);
+
+        displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, (int)minX);
+        displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, (int)minX);
+
+        LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
+        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
 
     /************ MAP FUNCTIONS ************/

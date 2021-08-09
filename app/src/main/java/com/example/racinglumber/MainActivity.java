@@ -390,9 +390,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             dataStorage.correctDataSetOrientation();
         }
 
-        /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        /////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         displayedLat = dataStorage.getFirstGPSValueFromLastRecording(true);
         displayedLong = dataStorage.getFirstGPSValueFromLastRecording(false);
 
@@ -400,9 +397,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
-        //////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         dataStorage.initSynthDataArrays();
         dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
