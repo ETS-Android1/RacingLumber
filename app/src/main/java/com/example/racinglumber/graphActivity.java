@@ -266,13 +266,21 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         if ((dataStorage.selectedSet == dataStorage.SelectedSet.setOne) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
         {
             setOneGraphOffset += offset;
-            updateSetOne = true;
+
+            if ((dataStorage.synthDataArray[0] != null) && (dataStorage.synthDataArray[0].lateralDataArray != null) && (dataStorage.synthDataArray[0].longitudalDataArray != null))
+            {
+                updateSetOne = true;
+            }
         }
 
         if ((dataStorage.selectedSet == dataStorage.SelectedSet.setTwo) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
         {
             setTwoGraphOffset += offset;
-            updateSetTwo = true;
+
+            if ((dataStorage.synthDataArray[1] != null) && (dataStorage.synthDataArray[1].lateralDataArray != null) && (dataStorage.synthDataArray[1].longitudalDataArray != null))
+            {
+                updateSetTwo = true;
+            }
         }
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
@@ -418,6 +426,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         }
 
         ////////////todo does the map scroll along with the data???? Test that this code works
+        ////////////todo I think data index needs to be offset with data setTwoGraphOffset or set one offset
         /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -427,8 +436,32 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         minX = graph.getViewport().getMinX(false);
 
-        displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, (int)minX);
-        displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, (int)minX);
+        if (updateSetOne)
+        {
+            if ((minX - setOneGraphOffset) > 0)
+            {
+                displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, (int)minX - setOneGraphOffset);
+                displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, (int)minX - setOneGraphOffset);
+            }
+            else
+            {
+                displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, 0);
+                displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, 0);
+            }
+        }
+        else
+        {
+            if ((minX - setTwoGraphOffset) > 0)
+            {
+                displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, (int)minX - setTwoGraphOffset);
+                displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, (int)minX - setTwoGraphOffset);
+            }
+            else
+            {
+                displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, 0);
+                displayedLong = dataStorage.getGPSValueFromAccelDataIndex(false, 0);
+            }
+        }
 
         LatLng displayedLocation = new LatLng(displayedLat, displayedLong);
         mMap.clear();
