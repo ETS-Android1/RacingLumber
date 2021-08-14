@@ -267,7 +267,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         {
             setOneGraphOffset += offset;
 
-            if ((dataStorage.synthDataArray[0] != null) && (dataStorage.synthDataArray[0].lateralDataArray != null) && (dataStorage.synthDataArray[0].longitudalDataArray != null))
+            if ((dataStorage.synthDataArray != null) && (dataStorage.synthDataArray[0] != null) && (dataStorage.synthDataArray[0].lateralDataArray != null) && (dataStorage.synthDataArray[0].longitudalDataArray != null))
             {
                 updateSetOne = true;
             }
@@ -277,7 +277,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         {
             setTwoGraphOffset += offset;
 
-            if ((dataStorage.synthDataArray[1] != null) && (dataStorage.synthDataArray[1].lateralDataArray != null) && (dataStorage.synthDataArray[1].longitudalDataArray != null))
+            if ((dataStorage.synthDataArray != null) && (dataStorage.synthDataArray[1] != null) && (dataStorage.synthDataArray[1].lateralDataArray != null) && (dataStorage.synthDataArray[1].longitudalDataArray != null))
             {
                 updateSetTwo = true;
             }
