@@ -758,7 +758,10 @@ public class fileManageActivity extends Activity implements BottomNavigationView
         switch (v.getId())
         {
             case R.id.saveButton:
-                this.createFile(); //Save button clicked
+                if (dataStorage.dataArrayLen > 0)
+                {
+                    this.createFile(); //Save button clicked
+                }
                 break;
 
             case R.id.loadButton1:

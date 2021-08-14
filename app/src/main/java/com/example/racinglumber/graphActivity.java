@@ -488,6 +488,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultMapLocation, gpsDefaultZoom));
+        mMap.addMarker(new MarkerOptions().position(defaultMapLocation).title("Current location"));
     }
 
     /************ USER INTERFACE FUNCTIONS ************/
@@ -537,8 +538,11 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 }
                 else
                 {
-                    addGraphSeries(LatSetOne, dataStorage.RecordType.acceleration);
-                    latOneOnGraph = true;
+                    if ((dataStorage.synthDataArray != null) && (dataStorage.synthDataArray[0] != null) && (dataStorage.synthDataArray[0].lateralDataArray != null))
+                    {
+                        addGraphSeries(LatSetOne, dataStorage.RecordType.acceleration);
+                        latOneOnGraph = true;
+                    }
                 }
                 break;
 
@@ -550,8 +554,11 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 }
                 else
                 {
-                    addGraphSeries(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration);
-                    longOneOnGraph = true;
+                    if ((dataStorage.synthDataArray != null) && (dataStorage.synthDataArray[0] != null) && (dataStorage.synthDataArray[0].longitudalDataArray != null))
+                    {
+                        addGraphSeries(dataStorage.Axis.LongSetOne, dataStorage.RecordType.acceleration);
+                        longOneOnGraph = true;
+                    }
                 }
                 break;
 
@@ -563,8 +570,11 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 }
                 else
                 {
-                    addGraphSeries(dataStorage.Axis.LatSetTwo, dataStorage.RecordType.acceleration);
-                    latTwoOnGraph = true;
+                    if ((dataStorage.synthDataArray != null) && (dataStorage.synthDataArray[1] != null) && (dataStorage.synthDataArray[1].lateralDataArray != null))
+                    {
+                        addGraphSeries(dataStorage.Axis.LatSetTwo, dataStorage.RecordType.acceleration);
+                        latTwoOnGraph = true;
+                    }
                 }
                 break;
 
@@ -575,8 +585,11 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
                 }
                 else
                 {
-                    addGraphSeries(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration);
-                    longTwoOnGraph = true;
+                    if ((dataStorage.synthDataArray != null) && (dataStorage.synthDataArray[1] != null) && (dataStorage.synthDataArray[1].longitudalDataArray != null))
+                    {
+                        addGraphSeries(dataStorage.Axis.LongSetTwo, dataStorage.RecordType.acceleration);
+                        longTwoOnGraph = true;
+                    }
                 }
                 break;
 
