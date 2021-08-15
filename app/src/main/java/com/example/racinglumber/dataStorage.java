@@ -115,8 +115,8 @@ public class dataStorage {
                 //Average 10 samples as forward vector
                 for (int j = 0; j < 10; j++)
                 {
-                    xArray += xDataArray[i+j];///dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
-                    yArray += yDataArray[i+j];///dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
+                    xArray += xDataArray[i+j];
+                    yArray += yDataArray[i+j];
                 }
             }
         }
@@ -125,42 +125,7 @@ public class dataStorage {
         magnitude = (float) Math.sqrt((xArray*xArray)+(yArray*yArray));
         forwardVectorX = xArray/magnitude;
         forwardVectorY = yArray/magnitude;
-
-        ////////////////========================================================================
-        ////////////////========================================================================
-        ////////////////========================================================================
-
-//        /*Prototype is using 100Hz capture.  First 3 seconds is setup(putting in pocket), 3 seconds is averaging vector of kart going forward, then save*/
-//        float xArray = 0.0f;
-//        float yArray = 0.0f;
-//        float xAvg, yAvg;
-//        float magnitude;
-//
-//        //todo could make delay configurable
-//        for (int index = 150; index < 200; index++)//start at 300 to make it start at 3 seconds, 3* 50Hz
-//        {
-//            if (index < dataStorage.getDataArrayLen())
-//            {
-//                xArray += dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
-//                yArray += dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
-//            }
-//        }
-//
-//        //todo could use moving average algorithm to be more accurate
-//        //todo don't need average, since magnitude is cancelled out later anyways
-//        xAvg = xArray/50.0f;
-//        yAvg = yArray/50.0f;
-//        magnitude = (float) Math.sqrt((xAvg*xAvg)+(yAvg*yAvg));
-//
-//        //normalize vector
-//        forwardVectorX = xAvg/magnitude;
-//        forwardVectorY = yAvg/magnitude;
-
-        /////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        /////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        /////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
-    /////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     public static void clearStorage()
     {

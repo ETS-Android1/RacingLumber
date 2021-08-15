@@ -102,12 +102,19 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 case fileLoadRequestCode2:
                     loadSaveToDataStorage(resultData.getData());
 
+                    if (dataStorage.synthDataArray == null)
+                    {
+                        dataStorage.synthDataArray = new synthesizedData[dataStorage.dataArrayLen];
+                    }
+
                     if (requestCode == fileLoadRequestCode1)
                     {
+                        dataStorage.synthDataArray[0] = new synthesizedData();
                         dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
                     }
                     else
                     {
+                        dataStorage.synthDataArray[1] = new synthesizedData();
                         dataStorage.synthDataArray[1].generateSynthDataFromDataStorage();
                     }
                     break;
@@ -172,6 +179,12 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             }
 
             dataStorage.dataArrayLen = dataArrLenCalc;//todo parse string
+
+            //////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //Initialize data storage
+            dataStorage.clearStorage();
+            ///public static void clearStorage()
+                ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
             //Find second delimiter.  After this is Acceleration vector x
             do {
