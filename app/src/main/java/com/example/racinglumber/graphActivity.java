@@ -425,11 +425,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             }
         }
 
-        ////////////todo does the map scroll along with the data???? Test that this code works
-        ////////////todo I think data index needs to be offset with data setTwoGraphOffset or set one offset
-        /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        /////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         double displayedLat;
         double displayedLong;
         double minX;
@@ -467,9 +462,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(displayedLocation).title("Current location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(displayedLocation));
-        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
 
     /************ MAP FUNCTIONS ************/

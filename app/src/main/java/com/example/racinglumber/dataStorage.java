@@ -71,7 +71,7 @@ public class dataStorage {
     {
         if (dataArrayLen > 0)
         {
-            synthDataArray = new synthesizedData[dataArrayLen];
+            synthDataArray = new synthesizedData[2];
             synthDataArray[0] = new synthesizedData();
             synthDataArray[1] = new synthesizedData();
         }
@@ -80,15 +80,10 @@ public class dataStorage {
             synthDataArray = null;
         }
     }
-    //////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //todo use a user selected point instead, this works for now though
 
     //This sets the forward vector in data storage, to be used by generateSynthDataFromDataStorage()
     public static void computeForwardVector(int gpsDataIndex)
     {
-        ///////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ///////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ///////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         int gpsDataIndexClamped;
         long targetTime;
         float xArray = 0.0f;
@@ -253,7 +248,7 @@ public class dataStorage {
         }
         else
         {
-            accelEventTimestamp = accelEventTime[accelIndex];//todo use this value?
+            accelEventTimestamp = accelEventTime[accelIndex];
 
             /*Check if the timestamp searched for is before the first gps timeStamp*/
             if ((accelEventTimestamp < synthDataArray[synthIndex].GPSEventTime[0]) || (accelIndex == 0) || (synthDataArray[synthIndex].GPSIndex == 0))

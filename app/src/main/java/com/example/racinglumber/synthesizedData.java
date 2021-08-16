@@ -14,17 +14,10 @@ public class synthesizedData {
     public long[] GPSEventTime;
     public static int GPSIndex; //index of GPS data
 
-    public synthesizedData()
-    {
-        //constructor
-        //TODO remove//forwardVectorX = 5.0f;
-    }
-
     public void generateSynthDataFromDataStorage()
     {
         if (dataArrayLen > 0)
         {
-            //////////-----------lateralDataArray = new float[dataArrayLen];
             computeLateralLongitudalArrays();
 
             /*Instantiate gps arrays*/

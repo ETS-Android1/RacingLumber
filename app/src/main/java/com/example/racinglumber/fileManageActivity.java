@@ -104,7 +104,7 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
                     if (dataStorage.synthDataArray == null)
                     {
-                        dataStorage.synthDataArray = new synthesizedData[dataStorage.dataArrayLen];
+                        dataStorage.synthDataArray = new synthesizedData[2];
                     }
 
                     if (requestCode == fileLoadRequestCode1)
@@ -134,8 +134,6 @@ public class fileManageActivity extends Activity implements BottomNavigationView
             }
         }
     }
-
-    ///////TODO NEXT this needs to load the forward vector from storage
 
     private void loadSaveToDataStorage(@NonNull Uri uri)
     {
@@ -178,13 +176,10 @@ public class fileManageActivity extends Activity implements BottomNavigationView
                 }
             }
 
-            dataStorage.dataArrayLen = dataArrLenCalc;//todo parse string
+            dataStorage.dataArrayLen = dataArrLenCalc;
 
-            //////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //Initialize data storage
             dataStorage.clearStorage();
-            ///public static void clearStorage()
-                ////////////////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
             //Find second delimiter.  After this is Acceleration vector x
             do {
