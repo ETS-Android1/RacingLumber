@@ -47,7 +47,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private FusedLocationProviderClient fusedLocationClient;
 
     private final int defaultRecordingLength = 10;
-    private final int gpsPollingInterval = 1000;
+    private final int gpsPollingInterval = 100;
     private final int locationPermissionsRequestCode = 121;
     boolean dataIsRecording = false;
 
