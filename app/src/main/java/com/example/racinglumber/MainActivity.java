@@ -46,8 +46,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Sensor senGravity;
     private FusedLocationProviderClient fusedLocationClient;
 
-    private final int defaultRecordingLength = 10;
-    private final int gpsPollingInterval = 100;
+    private final int defaultRecordingLength = 10;//in seconds
     private final int locationPermissionsRequestCode = 121;
     boolean dataIsRecording = false;
 
@@ -346,6 +345,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void startRecording()
     {
+        String inputString;
+        int gpsInterval;
+
         setDataRecordLength();
 
         dataStorage.clearStorage();
@@ -355,9 +357,22 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         dataIsRecording = true;
 
+        /*Get GPS polling interval*/
+        EditText gpsInput = (EditText) findViewById(R.id.textMinuteInput);
+        inputString = gpsInput.getText().toString();
+
+        if (!inputString.isEmpty())
+        {
+            gpsInterval = Integer.parseInt(inputString);
+        }
+        else
+        {
+            gpsInterval = 100;
+        }
+
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(gpsPollingInterval);
+        locationRequest.setInterval(gpsInterval);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, locationPermissionsRequestCode);

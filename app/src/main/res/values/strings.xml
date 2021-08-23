@@ -6,6 +6,8 @@
     <string name="mainUIrecordtimeSecUnits">seconds</string>
     <string name="mainUIautoFillHintMinutes">0</string>
     <string name="mainUIautoFillHintSeconds">10</string>
+    <string name="mainUIGPSPollingText">GPS polling rate</string>
+    <string name="mainUIautoFillHintGPS">100</string>
     <string name="mainUIcorrectTileText">Correct tilt in recorded data</string>
     <string name="bottom_nav_record">Record</string>
     <string name="bottom_nav_graph">Graph</string>
