@@ -66,11 +66,11 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
+        /*Set up listeners*/
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_id);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_graph_button);
 
-        /*Set up selected set buttons and selected set*/
         Button setOneButton = (Button) findViewById(R.id.setOneButton);
         setOneButton.setOnClickListener(this);
 
@@ -105,6 +105,7 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
+        /*Set up graph*/
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
 
         graph.getViewport().setYAxisBoundsManual(true);
@@ -145,6 +146,12 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        /*This function handles button clicks*/
+
+        final int scroll3 = 50;
+        final int scroll2 = 10;
+        final int scroll1 = 1;
+
         Button setOne       = (Button) findViewById(R.id.setOneButton);
         Button setTwo       = (Button) findViewById(R.id.setTwoButton);
         Button setOneTwo    = (Button) findViewById(R.id.bothSetsButton);
@@ -177,38 +184,38 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
         else if (v.getId() == R.id.left3Button)
         {
             updateColor(R.id.left3Button);
-            scrollSeries(50);
+            scrollSeries(scroll3);
         }
         else if (v.getId() == R.id.left2Button)
         {
             updateColor(R.id.left2Button);
-            scrollSeries(10);
+            scrollSeries(scroll2);
         }
         else if (v.getId() == R.id.left1Button)
         {
             updateColor(R.id.left1Button);
-            scrollSeries(1);
+            scrollSeries(scroll1);
         }
         else if (v.getId() == R.id.right1Button)
         {
             updateColor(R.id.right1Button);
-            scrollSeries(-1);
+            scrollSeries(-scroll1);
         }
         else if (v.getId() ==  R.id.right2Button)
         {
             updateColor(R.id.right2Button);
-            scrollSeries(-10);
+            scrollSeries(-scroll2);
         }
         else// v.getId() == R.id.right3Button
         {
             updateColor(R.id.right3Button);
-            scrollSeries(-50);
+            scrollSeries(-scroll3);
         }
     }
 
     private void updateColor(int buttonID)
     {
-        /*Color selected button and clear other buttons*/
+        /*This function colors selected button and clears other buttons*/
         Button left3 = (Button) findViewById(R.id.left3Button);
         Button left2 = (Button) findViewById(R.id.left2Button);
         Button left1 = (Button) findViewById(R.id.left1Button);
@@ -252,6 +259,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
     }
 
     private void scrollSeries(int offset){
+        /*This function handles scrolling the datasets*/
+
         boolean updateSetOne = false;
         boolean updateSetTwo = false;
 
@@ -262,6 +271,10 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
         float newValLat;
         float newValLong;
+
+        double displayedLat;
+        double displayedLong;
+        double minX;
 
         if ((dataStorage.selectedSet == dataStorage.SelectedSet.setOne) || (dataStorage.selectedSet == dataStorage.SelectedSet.setOneTwo))
         {
@@ -425,10 +438,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             }
         }
 
-        double displayedLat;
-        double displayedLong;
-        double minX;
-
         minX = graph.getViewport().getMinX(false);
 
         if (updateSetOne)
@@ -468,6 +477,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        /*This function runs the first time the maps is loaded in the app*/
+
         double displayedLat;
         double displayedLong;
 
@@ -487,6 +498,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        /*This function handles switching views*/
+
         int itemID = item.getItemId();
         boolean returnVal = true;
 
@@ -513,6 +526,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        /*This function handles adding/removing datasets from the graph display*/
+
         parent.getItemAtPosition(position);
 
         GraphView graph = (GraphView)findViewById(R.id.graphDisplay);
@@ -612,6 +627,8 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
 
     private void addGraphSeries(dataStorage.Axis axis, dataStorage.RecordType recordType)
     {
+        /*This function adds a graph to the dataseries*/
+
         LineGraphSeries<DataPoint> newSeries = new LineGraphSeries();
         float newVal;
         float currentMaxGraphY;
@@ -724,8 +741,6 @@ public class graphActivity extends FragmentActivity implements View.OnClickListe
             default:
                 break;
         }
-
-        /*Set series-specific graph elements, colors from https://www.rapidtables.com/web/color/red-color.html*/
 
         switch (axis)
         {
