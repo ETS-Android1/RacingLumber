@@ -26,13 +26,14 @@ import static com.example.racinglumber.dataStorage.RecordType.rotation;
 
 public class fileManageActivity extends Activity implements BottomNavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
     private BottomNavigationView bottomNavigationView;
-    final char dataDelimiter = '~';
+    final char dataDelimiter = '~';//this is the delimiter between data exported.  Modify if you would like a different delimiter
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_manage);
 
+        /*Set up listeners*/
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
 
@@ -52,12 +53,14 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     //////////////////////////File Access Functions//////////////////////////
 
+    /*These codes are all arbitrary, as long as they are unique to this file*/
     private static final int fileSaveRequestCode = 1;
     private static final int fileLoadRequestCode1 = 2;
     private static final int fileLoadRequestCode2 = 3;
     private static final int fileDeleteRequestCode = 4;
 
     private void createFile() {
+        /*This function creates the file with a default name of saveData*/
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
@@ -67,21 +70,23 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     }
 
     private void openFile(int dataset) {
+        /*this function opens a file*/
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
 
         if (dataset == 1)
         {
-            startActivityForResult(intent, fileLoadRequestCode1);
+            startActivityForResult(intent, fileLoadRequestCode1);//load for dataset 1
         }
         else
         {
-            startActivityForResult(intent, fileLoadRequestCode2);
+            startActivityForResult(intent, fileLoadRequestCode2);//load for dataset 2
         }
     }
 
     private void deleteFile() {
+        /*This function deletes a file from local storage*/
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
@@ -91,9 +96,10 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        /*This function catches file request responses and performs operations using the input URI*/
+
         Uri uri;
 
-        /*The result data contains a URI for the document or directory that the user created*/
         if ((resultCode == Activity.RESULT_OK) && (resultData != null))
         {
             switch (requestCode)
@@ -137,16 +143,17 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     private void loadSaveToDataStorage(@NonNull Uri uri)
     {
+        /* This function loads the file data into local datastorage.  Another function can then load
+         * this data into one of the two datasets to be viewed in the graphActivity */
+
         InputStream inStream;
         char tempChar;
         //DataArrayLen calculation vars
         int tempInt = 0;
         int dataArrLenCalc = 0;
-
         //Data array variables
         String valString = "";
         float valFlt;
-        int valInt;
         long valLong;
 
         try
@@ -514,6 +521,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     }
 
     private void writeEncodedDataToFile(@NonNull Uri uri) {
+        /*this function writes local dataStorage to a text file for future use*/
+
         OutputStream outputStream;
         int dataArrayLen;
         float accelVal;
@@ -763,6 +772,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
     @Override
     public void onClick(View v)
     {
+        /*This function handles button listeners*/
+
         switch (v.getId())
         {
             case R.id.saveButton:
@@ -791,6 +802,8 @@ public class fileManageActivity extends Activity implements BottomNavigationView
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        /*This function handles switching views*/
+
         int itemID = item.getItemId();
         boolean returnVal = true;
 
