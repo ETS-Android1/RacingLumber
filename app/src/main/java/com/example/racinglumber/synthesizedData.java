@@ -2,10 +2,10 @@ package com.example.racinglumber;
 
 import static com.example.racinglumber.dataStorage.dataArrayLen;
 
-//This class contains a set of synthesized latitudal, longitudal, etc. data using sensor fusion
-//builds based on current data in dataStorage
-public class synthesizedData {
 
+public class synthesizedData {
+    /* This class contains a set of synthesized latitudal, longitudal, etc. data using sensor fusion
+     * builds based on current data in dataStorage */
     public int dataLen = 0;
     public float[] lateralDataArray; //left (negative) right (positive) acceleration
     public float[] longitudalDataArray; //backward (negative) forward (positive) acceleration
@@ -16,6 +16,7 @@ public class synthesizedData {
 
     public void generateSynthDataFromDataStorage()
     {
+        /*This function creates a synthesized data array from the local data storage*/
         if (dataArrayLen > 0)
         {
             computeLateralLongitudalArrays();
@@ -39,17 +40,15 @@ public class synthesizedData {
 
     public void computeLateralLongitudalArrays()
     {
+        /*This function uses the forward vector to split the lateral and longitudal acceleration*/
+
         float xVal, yVal, xyMag, xyDotProduct, cosTheta, theta;
 
         lateralDataArray = new float[dataStorage.getDataArrayLen()];
         longitudalDataArray = new float[dataStorage.getDataArrayLen()];
 
-        //Instantiate lateral data array
         for (int index = 0; index < dataStorage.getDataArrayLen(); index++)
         {
-            //use dot product to get angle:
-
-            //new vector, get magnitude
             xVal = dataStorage.getSensorValue(dataStorage.Axis.X, dataStorage.RecordType.acceleration, index);
             yVal = dataStorage.getSensorValue(dataStorage.Axis.Y, dataStorage.RecordType.acceleration, index);
             xyMag = (float) Math.sqrt((xVal*xVal)+(yVal*yVal));
@@ -60,7 +59,6 @@ public class synthesizedData {
             //get angle between vectors
             theta = (float) Math.acos(cosTheta);
 
-            //todo some of these signs might need to flip
             //Get the lateral component
             lateralDataArray[index] = xyMag*((float)Math.sin(theta));
             //get the longitudal component

@@ -90,9 +90,9 @@ public class dataStorage {
         float yArray = 0.0f;
         float magnitude;
 
-        if (gpsDataIndex > GPSIndex)
+        if (gpsDataIndex > (GPSIndex - 1))
         {
-            gpsDataIndexClamped = GPSIndex-1;
+            gpsDataIndexClamped = GPSIndex - 1;
         }
         else
         {
@@ -113,6 +113,7 @@ public class dataStorage {
                     xArray += xDataArray[i+j];
                     yArray += yDataArray[i+j];
                 }
+                break;
             }
         }
 

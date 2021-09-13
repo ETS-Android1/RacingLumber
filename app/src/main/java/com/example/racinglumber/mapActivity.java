@@ -27,7 +27,7 @@ public class mapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //This function manipulates the map once available
+        /*This function manipulates the map once available*/
 
         mMap = googleMap;
 
