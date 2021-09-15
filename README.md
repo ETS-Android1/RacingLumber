@@ -73,126 +73,57 @@
 THIS PROJECT IS IN PROGRESS, ALONG WITH THE README.  IT IS NOT READY TO USE, STAY TUNED
 
 This project is aimed at providing flexible race telemetry.  Racing Lumber does not require prior knowledge of the mounting orientation of the mobile device running this application.  This means that Racing Lumber can be used while in a sealed pocket for go-karting, mounted to an RC car/plane, among other potential applications.
+
 I originally created this app as a means to provide go-karting or amateur racing telemetry, where a user cannot or does not want to mount telemetry equipment.  Instead, press play, put the phone in your sealed pocket, and you are ready to race.
-This project provides lateral/longitudal acceleration data graphically, and can import/export raw accelerometer and GPS data.
-Racing Lumber is open source so that users can modify and improve it as they see fit.
+
+This project provides lateral/longitudal acceleration data graphically, and can import/export raw accelerometer and GPS data. Racing Lumber is open source so that users can modify and improve it as they see fit.
 
 ### Built With
 
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
-
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+* [GraphView](https://github.com/jjoe64/GraphView)
+* [Readme Template](https://github.com/othneildrew/Best-README-Template)
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-
+To build this project, you need Android Studio with CMAKE support, and Git.
+* android studio with CMAKE support: https://developer.android.com/studio/projects/install-ndk
+* git: https://git-scm.com/
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+This project, being a solo development effort, follows a specific workflow.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Written instructions for the Record(default) View:
+* Choose a recording length
+* Select "Correct tilt in recorded data" if you are recording for lateral/longitudal data.  For raw data recording, leave it unselected
+* Choose a GPS polling rate in milliseconds.  Actual GPS polling rate will be limited by your device.  The lowest supported value is 10ms
+* Press record.  It is valid to press record again to end the recording, or you can let the full record period elapse
+* Use the arrow keys to select a GPS location in the recording.  Choose a location where you were accelerating in a straight line
+* Press the Set Forward Vector to set the forward vector.  This is used to split acceleration into lateral and longitudal vectors
+* Select graph view using the bottom navigation to view recorded data, or save view to save the recorded data
 
+Written instructions for the Graph View:
+* Select data that you would like to using the spinner at the top of the view.  By default after recording, data is stored in set one.  Set one and two can be populated/overwritten in the save view
+* Scroll/resize the data as desired 
+* Select set one, two, or one and two buttons to choose which data to offset.  By default this is set to set one
+* Use the arrow keys to set offsets for set one/two/onetwo based on the selected button.  This can be used to align/compare datasets
+* The mapview will show the closest GPS data for the dataset selected.  Specifically, this GPS location is the closest measurement to the accelerometer measurement on the leftmost side of the screen for the selected dataset
 
+Written instructions for the Save View:
+* Android has restrictions on how files are stored.  To get around this to save datasets, datasets are stored as local to the app
+* After recording a dataset, press "save to external" and choose a filename.  Depending on the recording length, the file size may be large and the screen may freeze for a while during the save.  This is expected
+* If you want to export this dataset, send it via gmail/google drive from the phone to yourself.  As the dataset file is local to the app, it cannot be seen over PC USB connection
+* Load a dataset to set one or two for viewing in the graph view.  You can load the same dataset into dataset one and two to compare the same dataset at different points in time
+* Use "delete external save" to delete recorded datasets as required
 
 <!-- ROADMAP -->
-## Roadmap
+## Remaining Development
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
+* App currently only runs when it is open (in focus).  Recording needs to run as a background task when screen is off.
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
-
-
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+[Apache 2.0] (https://www.apache.org/licenses/LICENSE-2.0)
