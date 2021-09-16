@@ -12,8 +12,10 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -53,6 +55,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private int gpsDefaultPeriod = 100; //in milliseconds
     private int gpsDataIndex = 0;//this is the gps data index for the forward vector gps view
 
+    /*System Services*/
+    PowerManager powerManager;
+    PowerManager.WakeLock wakeLock;
+    Boolean appLockSet = false;//if true, do not listen to screen presses and wait for recording to complete
+    Boolean appLock = false;//if true, do not listen to screen presses and wait for recording to complete
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +72,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_record_button);
 
         /*Set up button listeners*/
+        Button lockButton = (Button) findViewById(R.id.lockButton);
+        lockButton.setOnClickListener(this);
         Button recordButton = (Button) findViewById(R.id.recordButton);
         recordButton.setOnClickListener(this);
         Button left3Button = (Button) findViewById(R.id.left3ButtonMain);
@@ -93,6 +103,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         senGravity = senSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
     }
 
     /************ MAP FUNCTIONS ************/
@@ -116,6 +128,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         /*This function switches between views*/
         int itemID = item.getItemId();
         boolean returnVal = true;
+
+        if (appLock)
+        {
+            return false;
+        }
 
         if (!dataIsRecording)
         {
@@ -149,14 +166,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         double displayedLat;
         double displayedLong;
         boolean startRecording = false;
+        boolean startLock = false;
 
         /*These are the scrolling increments for the gps map view*/
         final int scroll3 = 50;
         final int scroll2 = 10;
         final int scroll1 = 1;
 
+        if (appLock)
+        {
+            return;
+        }
+
         switch(v.getId())
         {
+            case R.id.lockButton:
+                /*Lock/unlock buttons to prevent misclick when recording*/
+                appLockSet = !appLockSet;
+                if (appLockSet)
+                {
+                    Button backward_img = (Button) findViewById(R.id.lockButton);
+                    backward_img.setBackgroundColor(Color.RED);
+                }
+                else
+                {
+                    Button backward_img = (Button) findViewById(R.id.lockButton);
+                    backward_img.setBackgroundColor(Color.LTGRAY);
+                }
+
+                startLock = true;
+                break;
+
             case R.id.recordButton:
                 /*Start/end recording data*/
                 dataIsRecording = !dataIsRecording;
@@ -265,7 +305,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
 
         /*Don't update the map if the user starts recording, because they might not have GPS data yet*/
-        if (!startRecording)
+        if (!startRecording && !startLock)
         {
             /*Update the map view*/
             displayedLat = dataStorage.getGPSValueFromAccelDataIndex(true, gpsDataIndex);
@@ -390,6 +430,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void startRecording()
     {
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyApp::MyWakelockTag");
+
+        wakeLock.acquire();
+
+        if (appLockSet)
+        {
+            appLock = true;
+        }
 
         /*This function is called by hitting the record button and kicks off sensor and GPS listeners*/
         String inputString;
@@ -450,6 +499,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         record.setBackgroundColor(Color.LTGRAY);
         dataIsRecording = false;
 
+        Button backward_img = (Button) findViewById(R.id.lockButton);
+        backward_img.setBackgroundColor(Color.LTGRAY);
+        appLock = false;
+        appLockSet = false;
+
         fusedLocationClient.removeLocationUpdates(locationCallback); //this ends gps data polling
 
         onPause(); //this ends accelerometer listening
@@ -476,6 +530,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
          * clear any previous data in the synthesized data arrays */
         dataStorage.initSynthDataArrays();
         dataStorage.synthDataArray[0].generateSynthDataFromDataStorage();
+
+        wakeLock.release();
     }
 
     /************ USER INTERFACE FUNCTIONS ************/
