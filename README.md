@@ -31,7 +31,7 @@ Written instructions for the Record(default) View:
 * Select "Correct tilt in recorded data" if you are recording for lateral/longitudal data.  For raw data recording, leave it unselected
 * Choose a GPS polling rate in milliseconds.  Actual GPS polling rate will be limited by your device.  The lowest supported value is 10ms
 * If you are using this app in a pocket where buttons can be inadvertantly pressed, press the "lock" button.  This will disable button input during the recording interval
-* Press record.  It is valid to press record again to end the recording, or you can let the full record period elapse.  Do not press the power button on your phone
+* Press record.  It is valid to press record again to end the recording, or you can let the full record period elapse.  Do not press the power button on your phone (it will pause recording)
 * Use the arrow keys to select a GPS location in the recording.  Choose a location where you were accelerating in a straight line
 * Press the Set Forward Vector to set the forward vector.  This is used to split acceleration into lateral and longitudal vectors
 * Select graph view using the bottom navigation to view recorded data, or save view to save the recorded data
