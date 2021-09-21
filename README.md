@@ -20,7 +20,14 @@ To build this project you need Android Studio with CMAKE support, and Git.
 * android studio with CMAKE support: https://developer.android.com/studio/projects/install-ndk
 * git: https://git-scm.com/
 
-Alternatively, download the app from Google play: _todo_
+Alternatively, download the app from Google play: _todo_ app is currently under review, once it passes I will update this with a link
+
+The Google play download is a few dollars.  Feel free to use this download method if you would like a slightly easier install process or if you would like to tip the developer.
+
+## Known issues
+
+* During the first recording, the app will ask for GPS permissions.  The recording will be affected by this authentication, so it is recommended to run a quick recording initially to give the app its permissions
+* Required memory for a recording is not calculated by the app prior to recording.  A recording may fail if it runs for an extended time or the app is run on a phone with little memory
 
 ## Usage
 
@@ -54,6 +61,8 @@ Written instructions for the Save View:
 
 This app codebase is available for modification and use in other projects under the Apache 2.0 license.  I will not be maintaining this project as I am moving on to other projects.
 
-## License
+## License and Legal
 
 This project is published under the Apache 2.0 license: https://www.apache.org/licenses/LICENSE-2.0
+
+I accept no responsibility for any damage or injury resulting from this software.  This software is provided free of use, the use of which is at the user's responsibility.

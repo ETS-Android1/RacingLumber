@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     android.ndkVersion '22.0.7026061'
 
     defaultConfig {
-        applicationId "com.example.racinglumber"
+        applicationId "com.app.racinglumber"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
