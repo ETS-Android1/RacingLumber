@@ -28,6 +28,7 @@ The Google play download is a few dollars.  Feel free to use this download metho
 
 * During the first recording, the app will ask for GPS permissions.  The recording will be affected by this authentication, so it is recommended to run a quick recording initially to give the app its permissions
 * Required memory for a recording is not calculated by the app prior to recording.  A recording may fail if it runs for an extended time or the app is run on a phone with little memory
+* GPS accuracy/availability is dependent on the mobile phone speed and the availability of GPS data from the Google API.  This will vary by device and location
 
 ## Usage
 
