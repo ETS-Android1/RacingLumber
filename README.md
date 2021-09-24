@@ -20,7 +20,7 @@ To build this project you need Android Studio with CMAKE support, and Git.
 * android studio with CMAKE support: https://developer.android.com/studio/projects/install-ndk
 * git: https://git-scm.com/
 
-Alternatively, download the app from Google play: _todo_ app is currently under review, once it passes I will update this with a link
+Alternatively, download the app from Google play: https://play.google.com/store/apps/details?id=com.app.racinglumber
 
 The Google play download is a few dollars.  Feel free to use this download method if you would like a slightly easier install process or if you would like to tip the developer.
 
@@ -59,7 +59,7 @@ Written instructions for the Save View:
 
 ## Contributing
 
-This app codebase is available for modification and use in other projects under the Apache 2.0 license.  I will not be maintaining this project as I am moving on to other projects.
+This app codebase is available for modification and use in other projects under the Apache 2.0 license.  I will not be maintaining this project as I am moving on to other projects.  I have pushed a release-spencer branch for all releases/updates by myself.
 
 ## License and Legal
 
