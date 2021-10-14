@@ -22,8 +22,6 @@ To build this project you need Android Studio with CMAKE support, and Git.
 
 Alternatively, download the app from Google play: https://play.google.com/store/apps/details?id=com.app.racinglumber
 
-The Google play download is a few dollars.  Feel free to use this download method if you would like a slightly easier install process or if you would like to tip the developer.
-
 ## Known issues
 
 * During the first recording, the app will ask for GPS permissions.  The recording will be affected by this authentication, so it is recommended to run a quick recording initially to give the app its permissions
